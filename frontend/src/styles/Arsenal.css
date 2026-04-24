@@ -1,0 +1,226 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap');
+
+.arsenal-wrapper {
+    background-color: #030407;
+    min-height: 100vh;
+    padding: 40px;
+    font-family: 'Inter', sans-serif;
+    color: #fff;
+    background-image: 
+        radial-gradient(circle at 50% 0%, rgba(255, 184, 108, 0.08), transparent 50%),
+        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    background-size: 100% 100%, 30px 30px, 30px 30px;
+    background-position: center top, center center, center center;
+    position: relative;
+    overflow-x: hidden;
+}
+
+.arsenal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 20px;
+}
+
+.arsenal-title { 
+    margin: 0; 
+    font-size: 2.8rem; 
+    font-weight: 900; 
+    color: #ffb86c; 
+    text-transform: uppercase; 
+    letter-spacing: 3px; 
+    text-shadow: 0 0 20px rgba(255, 184, 108, 0.5); 
+}
+
+.arsenal-subtitle { 
+    color: #8b92a5; 
+    margin-top: 8px; 
+    font-family: 'Space Mono', monospace; 
+}
+
+/* --- WALLET UI --- */
+.wallet-card {
+    background: rgba(10, 12, 18, 0.8);
+    border: 1px solid rgba(255, 184, 108, 0.4);
+    padding: 15px 30px;
+    border-radius: 12px;
+    text-align: right;
+    box-shadow: 0 0 25px rgba(255, 184, 108, 0.15), inset 0 0 10px rgba(255, 184, 108, 0.05);
+    backdrop-filter: blur(10px);
+}
+.wallet-label { display: block; color: #8b92a5; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; font-family: 'Space Mono', monospace;}
+.wallet-balance { font-weight: 900; font-family: 'Space Mono', monospace; display: flex; align-items: center; gap: 15px; }
+.wallet-lvl { color: #00ffe7; font-size: 1.2rem; text-shadow: 0 0 10px rgba(0, 255, 231, 0.4); }
+.wallet-xp { color: #ffb86c; font-size: 2.2rem; text-shadow: 0 0 15px rgba(255, 184, 108, 0.5); }
+
+/* --- TERMINAL (ADD REWARD) --- */
+.terminal-container {
+    background: #0a0a0a;
+    border: 1px solid #333;
+    border-radius: 8px;
+    margin-bottom: 50px;
+    overflow: hidden;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+    font-family: 'Space Mono', monospace;
+}
+.terminal-top-bar {
+    background: #1a1a1a;
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #333;
+}
+.term-dots { display: flex; gap: 8px; margin-right: 20px; }
+.dot { width: 12px; height: 12px; border-radius: 50%; }
+.dot.red { background: #ef4444; }
+.dot.yellow { background: #eab308; }
+.dot.green { background: #10b981; }
+.term-title { color: #6b7280; font-size: 0.85rem; letter-spacing: 1px; }
+
+.terminal-body {
+    display: flex;
+    padding: 20px;
+    gap: 20px;
+    align-items: center;
+}
+.term-input-group {
+    display: flex;
+    align-items: center;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid #333;
+    border-radius: 4px;
+    flex: 1;
+    padding: 0 15px;
+    transition: all 0.3s;
+}
+.term-input-group:focus-within { border-color: #00ffe7; box-shadow: 0 0 15px rgba(0,255,231,0.2); }
+.term-prompt { color: #00ffe7; font-weight: bold; margin-right: 10px; }
+.terminal-body input {
+    background: transparent; border: none; color: #fff; width: 100%; padding: 15px 0; outline: none; font-family: 'Space Mono', monospace;
+}
+.term-btn {
+    background: rgba(0, 255, 231, 0.1); border: 1px solid #00ffe7; color: #00ffe7; font-weight: bold; padding: 0 25px; height: 50px; border-radius: 4px; cursor: pointer; transition: all 0.3s; font-family: inherit; white-space: nowrap;
+}
+.term-btn:hover { background: #00ffe7; color: #000; box-shadow: 0 0 20px rgba(0, 255, 231, 0.6); }
+
+/* --- REWARDS GRID --- */
+.arsenal-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 30px;
+}
+
+.empty-state-msg { color: #8b92a5; font-family: 'Space Mono', monospace; font-style: italic; font-size: 1.1rem; }
+
+.reward-card {
+    background: rgba(12, 15, 22, 0.95);
+    border: 1px solid #333;
+    padding: 30px 25px;
+    border-radius: 16px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(10px);
+}
+
+.reward-card:hover { transform: translateY(-5px); }
+
+.delete-reward {
+    position: absolute; top: 15px; right: 15px;
+    background: transparent; border: none; color: #ef4444; font-size: 1.2rem; cursor: pointer; opacity: 0; transition: 0.2s;
+}
+.reward-card:hover .delete-reward { opacity: 0.6; }
+.delete-reward:hover { opacity: 1 !important; transform: scale(1.2); }
+
+.reward-card h4 { margin: 0 0 15px 0; font-size: 1.3rem; color: #fff; line-height: 1.4; }
+.reward-cost { font-size: 2rem; font-weight: 900; font-family: 'Space Mono', monospace; margin-bottom: 25px; }
+
+.purchase-btn {
+    width: 100%; padding: 16px; border: none; border-radius: 8px; font-weight: 900; font-family: 'Space Mono', monospace; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s;
+}
+
+/* 🟢 Affordable State */
+.reward-card.affordable { border-color: rgba(255, 184, 108, 0.4); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+.reward-card.affordable:hover { box-shadow: 0 15px 40px rgba(255, 184, 108, 0.2), inset 0 0 20px rgba(255, 184, 108, 0.05); border-color: #ffb86c; }
+.reward-card.affordable .reward-cost { color: #ffb86c; text-shadow: 0 0 15px rgba(255, 184, 108, 0.4); }
+.reward-card.affordable .purchase-btn { background: rgba(255, 184, 108, 0.1); color: #ffb86c; border: 1px solid rgba(255, 184, 108, 0.5); }
+.reward-card.affordable .purchase-btn:hover { background: #ffb86c; color: #000; box-shadow: 0 0 20px rgba(255, 184, 108, 0.6); }
+
+/* 🔴 Locked State & Shake Animation */
+.reward-card.locked { border-color: rgba(239, 68, 68, 0.2); opacity: 0.75; }
+.reward-card.locked:hover { animation: errorShake 0.4s ease-in-out; border-color: #ef4444; opacity: 1; box-shadow: 0 0 20px rgba(239, 68, 68, 0.2); }
+.reward-card.locked .reward-cost { color: #ef4444; }
+.reward-card.locked .purchase-btn { background: rgba(239, 68, 68, 0.05); color: #ef4444; border: 1px dashed #ef4444; cursor: not-allowed; }
+
+/* ⚠️ Confirm State */
+.purchase-btn.confirm-state { background: #eab308 !important; color: #000 !important; border-color: #eab308 !important; box-shadow: 0 0 20px rgba(234, 179, 8, 0.6) !important; animation: pulseWarning 1s infinite; }
+
+/* 👾 Glitch State */
+.reward-card.glitching { border-color: #a855f7; box-shadow: 0 0 30px rgba(168, 85, 247, 0.5); animation: cardGlitch 0.2s infinite; }
+.purchase-btn.processing-state { background: #a855f7 !important; color: #000 !important; border-color: #a855f7 !important; cursor: wait; }
+.cyber-glitch-text { animation: textFlicker 0.1s infinite; }
+
+
+/* --- TOAST NOTIFICATIONS --- */
+.arsenal-toast {
+    position: fixed;
+    bottom: 40px;
+    right: 40px;
+    background: rgba(10, 12, 18, 0.95);
+    padding: 20px 25px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    z-index: 9999;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+    backdrop-filter: blur(10px);
+    font-family: 'Space Mono', monospace;
+    font-weight: bold;
+    animation: slideUpToast 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+.arsenal-toast.success { border-left: 5px solid #10b981; }
+.arsenal-toast.success .toast-icon { color: #10b981; text-shadow: 0 0 10px #10b981; }
+.arsenal-toast.error { border-left: 5px solid #ef4444; }
+.arsenal-toast.error .toast-icon { color: #ef4444; text-shadow: 0 0 10px #ef4444; }
+
+.toast-icon { font-size: 1.5rem; }
+.toast-msg { color: #fff; letter-spacing: 1px; }
+
+/* --- KEYFRAMES --- */
+@keyframes errorShake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-5px); }
+    40%, 80% { transform: translateX(5px); }
+}
+
+@keyframes pulseWarning {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
+}
+
+@keyframes cardGlitch {
+    0% { transform: translate(0); filter: hue-rotate(0deg); }
+    20% { transform: translate(-2px, 2px); filter: hue-rotate(90deg); }
+    40% { transform: translate(-2px, -2px); }
+    60% { transform: translate(2px, 2px); filter: hue-rotate(-90deg); }
+    80% { transform: translate(2px, -2px); }
+    100% { transform: translate(0); filter: hue-rotate(0deg); }
+}
+
+@keyframes textFlicker {
+    0% { opacity: 1; letter-spacing: 1px; }
+    50% { opacity: 0.5; letter-spacing: 3px; }
+    100% { opacity: 1; letter-spacing: 1px; }
+}
+
+@keyframes slideUpToast {
+    0% { transform: translateY(100px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}

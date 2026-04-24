@@ -1,0 +1,189 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* Page base */
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Main container */
+.three-container {
+  display: grid;
+  grid-template-columns: 65% 35%; /* ← balanced split */
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background: radial-gradient(circle at top, #0b0f1a, #02030a);
+  color: white;
+}
+
+
+/* LEFT SIDE (3D area) */
+.three-left {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* Logo */
+.logo {
+  position: absolute;
+  top: 30px;
+  left: 40px;
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #caa8ff;
+  text-shadow: 0 0 20px #7f5cff;
+  z-index: 10;
+}
+
+/* RIGHT SIDE (login area) */
+.three-right {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 80px;
+}
+
+
+/* GLASS CARD — enlarged */
+.glass-card {
+  width: min(680px, 95%);
+  padding: 70px 60px;
+  border-radius: 28px;
+
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(25px);
+
+  box-shadow: 0 0 80px rgba(0, 255, 255, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+
+  transform: scale(1.15);
+}
+
+
+/* Title */
+.glass-card h2 {
+  font-size: 1.8rem;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+/* Inputs */
+.input-box {
+  margin-bottom: 18px;
+}
+
+.input-box input {
+  width: 100%;
+  padding: 18px 20px;
+  border-radius: 14px;
+  font-size: 1.1rem;
+
+  background: rgba(0,0,0,0.45);
+  border: 1px solid rgba(255,255,255,0.18);
+  color: white;
+  outline: none;
+}
+
+/* Password eye icon */
+.password-box {
+  position: relative;
+}
+
+.password-box span {
+  position: absolute;
+  right: 15px;
+  top: 14px;
+  cursor: pointer;
+}
+
+/* Login/Register button */
+.login-btn {
+  width: 100%;
+  padding: 18px;
+  margin-top: 25px;
+
+  border-radius: 30px;
+  font-size: 1.2rem;
+
+  border: none;
+  background: linear-gradient(90deg, #7f5cff, #00ffe7);
+  color: black;
+
+  font-weight: bold;
+  cursor: pointer;
+
+  box-shadow: 0 0 30px rgba(0,255,255,0.8);
+}
+
+.login-btn:hover {
+  transform: scale(1.03);
+}
+
+/* Text below button */
+.glass-card p {
+  margin-top: 18px;
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+/* Signup toggle */
+.signup-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+  font-size: 0.9rem;
+}
+
+/* Switch */
+.switch {
+  position: relative;
+  width: 45px;
+  height: 24px;
+}
+
+.switch input {
+  display: none;
+}
+
+.slider {
+  position: absolute;
+  background: #444;
+  border-radius: 20px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  cursor: pointer;
+}
+
+.slider:before {
+  content: "";
+  position: absolute;
+  height: 18px;
+  width: 18px;
+  background: white;
+  border-radius: 50%;
+  left: 3px;
+  top: 3px;
+  transition: 0.3s;
+}
+
+.switch input:checked + .slider {
+  background: #7f5cff;
+}
+
+.switch input:checked + .slider:before {
+  transform: translateX(20px);
+}

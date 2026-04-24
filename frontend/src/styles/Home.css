@@ -1,0 +1,351 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap');
+
+/* --- Layout & Background --- */
+.home-container {
+  min-height: calc(100vh - 70px);
+  width: 100%;
+  background-color: #04050a;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  padding: 40px 0;
+}
+
+/* --- Ambient Glowing Waves --- */
+.ambient-wave {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.5;
+  z-index: 0;
+  pointer-events: none;
+  animation: cosmicFlow 20s infinite alternate ease-in-out;
+}
+
+.wave-blue {
+  width: 70vw;
+  height: 400px;
+  background: radial-gradient(ellipse at center, rgba(0, 136, 255, 0.4) 0%, transparent 70%);
+  top: 30%;
+  left: -10%;
+}
+
+.wave-purple {
+  width: 60vw;
+  height: 400px;
+  background: radial-gradient(ellipse at center, rgba(157, 0, 255, 0.3) 0%, transparent 70%);
+  top: 50%;
+  right: -10%;
+  animation-delay: -5s;
+}
+
+.wave-orange {
+  width: 40vw;
+  height: 300px;
+  background: radial-gradient(ellipse at center, rgba(255, 123, 0, 0.2) 0%, transparent 70%);
+  top: 60%;
+  right: 10%;
+  animation-delay: -10s;
+}
+
+/* --- Entrance Animations --- */
+.animate-entrance {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.3s; }
+.delay-3 { animation-delay: 0.5s; }
+.delay-4 { animation-delay: 0.7s; }
+
+/* --- Hero Content --- */
+.hyperlife-hero {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 1000px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0 20px;
+}
+
+.hero-headers { margin-bottom: 20px; }
+
+.hero-title {
+  font-size: clamp(3rem, 5vw, 4.5rem);
+  font-weight: 800;
+  letter-spacing: -1.5px;
+  margin-bottom: 12px;
+  text-shadow: 0 4px 30px rgba(255, 255, 255, 0.2);
+}
+
+.hero-subtitle {
+  font-size: 1.1rem;
+  font-weight: 400;
+  color: #b4b8cc;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.subtitle-lower {
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
+
+/* --- CENTRAL 3D UNIVERSE VISUAL --- */
+.universe-visual {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  height: 450px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px 0;
+  transform-style: preserve-3d;
+  perspective: 1200px; /* Gives depth to the orbits */
+  cursor: pointer; /* Makes it clearly clickable */
+  transition: transform 0.4s ease; /* Smooth hover transition */
+}
+
+/* Zoom effect when hovering over the universe */
+.universe-visual:hover {
+  transform: scale(1.02);
+}
+
+.human-core {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -160px;
+  margin-left: -80px;
+  width: 160px;
+  height: 320px;
+  z-index: 5;
+  transform: translateZ(10px); /* Pushes human slightly forward */
+}
+
+/* --- TRUE 3D ORBIT SYSTEM --- */
+.orbit-system {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-style: preserve-3d;
+  /* Tilts the solar system down to look like rings */
+  transform: translate(-50%, -50%) rotateX(75deg); 
+}
+
+.system-1 { width: 350px; height: 350px; }
+.system-2 { width: 550px; height: 550px; }
+.system-3 { width: 750px; height: 750px; }
+
+.orbit-ring {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.02);
+}
+
+.system-1 .orbit-ring { border-color: rgba(0, 255, 231, 0.3); }
+.system-2 .orbit-ring { border-color: rgba(255, 215, 0, 0.2); }
+.system-3 .orbit-ring { border-color: rgba(138, 92, 255, 0.25); }
+
+/* The invisible arm that spins the planet */
+.planet-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  animation: orbitSpin linear infinite;
+}
+
+/* Speeds and starting positions (delays) */
+.system-1 .planet-container, .system-1 .planet-node { 
+  animation-duration: 20s; animation-delay: -5s; 
+}
+.system-2 .planet-container, .system-2 .planet-node { 
+  animation-duration: 35s; animation-direction: reverse; animation-delay: -15s; 
+}
+.system-3 .planet-container, .system-3 .planet-node { 
+  animation-duration: 50s; animation-delay: -25s; 
+}
+
+/* The actual planet module attached to the spinning arm */
+.planet-node {
+  position: absolute;
+  top: 0; /* Locked to the top edge of the ring */
+  left: 50%;
+  display: flex;
+  align-items: center;
+  /* Counter-spins backward so it stays upright to the screen */
+  animation: counterSpin linear infinite;
+}
+
+/* HUD Labels */
+.hud-line {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+  width: 60px;
+}
+
+.hud-label {
+  font-size: 0.85rem;
+  color: #fff;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.hud-left { margin-right: 15px; }
+.hud-left-text { margin-right: 15px; }
+.hud-right { margin-left: 15px; }
+.hud-right-text { margin-left: 15px; }
+
+/* The Planets */
+.planet {
+  border-radius: 50%;
+  position: relative;
+}
+
+.p-health {
+  width: 45px; height: 45px;
+  background: radial-gradient(circle at 30% 30%, #4ade80, #06b6d4, #083344);
+  box-shadow: 0 0 25px rgba(6, 182, 212, 0.6), inset -5px -5px 15px rgba(0,0,0,0.8);
+}
+
+.p-finance {
+  width: 55px; height: 55px;
+  background: radial-gradient(circle at 30% 30%, #fde047, #ca8a04, #422006);
+  box-shadow: 0 0 30px rgba(202, 138, 4, 0.5), inset -8px -8px 15px rgba(0,0,0,0.8);
+}
+
+.p-knowledge {
+  width: 50px; height: 50px;
+  background: radial-gradient(circle at 30% 30%, #60a5fa, #2563eb, #1e3a8a);
+  box-shadow: 0 0 30px rgba(37, 99, 235, 0.6), inset -5px -5px 15px rgba(0,0,0,0.8);
+}
+
+.planet-ring {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 85px; height: 85px;
+  border: 2px solid rgba(0, 255, 255, 0.8);
+  border-radius: 50%;
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.5), inset 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+/* --- Buttons --- */
+.hero-actions {
+  display: flex;
+  gap: 25px;
+  justify-content: center;
+}
+
+.neon-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 36px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #fff;
+}
+
+.sparkle { opacity: 0.8; }
+
+.btn-blue {
+  background: linear-gradient(90deg, #1e3a8a, #3b82f6);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 25px rgba(59, 130, 246, 0.5);
+}
+
+.btn-blue:hover {
+  box-shadow: 0 0 40px rgba(59, 130, 246, 1), inset 0 0 20px rgba(255,255,255,0.4);
+  transform: translateY(-3px);
+}
+
+.btn-purple {
+  background: linear-gradient(90deg, #4c1d95, #a855f7);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 25px rgba(168, 85, 247, 0.5);
+}
+
+.btn-purple:hover {
+  box-shadow: 0 0 40px rgba(168, 85, 247, 1), inset 0 0 20px rgba(255,255,255,0.4);
+  transform: translateY(-3px);
+}
+
+/* --- KEYFRAMES FOR ANIMATIONS --- */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes cosmicFlow {
+  from { transform: scale(1) translate(0, 0); }
+  to { transform: scale(1.1) translate(30px, -30px); }
+}
+
+/* Spins the invisible arm forward */
+@keyframes orbitSpin {
+  from { transform: rotateZ(0deg); }
+  to { transform: rotateZ(360deg); }
+}
+
+/* Spins the planet backward AND undoes the X-axis tilt to face the screen */
+@keyframes counterSpin {
+  from { transform: translate(-50%, -50%) rotateZ(0deg) rotateX(-75deg); }
+  to { transform: translate(-50%, -50%) rotateZ(-360deg) rotateX(-75deg); }
+}
+
+/* Continuous Floating / Zero-G effect */
+.floating { animation: floatZeroG 6s ease-in-out infinite; }
+@keyframes floatZeroG {
+  0% { transform: translateY(0) translateZ(10px); }
+  50% { transform: translateY(-15px) translateZ(10px); }
+  100% { transform: translateY(0) translateZ(10px); }
+}
+
+/* Glowing Pulse for Planets and Buttons */
+.pulse-glow { animation: glowingPulse 3s infinite alternate; }
+.pulse-btn { animation: btnPulse 2s infinite alternate; }
+
+@keyframes glowingPulse {
+  0% { filter: brightness(1); }
+  100% { filter: brightness(1.3) drop-shadow(0 0 10px rgba(255,255,255,0.3)); }
+}
+
+@keyframes btnPulse {
+  0% { box-shadow: 0 0 20px currentColor; }
+  100% { box-shadow: 0 0 35px currentColor; }
+}
+
+/* Ring Spin on Knowledge Planet */
+.spin-3d { animation: spinRing 8s linear infinite; }
+@keyframes spinRing {
+  from { transform: translate(-50%, -50%) rotateX(70deg) rotateY(20deg) rotateZ(0deg); }
+  to { transform: translate(-50%, -50%) rotateX(70deg) rotateY(20deg) rotateZ(360deg); }
+}
+
+/* --- Responsive --- */
+@media (max-width: 900px) {
+  .universe-visual { height: 350px; transform: scale(0.65); }
+  .hero-actions { flex-direction: column; gap: 15px; }
+  .neon-btn { justify-content: center; }
+}

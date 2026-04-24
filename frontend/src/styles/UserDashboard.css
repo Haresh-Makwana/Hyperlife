@@ -1,0 +1,315 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+/* ========================================================= */
+/* 1. IMMERSIVE LOGIN & REGISTER STYLES (ThreeDashboard.jsx) */
+/* ========================================================= */
+
+.immersive-auth-wrapper { position: relative; width: 100vw; height: 100vh; overflow: hidden; background-color: #030407; font-family: 'Inter', sans-serif; color: #fff; }
+.canvas-background { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
+.ui-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; display: flex; justify-content: space-between; pointer-events: none; }
+.brand-section { padding: 40px 50px; pointer-events: auto; }
+.brand-section .logo { font-size: 2.5rem; font-weight: 800; text-shadow: 0 0 20px rgba(0, 255, 231, 0.4); letter-spacing: -1px; margin: 0; color: #fff; }
+.form-section { width: 100%; max-width: 500px; height: 100%; display: flex; align-items: center; justify-content: center; padding: 40px; background: linear-gradient(to left, rgba(5, 7, 12, 0.9) 0%, rgba(5, 7, 12, 0) 100%); pointer-events: auto; }
+.ultra-glass-card { background: rgba(15, 18, 28, 0.4); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 24px; padding: 50px 40px; width: 100%; box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(255, 255, 255, 0.02); }
+.ultra-glass-card h2 { font-size: 2rem; font-weight: 700; margin-bottom: 25px; letter-spacing: -0.5px; margin-top:0; color: #fff;}
+.input-group { position: relative; margin-bottom: 20px; }
+.cyber-input { width: 100%; background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 255, 255, 0.1); padding: 16px 20px; border-radius: 12px; color: #fff; font-size: 1rem; outline: none; transition: all 0.3s ease; box-sizing: border-box; }
+.cyber-input::placeholder { color: #6b7280; }
+.cyber-input:focus { border-color: #00ffe7; box-shadow: 0 0 15px rgba(0, 255, 231, 0.15); background: rgba(0, 0, 0, 0.4); }
+.eye-icon { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #6b7280; transition: color 0.3s; }
+.eye-icon:hover { color: #00ffe7; }
+.cyber-btn { width: 100%; background: linear-gradient(90deg, #7f5cff, #00ffe7); background-size: 200% auto; color: #000; font-weight: 800; font-size: 1.1rem; padding: 16px; border: none; border-radius: 12px; cursor: pointer; margin-top: 10px; transition: all 0.4s ease; box-shadow: 0 10px 20px rgba(0, 255, 231, 0.2); }
+.cyber-btn:hover { background-position: right center; transform: translateY(-2px); box-shadow: 0 15px 30px rgba(0, 255, 231, 0.4); }
+.cyber-btn:disabled { background: #374151; color: #9ca3af; cursor: not-allowed; box-shadow: none; transform: none; }
+.auth-switch { text-align: center; margin-top: 25px; color: #8b92a5; font-size: 0.95rem; }
+.auth-switch span { color: #00ffe7; font-weight: 600; cursor: pointer; margin-left: 8px; transition: text-shadow 0.3s; }
+.role-toggle-container { display: flex; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; margin-bottom: 25px; padding: 5px; position: relative; }
+.role-btn { flex: 1; padding: 12px 0; text-align: center; color: #8b92a5; font-weight: 600; font-size: 0.9rem; cursor: pointer; border-radius: 8px; transition: all 0.3s ease; z-index: 1; }
+.role-btn.active { color: #fff; text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
+.role-slider { position: absolute; top: 5px; bottom: 5px; width: calc(50% - 5px); background: rgba(0, 255, 231, 0.15); border: 1px solid rgba(0, 255, 231, 0.4); box-shadow: inset 0 0 10px rgba(0, 255, 231, 0.1), 0 0 15px rgba(0, 255, 231, 0.2); border-radius: 8px; transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.4s, border-color 0.4s; z-index: 0; }
+.role-slider.admin-mode { transform: translateX(100%); background: rgba(127, 92, 255, 0.15); border-color: rgba(127, 92, 255, 0.4); box-shadow: inset 0 0 10px rgba(127, 92, 255, 0.1), 0 0 15px rgba(127, 92, 255, 0.2); }
+@media (max-width: 900px) { .ui-layer { flex-direction: column; justify-content: center; } .brand-section { position: absolute; top: 0; width: 100%; text-align: center; } .form-section { background: transparent; padding: 20px; margin-top: 60px; } }
+
+/* ========================================================= */
+/* 2. INNER DASHBOARD STYLES (Dashboard.jsx)                 */
+/* ========================================================= */
+
+/* 🚀 Added Animated Coordinate Grid */
+.ud-wrapper { 
+    position: relative; 
+    min-height: calc(100vh - 70px); 
+    background-color: #030407 !important; 
+    color: #ffffff !important; 
+    font-family: 'Inter', sans-serif !important; 
+    padding: 40px 5%; 
+    overflow: hidden; 
+    z-index: 1; 
+    background-image: 
+        radial-gradient(circle at center, rgba(0, 255, 231, 0.05) 0%, transparent 60%),
+        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px), 
+        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    background-size: 100% 100%, 40px 40px, 40px 40px;
+}
+
+.ud-orb-1, .ud-orb-2 { position: absolute; border-radius: 50%; filter: blur(80px); z-index: -1; opacity: 0.5; pointer-events: none; }
+.ud-orb-1 { top: -10%; left: -10%; width: 500px; height: 500px; background: radial-gradient(circle, rgba(0, 255, 231, 0.2) 0%, transparent 70%); animation: udFloat 12s infinite alternate ease-in-out; }
+.ud-orb-2 { bottom: -10%; right: -10%; width: 600px; height: 600px; background: radial-gradient(circle, rgba(127, 92, 255, 0.2) 0%, transparent 70%); animation: udFloat 15s infinite alternate-reverse ease-in-out; }
+@keyframes udFloat { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(50px, 50px) scale(1.1); } }
+
+/* 🚀 Added Light Sweep Hover Effect to Glass Cards */
+.ud-glass { 
+    background: rgba(12, 14, 22, 0.7) !important; 
+    backdrop-filter: blur(20px) !important; 
+    -webkit-backdrop-filter: blur(20px) !important; 
+    border: 1px solid rgba(255, 255, 255, 0.08) !important; 
+    border-radius: 24px !important; 
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(255, 255, 255, 0.02) !important; 
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s;
+}
+
+.ud-glass::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%; width: 50%; height: 100%;
+    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.05), transparent);
+    transform: skewX(-20deg);
+    transition: 0.7s;
+    pointer-events: none;
+    z-index: 10;
+}
+.ud-glass:hover::after {
+    left: 150%;
+    transition: 0.7s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* 🚀 Staggered Slide Up Animations */
+@keyframes udSlideUpFade { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+
+.ud-header { animation: udSlideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.ud-glass:nth-of-type(1) { animation: udSlideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.1s; opacity: 0; }
+.ud-actions-bar { animation: udSlideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.2s; opacity: 0; }
+.ud-stats-grid:nth-of-type(1) .ud-stat-card:nth-child(1) { animation: udSlideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.3s; opacity: 0; }
+.ud-stats-grid:nth-of-type(1) .ud-stat-card:nth-child(2) { animation: udSlideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.4s; opacity: 0; }
+.ud-stats-grid:nth-of-type(1) .ud-stat-card:nth-child(3) { animation: udSlideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.5s; opacity: 0; }
+.ud-stats-grid:nth-of-type(2) { animation: udSlideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.6s; opacity: 0; }
+.ud-activities-panel { animation: udSlideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.7s; opacity: 0; }
+
+
+.ud-header { display: flex; justify-content: space-between; align-items: center; padding: 35px 40px; margin-bottom: 35px; flex-wrap: wrap; gap: 30px; }
+.ud-profile-area { display: flex; align-items: center; gap: 20px; }
+
+/* Avatar Styles */
+.ud-avatar-ring { 
+  width: 75px; height: 75px; border-radius: 50%; 
+  background: linear-gradient(135deg, #00ffe7, #7f5cff); 
+  padding: 3px; box-shadow: 0 0 20px rgba(0, 255, 231, 0.4);
+  position: relative; cursor: pointer; overflow: hidden; transition: transform 0.3s ease;
+}
+.ud-avatar-ring:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(0, 255, 231, 0.6); }
+.ud-avatar { width: 100%; height: 100%; background-color: #030407; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 800; color: #fff; overflow: hidden; }
+.ud-avatar-image { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+.ud-avatar-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); border-radius: 50%; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease; }
+.ud-avatar-ring:hover .ud-avatar-overlay { opacity: 1; }
+.ud-avatar-loading { width: 25px; height: 25px; border: 3px solid rgba(255,255,255,0.3); border-top-color: #00ffe7; border-radius: 50%; animation: udSpin 1s linear infinite; }
+
+/* 🚀 Added Flowing Shimmer to Gradient Text */
+.ud-welcome-text h1 { font-size: 2.2rem !important; font-weight: 800 !important; margin: 0 0 5px 0 !important; color: #fff; }
+.ud-gradient-text { 
+    background: linear-gradient(90deg, #00ffe7, #7f5cff, #00ffe7); 
+    background-size: 200% auto;
+    -webkit-background-clip: text; 
+    -webkit-text-fill-color: transparent; 
+    animation: textShimmer 4s linear infinite;
+}
+@keyframes textShimmer { to { background-position: 200% center; } }
+.ud-email { color: #8b92a5 !important; margin: 0 !important; font-size: 1rem !important; }
+
+/* 🚀 Added Glowing Core to XP Bar */
+.ud-level-hud { flex: 1; min-width: 250px; max-width: 400px; }
+.ud-level-top { display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: 700; font-size: 1.1rem; }
+.ud-xp-track { width: 100%; height: 10px; background: rgba(0,0,0,0.5); border-radius: 10px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
+.ud-xp-fill { 
+    height: 100%; 
+    background: linear-gradient(90deg, #7f5cff, #00ffe7); 
+    border-radius: 10px; 
+    box-shadow: 0 0 15px rgba(0, 255, 231, 0.6); 
+    transition: width 1s cubic-bezier(0.16, 1, 0.3, 1); 
+    position: relative;
+}
+.ud-xp-fill::after {
+    content: ''; position: absolute; right: 0; top: 0; height: 100%; width: 10px;
+    background: #fff; border-radius: 50%; box-shadow: 0 0 10px #fff, 0 0 20px #00ffe7;
+}
+
+.ud-actions-bar { display: flex; gap: 15px; margin-bottom: 40px; flex-wrap: wrap; }
+.ud-btn { padding: 12px 24px !important; border-radius: 12px !important; font-weight: 700 !important; font-size: 0.95rem !important; font-family: 'Inter', sans-serif !important; cursor: pointer !important; border: none !important; outline: none !important; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; }
+.ud-btn-primary { 
+    background: linear-gradient(90deg, #00ffe7, #7f5cff) !important; 
+    background-size: 200% auto !important;
+    color: #000 !important; 
+    box-shadow: 0 5px 15px rgba(0, 255, 231, 0.2) !important; 
+}
+.ud-btn-primary:hover { 
+    transform: translateY(-3px) !important; 
+    box-shadow: 0 10px 25px rgba(0, 255, 231, 0.5) !important; 
+    background-position: right center !important;
+}
+.ud-btn-outline { background: rgba(255, 255, 255, 0.05) !important; color: #fff !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; }
+.ud-btn-outline:hover { background: rgba(255, 255, 255, 0.1) !important; border-color: rgba(255, 255, 255, 0.4) !important; transform: translateY(-2px) !important; }
+.ud-btn-danger { background: rgba(239, 68, 68, 0.1) !important; color: #ef4444 !important; border: 1px solid rgba(239, 68, 68, 0.3) !important; }
+.ud-btn-danger:hover { background: #ef4444 !important; color: #fff !important; box-shadow: 0 0 20px rgba(239, 68, 68, 0.4) !important; transform: translateY(-2px) !important; }
+
+.ud-stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 25px; margin-bottom: 30px; }
+.ud-stat-card { padding: 30px; display: flex; align-items: center; gap: 20px; transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s, border-color 0.4s; }
+.ud-stat-card:hover { transform: translateY(-8px); border-color: rgba(0, 255, 231, 0.3) !important; box-shadow: 0 20px 40px rgba(0,0,0,0.6), 0 0 30px rgba(0,255,231,0.1) !important; }
+.ud-stat-icon { width: 60px; height: 60px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; background: rgba(0, 0, 0, 0.4); }
+.ud-icon-cyan { color: #00ffe7; box-shadow: inset 0 0 20px rgba(0, 255, 231, 0.2); border: 1px solid rgba(0,255,231,0.1); }
+.ud-icon-purple { color: #b094ff; box-shadow: inset 0 0 20px rgba(127, 92, 255, 0.2); border: 1px solid rgba(127,92,255,0.1); }
+.ud-icon-orange { color: #ffaa00; box-shadow: inset 0 0 20px rgba(255, 170, 0, 0.2); border: 1px solid rgba(255,170,0,0.1); }
+.ud-stat-info h3 { color: #8b92a5 !important; font-size: 0.9rem !important; font-weight: 700 !important; text-transform: uppercase !important; margin: 0 0 8px 0 !important; letter-spacing: 1px !important; }
+.ud-stat-info p { font-size: 2.2rem !important; font-weight: 900 !important; margin: 0 !important; color: #fff !important; }
+.ud-stat-sub { font-size: 1.2rem; color: #4b5563; margin-left: 4px; }
+
+.ud-activities-panel { padding: 35px; }
+.ud-panel-title { font-size: 1.4rem !important; font-weight: 800 !important; margin: 0 0 25px 0 !important; border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding-bottom: 15px; color: #fff; letter-spacing: 0.5px;}
+
+/* 🚀 Staggered Activity Rows with Hover Glows */
+.ud-activity-row { 
+    display: flex; justify-content: space-between; align-items: center; padding: 20px; 
+    background: rgba(0, 0, 0, 0.3); border-radius: 16px; margin-bottom: 15px; 
+    border: 1px solid rgba(255,255,255,0.02); transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); 
+    animation: udFadeSlideIn 0.5s backwards;
+}
+.ud-activity-row:nth-child(1) { animation-delay: 0.7s; }
+.ud-activity-row:nth-child(2) { animation-delay: 0.8s; }
+.ud-activity-row:nth-child(3) { animation-delay: 0.9s; }
+.ud-activity-row:nth-child(4) { animation-delay: 1.0s; }
+.ud-activity-row:nth-child(5) { animation-delay: 1.1s; }
+
+@keyframes udFadeSlideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+
+.ud-activity-row:hover { background: rgba(0, 0, 0, 0.6); border-color: rgba(255, 255, 255, 0.15); transform: translateX(8px); box-shadow: -5px 5px 20px rgba(0,0,0,0.5); }
+.ud-activity-main { display: flex; align-items: center; gap: 15px; flex: 2; }
+.ud-dot { width: 12px; height: 12px; border-radius: 50%; animation: udPulseDot 2s infinite; }
+.ud-dot-cyan { background: #00ffe7; box-shadow: 0 0 10px #00ffe7; }
+.ud-dot-purple { background: #7f5cff; box-shadow: 0 0 10px #7f5cff; animation-delay: 1s; }
+
+@keyframes udPulseDot { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.3); opacity: 0.7; } }
+
+.ud-activity-main h3 { margin: 0 0 6px 0 !important; font-size: 1.15rem !important; font-weight: 700 !important; color: #fff !important; letter-spacing: 0.5px;}
+.ud-activity-desc { margin: 0 !important; color: #8b92a5 !important; font-size: 0.95rem !important; line-height: 1.4 !important; }
+.ud-activity-stats { display: flex; gap: 15px; flex: 1; align-items: center; justify-content: flex-end; }
+.ud-badge { background: rgba(0, 0, 0, 0.5); padding: 6px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; border: 1px solid rgba(255, 255, 255, 0.1); color: #fff; font-family: monospace; }
+.ud-date { color: #6b7280; font-size: 0.85rem; font-family: monospace; font-weight: bold; }
+
+@media (max-width: 900px) { .ud-header, .ud-activity-row { flex-direction: column; align-items: flex-start; } .ud-level-hud { width: 100%; } .ud-activity-stats { justify-content: flex-start; margin-top: 15px; flex-wrap: wrap; } }
+
+/* ========================================================= */
+/* 3. OMNI-NODE MICROPHONE CSS                               */
+/* ========================================================= */
+.mic-btn {
+  background: rgba(127, 92, 255, 0.1); border: 1px solid rgba(127, 92, 255, 0.4); color: #7f5cff;
+  border-radius: 12px; padding: 0 20px; font-size: 1.2rem; cursor: pointer; transition: all 0.3s ease;
+  display: flex; align-items: center; justify-content: center;
+}
+.mic-btn:hover { background: rgba(127, 92, 255, 0.3); box-shadow: 0 0 20px rgba(127, 92, 255, 0.5); transform: scale(1.05); }
+.mic-btn.listening { background: #ef4444; color: #fff; border-color: #ef4444; animation: pulse-mic 1.5s infinite; }
+
+@keyframes pulse-mic {
+  0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); transform: scale(1); }
+  50% { transform: scale(1.05); }
+  70% { box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); transform: scale(1); }
+}
+
+/* ========================================================= */
+/* 4. OMNI-NODE VOICE POPUP MODAL                            */
+/* ========================================================= */
+.ud-modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(5, 7, 12, 0.8); backdrop-filter: blur(20px) !important; display: flex; align-items: center; justify-content: center; z-index: 2000; animation: udFadeIn 0.3s ease-out; }
+.ud-voice-popup { background: rgba(12, 15, 24, 0.8) !important; backdrop-filter: blur(30px) !important; -webkit-backdrop-filter: blur(30px) !important; border: 1px solid rgba(0, 255, 231, 0.2) !important; border-radius: 32px !important; padding: 60px 50px; width: 90%; max-width: 600px; box-shadow: 0 40px 100px rgba(0, 0, 0, 0.9), 0 0 40px rgba(0,255,231,0.1), inset 0 0 20px rgba(255, 255, 255, 0.05) !important; text-align: center; position: relative; display: flex; flex-direction: column; align-items: center; }
+
+/* Central Microphone Circle */
+.ud-mic-container { width: 160px; height: 160px; background: linear-gradient(135deg, #00ffe7, #7f5cff); border-radius: 50%; padding: 3px; box-shadow: 0 0 30px rgba(0, 255, 231, 0.3), inset 0 0 10px rgba(255, 255, 255, 0.2); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); position: relative; margin-bottom: 25px; }
+.ud-mic-container:hover { transform: scale(1.1); box-shadow: 0 0 50px rgba(0, 255, 231, 0.6); }
+.ud-mic-icon { width: 100px; height: 100px; background-color: rgba(0, 0, 0, 0.4); border-radius: 50%; color: #fff; padding: 20px; }
+
+/* Radiating Wave Animation */
+.ud-mic-container.listening .ud-wave { position: absolute; top: 50%; left: 50%; border-radius: 50%; transform: translate(-50%, -50%) scale(1); border: 2px solid rgba(0, 255, 231, 0.8); box-shadow: 0 0 20px rgba(0, 255, 231, 0.5); opacity: 1; pointer-events: none; }
+.ud-wave-1 { animation: udWavePulse 2.5s infinite cubic-bezier(0.16, 1, 0.3, 1); }
+.ud-wave-2 { animation: udWavePulse 2.5s infinite cubic-bezier(0.16, 1, 0.3, 1) 0.6s; }
+.ud-wave-3 { animation: udWavePulse 2.5s infinite cubic-bezier(0.16, 1, 0.3, 1) 1.2s; }
+
+@keyframes udWavePulse { 0% { width: 160px; height: 160px; opacity: 1; border-width: 3px; } 70% { width: 300px; height: 300px; opacity: 0.2; border-width: 1px; } 100% { width: 350px; height: 350px; opacity: 0; border-width: 0px; } }
+
+.ud-speak-text { font-size: 1.2rem; font-weight: 800; text-transform: uppercase; color: #00ffe7; letter-spacing: 3px; margin: 0 0 20px 0; text-shadow: 0 0 15px rgba(0, 255, 231, 0.6); }
+.ud-listening-text { color: #fff; text-shadow: 0 0 20px rgba(255, 255, 255, 0.8); animation: udListeningTextPulse 1.5s infinite; }
+@keyframes udListeningTextPulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; transform: scale(1.05); } }
+
+.ud-close-btn { background: rgba(239, 68, 68, 0.1) !important; color: #ef4444 !important; border: 1px solid rgba(239, 68, 68, 0.3) !important; margin-top: 15px; }
+.ud-close-btn:hover { background: #ef4444 !important; color: #000 !important; box-shadow: 0 0 25px rgba(239, 68, 68, 0.6) !important; transform: translateY(-2px) !important; }
+
+.ud-spinner { width: 80px; height: 80px; border: 6px solid rgba(127, 92, 255, 0.1); border-top: 6px solid #00ffe7; border-radius: 50%; animation: udSpin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite; margin-bottom: 25px; box-shadow: 0 0 20px rgba(0,255,231,0.2); }
+@keyframes udSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+.ud-processing-text { color: #00ffe7; font-weight: 800; letter-spacing: 3px; text-transform: uppercase; animation: blink 1s infinite;}
+@keyframes udFadeIn { from { opacity: 0; backdrop-filter: blur(0px); } to { opacity: 1; backdrop-filter: blur(20px); } }
+
+.ud-transcript { color: #9ca3af; font-size: 1.15rem; font-style: italic; margin-top: 15px; max-width: 85%; word-wrap: break-word; background: rgba(0,0,0,0.4); padding: 15px; border-radius: 12px; border: 1px dashed rgba(255,255,255,0.1); }
+.ud-tag { padding: 6px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: 800; letter-spacing: 1px; font-family: monospace; text-transform: uppercase; }
+.theme-purple-tag { background: rgba(127, 92, 255, 0.15); color: #d8b4fe; border: 1px solid rgba(127, 92, 255, 0.4); box-shadow: 0 0 10px rgba(127,92,255,0.2); }
+
+
+/* ========================================================= */
+/* AUTH & GENERAL UI ANIMATIONS                              */
+/* ========================================================= */
+
+.auth-anim-slide-up {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: authSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes authSlideUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hover-glow { transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+.hover-glow:hover { box-shadow: 0 0 20px rgba(255, 255, 255, 0.4); transform: translateY(-2px); }
+
+.cyber-input {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  background: rgba(0, 0, 0, 0.4) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.cyber-input:focus {
+  border-color: #00ffe7 !important;
+  box-shadow: 0 0 20px rgba(0, 255, 231, 0.2), inset 0 0 10px rgba(0, 255, 231, 0.1) !important;
+  background: rgba(0, 0, 0, 0.6) !important;
+  transform: translateY(-2px);
+}
+
+.ultra-glass-card {
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.4s;
+}
+
+.ultra-glass-card::before {
+  content: '';
+  position: absolute;
+  top: -50%; left: -50%; width: 200%; height: 200%;
+  background: conic-gradient(transparent, rgba(127, 92, 255, 0.1), transparent 30%);
+  animation: rotateGlow 6s linear infinite;
+  pointer-events: none;
+  z-index: -1;
+}
+
+@keyframes rotateGlow {
+  100% { transform: rotate(360deg); }
+}

@@ -1,0 +1,290 @@
+/* --- CORE LAYOUT & GRID --- */
+.grid-wrapper {
+    background-color: #030407;
+    min-height: 100vh;
+    padding: 60px 40px;
+    font-family: 'Inter', sans-serif;
+    color: #fff;
+    background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px), 
+        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    background-size: 40px 40px;
+    background-position: center top;
+    position: relative;
+    overflow-x: hidden;
+}
+
+.grid-wrapper::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 100vw; height: 100vh;
+    background: radial-gradient(circle at top center, rgba(168, 85, 247, 0.05), transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.grid-header { 
+    text-align: center; 
+    margin-bottom: 50px; 
+    position: relative;
+    z-index: 2;
+    animation: fadeInDown 0.8s ease-out;
+}
+.grid-header h1 { 
+    margin: 0; 
+    font-size: 3rem; 
+    font-weight: 900; 
+    letter-spacing: 6px; 
+    color: #fff; 
+    text-shadow: 0 0 20px rgba(168, 85, 247, 0.8), 0 0 40px rgba(168, 85, 247, 0.4); 
+    text-transform: uppercase;
+}
+.grid-header p { 
+    color: #8b92a5; 
+    font-family: monospace; 
+    font-size: 1rem;
+    margin-top: 10px;
+    letter-spacing: 1px;
+}
+
+/* --- TOAST NOTIFICATION --- */
+.cyber-toast {
+    position: fixed;
+    top: 90px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(10, 12, 18, 0.95);
+    border: 1px solid #a855f7;
+    color: #fff;
+    padding: 15px 30px;
+    border-radius: 8px;
+    font-family: monospace;
+    font-weight: bold;
+    font-size: 0.95rem;
+    max-width: 600px;
+    text-align: center;
+    z-index: 1000;
+    box-shadow: 0 0 30px rgba(168, 85, 247, 0.5), inset 0 0 10px rgba(168, 85, 247, 0.2);
+    animation: toastSlideDown 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, toastFadeOut 0.4s ease-in forwards 4.5s;
+}
+
+/* --- ADD SKILL TERMINAL --- */
+.grid-forge { 
+    background: rgba(10, 12, 18, 0.85); 
+    border: 1px solid rgba(255, 255, 255, 0.1); 
+    padding: 25px; 
+    border-radius: 12px; 
+    margin-bottom: 60px; 
+    max-width: 800px; 
+    margin-left: auto; 
+    margin-right: auto; 
+    position: relative;
+    z-index: 2;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+.grid-forge::before {
+    content: 'INITIALIZE NEW NEURAL NODE';
+    position: absolute;
+    top: -10px;
+    left: 20px;
+    background: #030407;
+    padding: 0 10px;
+    font-family: monospace;
+    font-size: 0.75rem;
+    color: #8b92a5;
+    letter-spacing: 1px;
+}
+.grid-form { display: flex; gap: 15px; }
+.grid-form select, .grid-form input { 
+    flex: 1; 
+    background: rgba(0,0,0,0.6); 
+    border: 1px solid #333; 
+    color: #fff; 
+    padding: 15px; 
+    border-radius: 6px; 
+    outline: none; 
+    font-family: monospace; 
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+.grid-form select:focus, .grid-form input:focus { 
+    border-color: #a855f7; 
+    box-shadow: inset 0 0 10px rgba(168,85,247,0.2);
+}
+.grid-form button { 
+    background: rgba(168, 85, 247, 0.1); 
+    border: 1px solid #a855f7; 
+    color: #a855f7; 
+    font-weight: bold; 
+    font-family: monospace;
+    padding: 0 30px; 
+    border-radius: 6px; 
+    cursor: pointer; 
+    transition: all 0.3s; 
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.grid-form button:hover { 
+    background: #a855f7; 
+    color: #000; 
+    box-shadow: 0 0 20px #a855f7; 
+}
+
+/* --- THE TREES --- */
+.trees-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 60px;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+    padding-bottom: 100px;
+}
+
+.skill-tree {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 360px;
+}
+
+.tree-root {
+    background: rgba(10, 12, 18, 0.95);
+    border: 2px solid;
+    padding: 15px 40px;
+    border-radius: 30px;
+    font-weight: 900;
+    letter-spacing: 3px;
+    z-index: 2;
+    font-size: 1.1rem;
+    text-shadow: 0 0 10px currentColor;
+    backdrop-filter: blur(5px);
+}
+
+.tree-trunk {
+    width: 3px;
+    height: 40px;
+    background: linear-gradient(180deg, var(--domain-color) 0%, transparent 100%);
+    opacity: 0.6;
+    animation: flowVertical 2s infinite linear;
+    background-size: 100% 200%;
+}
+
+.tree-branches {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+}
+
+.skill-node {
+    display: flex;
+    align-items: flex-start; /* Changed for expanding panel */
+    width: 100%;
+    position: relative;
+    opacity: 0;
+    animation: slideInNode 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.node-connector {
+    width: 25px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--domain-color) 0%, transparent 100%);
+    opacity: 0.6;
+    animation: flowHorizontal 2s infinite linear;
+    background-size: 200% 100%;
+    margin-top: 30px; /* Align with the top of the box */
+}
+
+.node-box {
+    flex: 1;
+    background: rgba(12, 15, 24, 0.85);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-left: 4px solid var(--domain-color);
+    padding: 20px;
+    border-radius: 0 12px 12px 0;
+    position: relative;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    backdrop-filter: blur(10px);
+}
+
+.node-box:hover { 
+    transform: translateX(8px); 
+    background: rgba(20, 25, 38, 0.95);
+    border-color: rgba(255,255,255,0.1);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6), 5px 0 20px var(--domain-color-glow); 
+}
+
+.node-box.training { animation: pulseTrain 0.5s ease-out; }
+.node-box.level-up { animation: levelUpBurst 1s ease-out; border-color: var(--domain-color); }
+
+.del-btn { 
+    position: absolute; top: 8px; right: 12px; background: transparent; border: none; 
+    color: #4b5563; cursor: pointer; transition: 0.2s; font-size: 1.2rem; font-family: monospace;
+}
+.del-btn:hover { color: #ef4444; text-shadow: 0 0 10px #ef4444; }
+
+.node-box h4 { margin: 0 0 15px 0; font-size: 1.2rem; color: #f3f4f6; letter-spacing: 0.5px; }
+
+.node-stats { display: flex; justify-content: space-between; font-size: 0.85rem; font-family: monospace; color: #9ca3af; margin-bottom: 8px; }
+.lvl { font-weight: 900; color: var(--domain-color); background: var(--domain-color-glow); padding: 2px 8px; border-radius: 4px; text-shadow: 0 0 5px #000; }
+
+.progress-bar-bg { width: 100%; height: 8px; background: #030407; border-radius: 4px; overflow: hidden; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05); box-shadow: inset 0 2px 4px rgba(0,0,0,0.5); }
+.progress-bar-fill { height: 100%; background: var(--domain-color); transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1); box-shadow: 0 0 10px var(--domain-color); }
+
+/* --- AI ACTION LOGGER (NEW) --- */
+.train-btn {
+    width: 100%; background: rgba(0,0,0,0.3); border: 1px dashed var(--domain-color);
+    color: var(--domain-color); padding: 10px; border-radius: 6px; font-weight: bold;
+    font-family: monospace; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; letter-spacing: 1px;
+}
+.train-btn:hover { background: var(--domain-color-glow); border-style: solid; color: #fff; text-shadow: 0 0 5px #000; }
+
+.sync-panel {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px dashed rgba(255,255,255,0.1);
+    animation: fadeInDown 0.3s ease-out;
+}
+
+.sync-input {
+    width: 100%;
+    background: rgba(0,0,0,0.5);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: #fff;
+    padding: 10px;
+    border-radius: 6px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    resize: vertical;
+    min-height: 60px;
+    margin-bottom: 10px;
+    outline: none;
+    transition: all 0.3s;
+}
+.sync-input:focus { border-color: var(--domain-color); box-shadow: inset 0 0 10px var(--domain-color-glow); }
+
+.sync-actions { display: flex; gap: 10px; }
+.btn-submit, .btn-cancel {
+    flex: 1; padding: 8px; border-radius: 4px; font-family: monospace; font-weight: bold; cursor: pointer; transition: 0.2s; border: none;
+}
+.btn-submit { background: var(--domain-color); color: #000; }
+.btn-submit:hover:not(:disabled) { box-shadow: 0 0 15px var(--domain-color); }
+.btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-cancel { background: transparent; border: 1px solid #4b5563; color: #9ca3af; }
+.btn-cancel:hover { background: rgba(255,255,255,0.05); color: #fff; }
+
+/* --- KEYFRAMES --- */
+@keyframes fadeInDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideInNode { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes flowVertical { 0% { background-position: 0% -100%; } 100% { background-position: 0% 100%; } }
+@keyframes flowHorizontal { 0% { background-position: -100% 0%; } 100% { background-position: 100% 0%; } }
+@keyframes pulseTrain { 0% { transform: scale(1); box-shadow: 0 0 0 0 var(--domain-color-glow); } 50% { transform: scale(1.05); box-shadow: 0 0 20px var(--domain-color); } 100% { transform: scale(1); box-shadow: 0 0 0 0 transparent; } }
+@keyframes levelUpBurst { 0% { box-shadow: 0 0 0 0 var(--domain-color); background: var(--domain-color); } 50% { box-shadow: 0 0 40px 10px var(--domain-color); background: rgba(12, 15, 24, 0.85); } 100% { box-shadow: 0 0 0 0 transparent; } }
+@keyframes toastSlideDown { from { opacity: 0; transform: translate(-50%, -20px); } to { opacity: 1; transform: translate(-50%, 0); } }
+@keyframes toastFadeOut { from { opacity: 1; transform: translate(-50%, 0); } to { opacity: 0; transform: translate(-50%, -10px); } }

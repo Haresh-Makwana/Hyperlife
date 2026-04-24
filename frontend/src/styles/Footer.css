@@ -1,0 +1,158 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+
+/* --- FOOTER CONTAINER & BACKGROUND --- */
+.hyper-footer {
+  position: relative;
+  background-color: #020305;
+  color: #9ca3af;
+  font-family: 'Inter', sans-serif;
+  margin-top: auto; 
+  padding-top: 60px;
+  overflow: hidden;
+  border-top: 1px solid rgba(255,255,255,0.02);
+}
+
+/* Sci-Fi Grid Overlay */
+.footer-bg-grid {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: 
+      radial-gradient(circle at top center, rgba(127, 92, 255, 0.05) 0%, transparent 60%),
+      linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px), 
+      linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 100% 100%, 30px 30px, 30px 30px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Moving Neon Line */
+.footer-glow-bar {
+  position: absolute;
+  top: 0; left: -100%;
+  width: 50%; height: 2px;
+  background: linear-gradient(90deg, transparent, #00ffe7, #7f5cff, transparent);
+  box-shadow: 0 0 20px rgba(0, 255, 231, 0.8), 0 0 40px rgba(127, 92, 255, 0.6);
+  animation: scanlineFooter 6s linear infinite;
+  z-index: 2;
+}
+
+@keyframes scanlineFooter {
+  0% { left: -100%; }
+  100% { left: 200%; }
+}
+
+.footer-container {
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 5%;
+  z-index: 10;
+}
+
+/* --- GRID LAYOUT --- */
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 50px;
+  margin-bottom: 50px;
+}
+
+.footer-col { display: flex; flex-direction: column; }
+
+/* --- BRAND COLUMN --- */
+.footer-brand { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
+
+.brand-text { font-size: 1.5rem; font-weight: 900; color: #ffffff; letter-spacing: -0.5px; }
+.os-gradient { 
+    background: linear-gradient(90deg, #00ffe7, #7f5cff); 
+    -webkit-background-clip: text; 
+    -webkit-text-fill-color: transparent; 
+}
+
+.footer-desc { font-size: 0.95rem; line-height: 1.6; max-width: 320px; color: #8b92a5; }
+
+/* --- LINKS COLUMNS --- */
+.footer-heading {
+  color: #ffffff;
+  font-size: 1.1rem;
+  font-weight: 800;
+  margin-bottom: 25px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-shadow: 0 0 10px rgba(255,255,255,0.2);
+}
+
+.link-group { display: flex; flex-direction: column; gap: 15px; }
+
+.footer-link {
+  color: #8b92a5;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  font-family: monospace;
+}
+
+/* Sci-fi arrow that slides in on hover */
+.footer-link::before {
+  content: '>';
+  position: absolute;
+  left: -20px;
+  opacity: 0;
+  color: #00ffe7;
+  font-weight: 900;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.footer-link:hover {
+  color: #fff;
+  transform: translateX(20px);
+  text-shadow: 0 0 10px rgba(0, 255, 231, 0.5);
+}
+
+.footer-link:hover::before { opacity: 1; left: -15px; text-shadow: 0 0 15px #00ffe7; }
+
+/* --- BOTTOM BAR & SYSTEM STATUS --- */
+.footer-bottom {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 30px 0; border-top: 1px dashed rgba(255, 255, 255, 0.1);
+  font-size: 0.85rem; font-family: monospace;
+}
+
+.copyright { color: #6b7280; }
+
+.system-status {
+  display: flex; align-items: center; gap: 12px; color: #d1d5db; font-weight: 600;
+  background: rgba(0, 0, 0, 0.5); padding: 8px 18px; border-radius: 30px;
+  border: 1px solid rgba(16, 185, 129, 0.3); box-shadow: inset 0 0 15px rgba(16, 185, 129, 0.05);
+}
+
+/* Animated Radar Dot */
+.status-radar { position: relative; width: 10px; height: 10px; display: flex; align-items: center; justify-content: center; }
+.status-dot { position: absolute; width: 8px; height: 8px; background-color: #10b981; border-radius: 50%; box-shadow: 0 0 10px #10b981; z-index: 2; }
+.status-ping { position: absolute; width: 100%; height: 100%; background-color: transparent; border: 2px solid #10b981; border-radius: 50%; z-index: 1; animation: radarPing 2s cubic-bezier(0.16, 1, 0.3, 1) infinite; }
+
+@keyframes radarPing {
+  0% { transform: scale(1); opacity: 1; border-width: 2px; }
+  100% { transform: scale(3.5); opacity: 0; border-width: 0px; }
+}
+
+.status-text { letter-spacing: 0.5px; text-shadow: 0 0 10px rgba(16, 185, 129, 0.4); }
+
+/* --- RESPONSIVE ADJUSTMENTS --- */
+@media (max-width: 900px) {
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .brand-col { grid-column: span 2; margin-bottom: 20px; text-align: center; align-items: center; }
+  .footer-desc { text-align: center; }
+}
+
+@media (max-width: 600px) {
+  .footer-grid { grid-template-columns: 1fr; gap: 40px; text-align: center; }
+  .footer-col { align-items: center; }
+  .footer-link:hover { transform: translateX(0); color: #00ffe7; }
+  .footer-link::before { content: ''; }
+  .footer-bottom { flex-direction: column-reverse; gap: 20px; }
+}

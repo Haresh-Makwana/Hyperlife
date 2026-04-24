@@ -1,0 +1,137 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+
+/* --- Full Screen Blur Overlay --- */
+.hyper-modal-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background: rgba(3, 4, 7, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: modalFadeIn 0.3s ease-out;
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* --- The Glass Card --- */
+.hyper-modal-card {
+  background: rgba(15, 18, 28, 0.9);
+  border: 1px solid rgba(0, 255, 231, 0.3);
+  border-radius: 24px;
+  padding: 50px 40px;
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 0 30px rgba(0, 255, 231, 0.1);
+  animation: modalPopIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* If it's a Level Up, change colors to Purple/Gold */
+.hyper-modal-card.is-levelup {
+  border-color: #7f5cff;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 0 40px rgba(127, 92, 255, 0.2);
+}
+
+@keyframes modalPopIn {
+  from { opacity: 0; transform: scale(0.8) translateY(20px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* --- Ambient Card Glows --- */
+.hyper-modal-glow {
+  position: absolute;
+  width: 150px; height: 150px;
+  background: #00ffe7;
+  filter: blur(60px);
+  border-radius: 50%;
+  top: -50px; left: 50%;
+  transform: translateX(-50%);
+  opacity: 0.3;
+  z-index: 0;
+}
+
+.is-levelup .hyper-modal-glow {
+  background: #7f5cff;
+  width: 200px; height: 200px;
+  opacity: 0.5;
+  animation: pulseGlow 2s infinite alternate;
+}
+
+@keyframes pulseGlow {
+  0% { transform: translateX(-50%) scale(1); }
+  100% { transform: translateX(-50%) scale(1.2); }
+}
+
+/* --- Content Styling --- */
+.hyper-modal-content {
+  position: relative;
+  z-index: 1;
+}
+
+.hyper-modal-icon {
+  font-size: 4rem;
+  margin-bottom: 15px;
+  animation: floatIcon 3s ease-in-out infinite;
+}
+
+@keyframes floatIcon {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.hyper-modal-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0 0 10px 0;
+  letter-spacing: -0.5px;
+}
+
+.hyper-modal-subtitle {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.1rem;
+  color: #8b92a5;
+  margin: 0 0 30px 0;
+}
+
+.xp-highlight { color: #00ffe7; font-weight: 700; }
+.level-highlight { color: #b094ff; font-weight: 800; font-size: 1.2rem; }
+
+/* --- Action Button --- */
+.hyper-modal-btn {
+  width: 100%;
+  padding: 16px;
+  border-radius: 12px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: linear-gradient(90deg, #00ffe7, #7f5cff);
+  color: #000;
+  box-shadow: 0 5px 15px rgba(0, 255, 231, 0.3);
+}
+
+.hyper-modal-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 255, 231, 0.5);
+}
+
+.is-levelup .hyper-modal-btn {
+  background: linear-gradient(90deg, #7f5cff, #ffaa00);
+  box-shadow: 0 5px 15px rgba(127, 92, 255, 0.3);
+}
+
+.is-levelup .hyper-modal-btn:hover {
+  box-shadow: 0 10px 25px rgba(127, 92, 255, 0.5);
+}

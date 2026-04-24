@@ -1,0 +1,231 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+.about-container {
+  min-height: calc(100vh - 70px);
+  width: 100%;
+  background-color: #0b0c10;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  padding: 80px 5%;
+}
+
+/* --- Ambient Background Glows --- */
+.ambient-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(140px);
+  opacity: 0.35;
+  z-index: 0;
+  pointer-events: none;
+  animation: cosmicFlow 25s infinite alternate ease-in-out;
+}
+
+.glow-top-right {
+  width: 60vw;
+  height: 60vw;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.5) 0%, transparent 70%);
+  top: -20%;
+  right: -10%;
+}
+
+.glow-bottom-left {
+  width: 50vw;
+  height: 50vw;
+  background: radial-gradient(circle, rgba(0, 255, 231, 0.4) 0%, transparent 70%);
+  bottom: -20%;
+  left: -20%;
+  animation-delay: -5s;
+}
+
+/* --- Content Wrapper --- */
+.about-content {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 1000px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 80px;
+}
+
+/* --- Hero Section --- */
+.about-hero {
+  max-width: 700px;
+}
+
+.about-title {
+  font-size: clamp(3rem, 6vw, 4.5rem);
+  font-weight: 800;
+  letter-spacing: -1.5px;
+  line-height: 1.1;
+  margin-bottom: 24px;
+}
+
+.about-subtitle {
+  font-size: 1.15rem;
+  line-height: 1.7;
+  color: #9ca3af;
+}
+
+/* --- Philosophy Glass Card --- */
+.philosophy-glass-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 24px;
+  padding: 50px;
+  text-align: left;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+
+.card-glow-accent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, #00ffe7, #8b5cf6, #ffb86c);
+}
+
+.philosophy-glass-card h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #fff;
+}
+
+.philosophy-glass-card p {
+  font-size: 1.1rem;
+  color: #a0a5ba;
+  line-height: 1.8;
+  margin-bottom: 15px;
+}
+
+.philosophy-glass-card .highlight-text {
+  color: #00ffe7;
+  font-weight: 600;
+  font-style: italic;
+  margin-top: 25px;
+}
+
+/* --- Pillars Grid --- */
+.about-pillars {
+  width: 100%;
+}
+
+.section-heading {
+  font-size: 2.2rem;
+  margin-bottom: 40px;
+  font-weight: 700;
+  letter-spacing: -1px;
+}
+
+.pillars-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+}
+
+.pillar-card {
+  background: rgba(4, 5, 10, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  padding: 40px 30px;
+  text-align: left;
+  transition: all 0.4s ease;
+  position: relative;
+}
+
+.pillar-card:hover {
+  transform: translateY(-10px) scale(1.02);
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+}
+
+.pillar-icon {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  display: inline-block;
+  padding: 15px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.icon-cyan { box-shadow: inset 0 0 20px rgba(0, 255, 231, 0.1); }
+.icon-purple { box-shadow: inset 0 0 20px rgba(139, 92, 246, 0.1); }
+.icon-orange { box-shadow: inset 0 0 20px rgba(255, 184, 108, 0.1); }
+
+.pillar-card h4 {
+  font-size: 1.4rem;
+  color: #fff;
+  margin-bottom: 15px;
+}
+
+.pillar-card p {
+  color: #8b92a5;
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+/* --- CTA Section --- */
+.about-cta {
+  padding: 60px 0 40px;
+}
+
+.about-cta h2 {
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+  letter-spacing: -1px;
+}
+
+.mt-4 {
+  margin-top: 20px;
+}
+
+/* --- Animations --- */
+.animate-entrance {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.3s; }
+.delay-3 { animation-delay: 0.5s; }
+.delay-4 { animation-delay: 0.7s; }
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes cosmicFlow {
+  from { transform: scale(1) translate(0, 0); }
+  to { transform: scale(1.1) translate(40px, -40px); }
+}
+
+/* Zero-G Floating Effects */
+.floating-slow { animation: floatZeroG 8s ease-in-out infinite alternate-reverse; }
+.floating-med { animation: floatZeroG 6s ease-in-out infinite alternate; }
+.floating-fast { animation: floatZeroG 5s ease-in-out infinite alternate-reverse; }
+
+@keyframes floatZeroG {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+  100% { transform: translateY(0); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .about-container { padding: 40px 5%; }
+  .philosophy-glass-card { padding: 30px; }
+  .about-title { font-size: 2.5rem; }
+}

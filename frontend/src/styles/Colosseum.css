@@ -1,0 +1,219 @@
+/* --- CORE LAYOUT --- */
+.colosseum-wrapper {
+    background-color: #030407;
+    min-height: 100vh;
+    padding: 60px 40px;
+    font-family: 'Inter', sans-serif;
+    color: #fff;
+    background-image: 
+        radial-gradient(circle at center top, rgba(255, 0, 60, 0.08), transparent 60%),
+        linear-gradient(rgba(255, 255, 255, 0.01) 1px, transparent 1px), 
+        linear-gradient(90deg, rgba(255, 255, 255, 0.01) 1px, transparent 1px);
+    background-size: 100% 100%, 40px 40px, 40px 40px;
+    overflow-x: hidden;
+}
+
+.center { display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #ff003c; font-family: monospace; }
+
+.colosseum-header { 
+    text-align: center; 
+    margin-bottom: 50px; 
+    animation: fadeInDown 0.8s ease-out;
+}
+.colosseum-header h1 { 
+    margin: 0; 
+    font-size: 3.5rem; 
+    font-weight: 900; 
+    letter-spacing: 8px; 
+    color: #ff003c; 
+    text-shadow: 0 0 20px rgba(255, 0, 60, 0.6), 0 0 40px rgba(255, 0, 60, 0.3); 
+    text-transform: uppercase;
+}
+.colosseum-header p { 
+    color: #8b92a5; 
+    font-family: monospace; 
+    font-size: 1.1rem; 
+    margin-top: 10px;
+}
+
+/* --- TOAST NOTIFICATION --- */
+.cyber-toast {
+    position: fixed;
+    top: 90px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(10, 12, 18, 0.95);
+    border: 1px solid #ff003c;
+    color: #fff;
+    padding: 15px 30px;
+    border-radius: 8px;
+    font-family: monospace;
+    font-weight: bold;
+    font-size: 1rem;
+    z-index: 1000;
+    box-shadow: 0 0 30px rgba(255, 0, 60, 0.5), inset 0 0 10px rgba(255, 0, 60, 0.2);
+    animation: toastSlideDown 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, toastFadeOut 0.4s ease-in forwards 4.5s;
+    text-align: center;
+    max-width: 600px;
+}
+.cyber-toast.success { border-color: #10b981; box-shadow: 0 0 30px rgba(16, 185, 129, 0.5); }
+
+/* --- PANELS --- */
+.colosseum-layout { 
+    display: grid; 
+    grid-template-columns: 1fr 2fr; 
+    gap: 40px; 
+    max-width: 1300px; 
+    margin: 0 auto; 
+}
+
+.matchmaking-panel, .arena-panel {
+    background: rgba(12, 15, 24, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 35px;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6), inset 0 0 20px rgba(0,0,0,0.5);
+    backdrop-filter: blur(10px);
+}
+
+.matchmaking-panel { 
+    border-top: 4px solid #ff003c; 
+    height: fit-content; 
+    animation: slideInLeft 0.6s ease-out;
+}
+.matchmaking-panel h3 { margin-top: 0; color: #ff003c; letter-spacing: 2px; font-size: 1.5rem; text-shadow: 0 0 10px rgba(255,0,60,0.4); }
+
+.challenge-form { display: flex; flex-direction: column; gap: 20px; }
+.challenge-form label { font-size: 0.85rem; color: #9ca3af; text-transform: uppercase; font-weight: bold; letter-spacing: 1px; }
+.challenge-form input, .challenge-form select { 
+    background: rgba(0,0,0,0.6); 
+    border: 1px solid #333; 
+    color: #fff; 
+    padding: 15px; 
+    border-radius: 8px; 
+    outline: none; 
+    font-family: inherit; 
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+.challenge-form input:focus, .challenge-form select:focus { border-color: #ff003c; box-shadow: inset 0 0 10px rgba(255,0,60,0.2); }
+
+.split-inputs { display: flex; gap: 15px; }
+.split-inputs div { flex: 1; display: flex; flex-direction: column; gap: 10px; }
+
+.pot-preview { 
+    background: rgba(255, 184, 108, 0.1); 
+    border: 1px dashed #ffb86c; 
+    color: #ffb86c; 
+    padding: 20px; 
+    text-align: center; 
+    border-radius: 8px; 
+    font-weight: bold; 
+    margin-top: 10px; 
+    box-shadow: inset 0 0 15px rgba(255, 184, 108, 0.05);
+}
+.pot-preview span { font-size: 1.8rem; display: block; margin-top: 5px; font-family: monospace; text-shadow: 0 0 15px #ffb86c; }
+
+.strike-btn {
+    background: rgba(0,0,0,0.4); border: 1px solid #4b5563; color: #d1d5db; padding: 15px; border-radius: 8px; font-weight: 900; cursor: pointer; transition: all 0.3s; text-transform: uppercase; letter-spacing: 2px; width: 100%; font-family: monospace;
+}
+.strike-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+.strike-btn.primary { background: rgba(255, 0, 60, 0.1); border-color: #ff003c; color: #ff003c; }
+.strike-btn.primary:hover:not(:disabled) { background: #ff003c; color: #000; box-shadow: 0 0 25px rgba(255, 0, 60, 0.6); }
+.strike-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* --- ARENA PANEL & DUEL CARDS --- */
+.arena-panel { animation: slideInRight 0.6s ease-out; }
+.arena-panel h3 { margin-top: 0; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; color: #fff; letter-spacing: 2px; }
+.empty-arena { color: #4b5563; font-style: italic; font-family: monospace; text-align: center; padding: 50px; font-size: 1.1rem; }
+.duels-list { display: flex; flex-direction: column; gap: 25px; }
+
+.duel-card { 
+    background: rgba(0,0,0,0.6); 
+    border: 1px solid #333; 
+    border-radius: 12px; 
+    padding: 25px; 
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); 
+    position: relative;
+    overflow: hidden;
+}
+.duel-card::before {
+    content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: #333; transition: 0.4s;
+}
+.duel-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.8); border-color: #555; }
+.duel-card.status-active::before { background: #ff003c; box-shadow: 0 0 15px #ff003c; }
+.duel-card.status-active { border-color: rgba(255, 0, 60, 0.3); background: rgba(255,0,60,0.02); }
+.duel-card.status-completed::before { background: #10b981; }
+.duel-card.status-completed { opacity: 0.8; border-color: rgba(16, 185, 129, 0.3); }
+
+.duel-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+.duel-card-header h4 { margin: 0; color: #fff; font-size: 1.3rem; text-transform: uppercase; letter-spacing: 1px; }
+.wager-badge { background: rgba(255, 184, 108, 0.1); color: #ffb86c; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-family: monospace; border: 1px solid rgba(255,184,108,0.3); box-shadow: 0 0 10px rgba(255,184,108,0.1); }
+
+/* --- FIGHTING GAME METERS --- */
+.vs-container { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+.fighter { display: flex; flex-direction: column; flex: 1; }
+.fighter.them { text-align: right; }
+.fighter .name { color: #9ca3af; font-weight: 900; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; }
+.fighter.me .name { color: #00ffe7; text-shadow: 0 0 10px rgba(0,255,231,0.5); }
+.fighter.them .name { color: #ff003c; text-shadow: 0 0 10px rgba(255,0,60,0.5); }
+.fighter .score { font-size: 2.5rem; font-weight: 900; font-family: monospace; color: #fff; line-height: 1; margin-top: 5px; }
+
+.vs-badge { 
+    background: #030407; border: 2px solid #333; color: #fff; font-weight: 900; 
+    padding: 12px; border-radius: 50%; font-size: 0.9rem; letter-spacing: 2px; 
+    z-index: 2; font-style: italic; box-shadow: 0 0 20px rgba(0,0,0,0.8);
+}
+.duel-card.status-active .vs-badge { border-color: #ff003c; color: #ff003c; animation: vsPulse 2s infinite; }
+
+.progress-dual { 
+    display: flex; height: 16px; background: rgba(0,0,0,0.8); border: 2px solid #222; 
+    border-radius: 8px; overflow: hidden; margin-bottom: 25px; position: relative;
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.8);
+}
+.prog-me { background: linear-gradient(90deg, #00ffe7, #0088ff); transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1); box-shadow: inset 0 0 10px rgba(255,255,255,0.5); }
+.prog-them { background: linear-gradient(270deg, #ff003c, #880000); transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1); margin-left: auto; box-shadow: inset 0 0 10px rgba(255,255,255,0.5); }
+.vs-divider { position: absolute; left: 50%; top: -5px; bottom: -5px; width: 4px; background: #222; transform: translateX(-50%) skewX(-20deg); z-index: 10; }
+
+/* --- AI PROOF LOGGING PANEL --- */
+.proof-panel {
+    background: rgba(0,0,0,0.5);
+    border: 1px dashed rgba(0,255,231,0.4);
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 15px;
+    animation: fadeInDown 0.3s ease-out;
+}
+.proof-input {
+    width: 100%;
+    background: rgba(0,0,0,0.8);
+    border: 1px solid #333;
+    color: #fff;
+    padding: 12px;
+    border-radius: 6px;
+    font-family: monospace;
+    font-size: 0.9rem;
+    resize: vertical;
+    min-height: 70px;
+    margin-bottom: 15px;
+    outline: none;
+    transition: 0.3s;
+}
+.proof-input:focus { border-color: #00ffe7; box-shadow: inset 0 0 10px rgba(0,255,231,0.2); }
+
+.proof-actions { display: flex; gap: 10px; }
+.btn-submit { flex: 2; background: #00ffe7; color: #000; border: none; padding: 12px; font-weight: bold; font-family: monospace; border-radius: 6px; cursor: pointer; transition: 0.3s; font-size: 1rem; }
+.btn-submit:hover:not(:disabled) { box-shadow: 0 0 20px #00ffe7; }
+.btn-cancel { flex: 1; background: transparent; border: 1px solid #4b5563; color: #9ca3af; padding: 12px; font-weight: bold; font-family: monospace; border-radius: 6px; cursor: pointer; transition: 0.3s; }
+.btn-cancel:hover { background: rgba(255,255,255,0.05); color: #fff; }
+
+.winner-banner { background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 15px; border-radius: 8px; font-weight: bold; border: 1px dashed #10b981; letter-spacing: 2px; text-align: center; text-shadow: 0 0 10px rgba(16,185,129,0.4); }
+.loser-banner { background: rgba(239, 68, 68, 0.1); color: #ef4444; padding: 15px; border-radius: 8px; font-weight: bold; border: 1px dashed #ef4444; letter-spacing: 2px; text-align: center; }
+
+/* --- KEYFRAMES --- */
+@keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideInLeft { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes slideInRight { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes vsPulse { 0% { box-shadow: 0 0 10px rgba(255,0,60,0.2); } 50% { box-shadow: 0 0 25px rgba(255,0,60,0.8); text-shadow: 0 0 10px #fff; } 100% { box-shadow: 0 0 10px rgba(255,0,60,0.2); } }
+@keyframes toastSlideDown { from { opacity: 0; transform: translate(-50%, -20px); } to { opacity: 1; transform: translate(-50%, 0); } }
+@keyframes toastFadeOut { from { opacity: 1; transform: translate(-50%, 0); } to { opacity: 0; transform: translate(-50%, -10px); } }

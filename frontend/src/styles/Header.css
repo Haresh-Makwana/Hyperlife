@@ -1,0 +1,195 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+/* --- HEADER BASE (Forced Black Transparent) --- */
+.hyper-header {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 85px !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  padding: 0 5% !important;
+  
+  /* 🚀 THE FIX: Forced pure black with transparency, overriding any global grey styles */
+  background: rgba(2, 3, 5, 0.75) !important; 
+  backdrop-filter: blur(24px) !important;
+  -webkit-backdrop-filter: blur(24px) !important;
+  
+  border: none !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+  margin: 0 !important;
+  z-index: 9999 !important;
+  box-sizing: border-box !important;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  font-family: 'Inter', sans-serif !important;
+}
+
+/* Scrolled State */
+.hyper-header.header-scrolled {
+  height: 70px !important;
+  background: rgba(0, 0, 0, 0.95) !important; /* Goes pitch black when scrolling */
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9) !important;
+  border-bottom: 1px solid rgba(0, 255, 231, 0.2) !important;
+}
+
+/* The Sci-Fi Glowing Bottom Border */
+.header-glow-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(127, 92, 255, 0.3) 20%, 
+    rgba(0, 255, 231, 0.8) 50%, 
+    rgba(127, 92, 255, 0.3) 80%, 
+    transparent 100%
+  );
+  box-shadow: 0 2px 15px rgba(0, 255, 231, 0.4);
+  opacity: 0.7;
+  transition: opacity 0.4s;
+}
+
+.hyper-header.header-scrolled .header-glow-bar {
+  opacity: 1;
+}
+
+/* --- BRANDING & LOGO --- */
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  cursor: pointer;
+}
+
+.brand-logo-mark {
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 20px rgba(0, 255, 231, 0.1);
+  transition: all 0.4s ease;
+}
+
+.inner-core {
+  width: 12px;
+  height: 12px;
+  background: #00ffe7;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #00ffe7, 0 0 20px #7f5cff;
+  animation: corePulse 3s infinite alternate ease-in-out;
+}
+
+@keyframes corePulse {
+  0% { transform: scale(0.8); opacity: 0.8; filter: hue-rotate(0deg); }
+  100% { transform: scale(1.1); opacity: 1; filter: hue-rotate(45deg); }
+}
+
+.header-brand:hover .brand-logo-mark {
+  border-color: #00ffe7;
+  box-shadow: 0 0 20px rgba(0, 255, 231, 0.3);
+  transform: rotate(90deg);
+}
+
+.brand-text {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.5px;
+}
+
+.brand-os {
+  background: linear-gradient(45deg, #00ffe7, #7f5cff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 800;
+}
+
+/* --- NAVIGATION PILLS --- */
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-link {
+  color: #8b92a5;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 8px 18px;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+  letter-spacing: 0.3px;
+}
+
+.nav-link:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.nav-link.active {
+  color: #00ffe7;
+  background: rgba(0, 255, 231, 0.1);
+  box-shadow: inset 0 0 10px rgba(0, 255, 231, 0.05);
+}
+
+.nav-divider {
+  width: 1px;
+  height: 24px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 0 10px;
+}
+
+/* --- PREMIUM BUTTONS --- */
+.nav-btn-primary {
+  background: linear-gradient(90deg, #7f5cff, #00ffe7);
+  color: #000;
+  font-weight: 800;
+  font-size: 0.95rem;
+  padding: 10px 24px;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0, 255, 231, 0.2);
+}
+
+.nav-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 255, 231, 0.4);
+  filter: brightness(1.1);
+}
+
+.nav-btn-danger {
+  background: transparent;
+  color: #ff5f6d;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 8px 20px;
+  border-radius: 30px;
+  border: 1px solid rgba(255, 95, 109, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.nav-btn-danger:hover {
+  background: rgba(255, 95, 109, 0.1);
+  border-color: #ff5f6d;
+  box-shadow: 0 0 15px rgba(255, 95, 109, 0.3);
+  color: #fff;
+}
+
+/* --- RESPONSIVE MOBILE FIXES --- */
+@media (max-width: 900px) {
+  .header-nav { gap: 5px; }
+  .nav-link { display: none; }
+  .nav-divider { display: none; }
+}

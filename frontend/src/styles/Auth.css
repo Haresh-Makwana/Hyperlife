@@ -1,0 +1,274 @@
+/* =========================================
+   HYPERLIFE OS - AUTHENTICATION STYLES
+   ========================================= */
+
+.auth-container {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  background-color: #050505; /* Deep space black */
+  color: #ffffff;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* 🌌 Left Side: Abstract Branding */
+.auth-left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at center, #111827 0%, #050505 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Optional glow effect behind the logo */
+.auth-left::before {
+  content: '';
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  background: rgba(0, 255, 231, 0.1);
+  filter: blur(100px);
+  border-radius: 50%;
+}
+
+.auth-logo {
+  font-size: 3rem;
+  font-weight: 800;
+  letter-spacing: -1px;
+  z-index: 1;
+}
+
+.logo-icon {
+  margin-right: 10px;
+}
+
+/* 💎 Right Side: Login Form Area */
+.auth-right {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  z-index: 1;
+}
+
+/* Glassmorphism Card */
+.auth-glass-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  padding: 40px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.auth-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 30px;
+  color: #f3f4f6;
+  text-align: center;
+}
+
+/* =========================================
+   GOOGLE SSO BUTTON
+   ========================================= */
+.google-sso-btn {
+    width: 100%;
+    padding: 14px;
+    background: #ffffff;
+    color: #000000;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 25px;
+    transition: all 0.3s;
+}
+
+.google-sso-btn:hover {
+    background: #e2e8f0;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+.google-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.auth-divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #8b92a5;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    margin-bottom: 25px;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #333;
+}
+
+.auth-divider span {
+    padding: 0 10px;
+}
+
+/* =========================================
+   FORM INPUTS
+   ========================================= */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 14px 16px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: #fff;
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.input-group input:focus {
+  border-color: #00ffe7;
+  box-shadow: 0 0 0 2px rgba(0, 255, 231, 0.2);
+}
+
+.input-group input::placeholder {
+  color: #6b7280;
+}
+
+/* Submit Button */
+.auth-submit-btn {
+  width: 100%;
+  padding: 14px;
+  margin-top: 10px;
+  background: linear-gradient(135deg, #00ffe7 0%, #00b3a6 100%);
+  color: #000;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.auth-submit-btn:hover:not(:disabled) {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.auth-submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Links and Toggles */
+.forgot-password {
+  display: block;
+  text-align: right;
+  font-size: 0.85rem;
+  color: #9ca3af;
+  text-decoration: none;
+  margin-top: -5px;
+  margin-bottom: 10px;
+  transition: color 0.3s ease;
+}
+
+.forgot-password:hover {
+  color: #00ffe7;
+}
+
+.auth-toggle {
+  margin-top: 25px;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #9ca3af;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.toggle-btn {
+  background: none;
+  border: none;
+  color: #00ffe7;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  font-size: 0.9rem;
+}
+
+.toggle-btn:hover {
+  text-decoration: underline;
+}
+
+/* =========================================
+   SYSTEM ALERTS (Error & Success)
+   ========================================= */
+.error-message {
+  color: #ff4d4d;
+  background: rgba(255, 77, 77, 0.1);
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  border: 1px solid rgba(255, 77, 77, 0.2);
+  text-align: center;
+  margin-top: 10px;
+}
+
+.success-message {
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.1);
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  text-align: center;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+/* =========================================
+   RESPONSIVE DESIGN (Mobiles/Tablets)
+   ========================================= */
+@media (max-width: 768px) {
+  .auth-container {
+    flex-direction: column;
+  }
+  
+  .auth-left {
+    flex: none;
+    padding: 40px 20px;
+  }
+  
+  .auth-logo {
+    font-size: 2rem;
+  }
+  
+  .auth-right {
+    padding: 20px;
+    align-items: flex-start;
+  }
+}

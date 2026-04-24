@@ -1,0 +1,65 @@
+# --- HyperLife OS: Master Ignore List ---
+
+# 🛑 SENSITIVE DATA (Keep these out of GitHub!)
+Admin-Reg-Key.txt
+GoogleGroq(API Key).txt
+*.csv
+.env
+*.sql
+*.sqlite
+
+# 🚀 THE FIX: Global catches for heavy library folders
+node_modules/
+**/node_modules/
+vendor/
+**/vendor/
+
+# --- System / OS Files ---
+.DS_Store
+Thumbs.db
+*.swp
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# --- Editor / IDE ---
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# --- Frontend (React/Vite) ---
+frontend/dist/
+frontend/dist-ssr/
+frontend/*.local
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+
+# --- Backend (Laravel) ---
+backend/.env
+# We ignore the public/storage symlink so it doesn't break on Linux servers
+backend/public/storage
+backend/storage/*.key
+backend/storage/framework/cache/data/*
+backend/storage/framework/sessions/*
+backend/storage/framework/views/*
+backend/storage/logs/*
+backend/bootstrap/cache/*
+backend/.phpunit.result.cache
+
+# --- AI Core (Python) ---
+# Ignore local environments and compiled code
+ai/.env
+ai/__pycache__/
+ai/*.pyc
+ai/.venv/
+ai/venv/
+ai/env/
+ai/.pytest_cache/
+ai/temp_audio/
+
+# --- General Logs ---
+*.log
+logs/
