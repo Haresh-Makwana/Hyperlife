@@ -97,8 +97,8 @@ export default function ThreeDashboard() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // 🏆 THE FIX: Dynamic URL targeting
-  const API_URL = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000/api";
+  // 🏆 THE ULTIMATE FIX: 127.0.0.1 is dead. It will ALWAYS fall back to Railway now.
+  const API_URL = import.meta.env.VITE_API_BASE_URL || "https://hyperlife-production.up.railway.app/api";
 
   const [isSignup, setIsSignup] = useState(location.pathname === "/register");
   const [showPassword, setShowPassword] = useState(false);
@@ -144,7 +144,6 @@ export default function ThreeDashboard() {
 
   const handleGoogleLogin = async () => {
     try {
-      // 🏆 FIXED: Now uses the dynamic API_URL
       const res = await fetch(`${API_URL}/auth/google/url`);
       const data = await res.json();
       if (data.url) window.location.href = data.url;
@@ -174,7 +173,6 @@ export default function ThreeDashboard() {
       : { email, password };
 
     try {
-      // 🏆 FIXED: Now uses the dynamic API_URL
       const res = await fetch(`${API_URL}/${endpoint}`, {
         method: "POST",
         headers: { "Content-Type": "application/json", "Accept": "application/json" },
@@ -219,7 +217,6 @@ export default function ThreeDashboard() {
     e.preventDefault();
     setLoading(true); setError(""); setSuccess("");
     try {
-      // 🏆 FIXED: Now uses the dynamic API_URL
       const res = await fetch(`${API_URL}/verify-email-otp`, {
         method: "POST", 
         headers: { "Content-Type": "application/json", "Accept": "application/json" },
