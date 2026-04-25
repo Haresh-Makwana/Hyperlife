@@ -97,6 +97,9 @@ export default function ThreeDashboard() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // 🏆 THE FIX: Dynamic URL targeting
+  const API_URL = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000/api";
+
   const [isSignup, setIsSignup] = useState(location.pathname === "/register");
   const [showPassword, setShowPassword] = useState(false);
   const [role, setRole] = useState("user"); 
@@ -141,7 +144,8 @@ export default function ThreeDashboard() {
 
   const handleGoogleLogin = async () => {
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/auth/google/url");
+      // 🏆 FIXED: Now uses the dynamic API_URL
+      const res = await fetch(`${API_URL}/auth/google/url`);
       const data = await res.json();
       if (data.url) window.location.href = data.url;
     } catch (err) {
@@ -170,7 +174,8 @@ export default function ThreeDashboard() {
       : { email, password };
 
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/${endpoint}`, {
+      // 🏆 FIXED: Now uses the dynamic API_URL
+      const res = await fetch(`${API_URL}/${endpoint}`, {
         method: "POST",
         headers: { "Content-Type": "application/json", "Accept": "application/json" },
         body: JSON.stringify(payload),
@@ -214,7 +219,8 @@ export default function ThreeDashboard() {
     e.preventDefault();
     setLoading(true); setError(""); setSuccess("");
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/verify-email-otp", {
+      // 🏆 FIXED: Now uses the dynamic API_URL
+      const res = await fetch(`${API_URL}/verify-email-otp`, {
         method: "POST", 
         headers: { "Content-Type": "application/json", "Accept": "application/json" },
         body: JSON.stringify({ email, otp })
@@ -256,7 +262,6 @@ export default function ThreeDashboard() {
 
             {!verificationPhase && (
               <>
-                {/* 🚀 FIXED: Google Button now dynamically locks if Admin is selected */}
                 <button 
                     type="button" 
                     onClick={role === 'admin' ? null : handleGoogleLogin} 
