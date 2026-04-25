@@ -1,6 +1,8 @@
 import { getToken } from "./auth";
 
-const API_URL = "http://127.0.0.1:8000/api";
+// 🏆 THE FIX IS HERE 🏆
+// This tells React: "Use the Vercel variable if it exists. If not, use localhost."
+const API_URL = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000/api";
 
 export const apiFetch = async (endpoint, options = {}) => {
   // ❌ Prevent passing full URLs
