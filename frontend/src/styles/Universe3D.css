@@ -172,3 +172,74 @@
     70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(236, 72, 153, 0); }
     100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(236, 72, 153, 0); }
 }
+
+/* =========================================
+   MOBILE & TABLET RESPONSIVENESS
+========================================= */
+
+@media (max-width: 768px) {
+  /* Keep the canvas full bleed */
+  .canvas-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+  }
+
+  /* Center and stack the UI elements */
+  .ui-layer {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+  }
+
+  /* Scale down the glass card for mobile */
+  .ultra-glass-card {
+    width: 100%;
+    max-width: 90vw; /* Prevents it from touching the edges */
+    padding: 30px 20px;
+    margin: 0 auto;
+    backdrop-filter: blur(15px); /* Slightly reduce blur for mobile performance */
+  }
+
+  /* Adjust typography for smaller screens */
+  .brand-section .logo {
+    font-size: 2.2rem;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  /* Crucial: Prevent iOS auto-zoom on inputs */
+  .cyber-input {
+    font-size: 16px; 
+    padding: 12px 15px;
+  }
+
+  /* Adjust the role toggle buttons */
+  .role-toggle-container {
+    flex-direction: row;
+    width: 100%;
+  }
+  
+  .role-btn {
+    font-size: 0.85rem;
+    padding: 8px 10px;
+  }
+}
+
+/* For extremely small screens (Foldable phones) */
+@media (max-width: 360px) {
+  .ultra-glass-card {
+    padding: 20px 15px;
+  }
+  .brand-section .logo {
+    font-size: 1.8rem;
+  }
+}
