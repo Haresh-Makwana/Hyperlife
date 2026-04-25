@@ -167,8 +167,8 @@ class AuthController extends Controller
     public function handleGoogleCallback()
     {
         // 🚀 THE FIX: Use the Vercel URL from Railway environment variables, NEVER hardcode localhost in production
-        $frontendUrl = env('FRONTEND_URL', 'https://hyperlife-beta.vercel.app');
-
+// Force the exact live domain, ignoring the cache
+            $frontendUrl = 'https://hyperlife-tau.vercel.app';
         try {
             $guzzleClient = new \GuzzleHttp\Client(['verify' => false]);
 
