@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Log; // Added for debugging
 
 class AuthController extends Controller
 {
@@ -142,19 +143,32 @@ class AuthController extends Controller
     // ==========================================
     public function redirectToGoogle()
     {
-        $guzzleClient = new \GuzzleHttp\Client(['verify' => false]);
+        try {
+            $guzzleClient = new \GuzzleHttp\Client(['verify' => false]);
 
-        return response()->json([
-            'url' => Socialite::driver('google')
+            $url = Socialite::driver('google')
                         ->setHttpClient($guzzleClient)
                         ->stateless()
                         ->redirect()
-                        ->getTargetUrl()
-        ]);
+                        ->getTargetUrl();
+
+            return response()->json(['url' => $url]);
+
+        } catch (\Exception $e) {
+            // 🚀 THE FIX: This will catch the 500 error and tell us exactly what is broken!
+            Log::error('Google Auth Failed: ' . $e->getMessage());
+            return response()->json([
+                'message' => 'Server failed to generate Google link.',
+                'real_error' => $e->getMessage() 
+            ], 500);
+        }
     }
 
     public function handleGoogleCallback()
     {
+        // 🚀 THE FIX: Use the Vercel URL from Railway environment variables, NEVER hardcode localhost in production
+        $frontendUrl = env('FRONTEND_URL', 'https://hyperlife-beta.vercel.app');
+
         try {
             $guzzleClient = new \GuzzleHttp\Client(['verify' => false]);
 
@@ -183,14 +197,15 @@ class AuthController extends Controller
 
             $token = $user->createToken('auth_token')->plainTextToken;
             
-            // 🚀 FIXED: URL Encode the token so the pipe "|" character doesn't break browser routing
             $safeToken = urlencode($token);
             $safeRole = urlencode($user->role);
-            return redirect("http://localhost:5173/login?token={$safeToken}&role={$safeRole}");
+            
+            // Redirects to Vercel dynamically!
+            return redirect("{$frontendUrl}/login?token={$safeToken}&role={$safeRole}");
 
         } catch (\Exception $e) {
             $errorMsg = urlencode($e->getMessage());
-            return redirect("http://localhost:5173/login?error={$errorMsg}");
+            return redirect("{$frontendUrl}/login?error={$errorMsg}");
         }
     }
 
@@ -203,7 +218,6 @@ class AuthController extends Controller
         try {
             $user = $request->user();
             
-            // 🚀 FIXED: Safe returns prevent 500 Server Crashes if DB columns are empty
             return response()->json([
                 'id' => $user->id,
                 'name' => $user->name,
