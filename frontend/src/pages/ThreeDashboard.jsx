@@ -98,7 +98,7 @@ export default function ThreeDashboard() {
   const location = useLocation();
 
   // 🏆 THE ULTIMATE FIX: 127.0.0.1 is dead. It will ALWAYS fall back to Railway now.
-  const API_URL = import.meta.env.VITE_API_BASE_URL || "https://hyperlife-production.up.railway.app/api";
+  const API_URL = import.meta.env.VITE_API_BASE_URL || "https://hyperlife-backend.gt.tc/api";
 
   const [isSignup, setIsSignup] = useState(location.pathname === "/register");
   const [showPassword, setShowPassword] = useState(false);
@@ -142,16 +142,15 @@ export default function ThreeDashboard() {
     }
   }, [location.pathname, location.search, navigate]);
 
-  const handleGoogleLogin = async () => {
+ const handleGoogleLogin = () => {
     try {
-      const res = await fetch(`${API_URL}/auth/google/url`);
-      const data = await res.json();
-      if (data.url) window.location.href = data.url;
+      // 🚀 THE FIX: Direct browser navigation bypasses CORS fetch blocks entirely.
+      // Ensure API_URL evaluates to 'https://hyperlife-backend.gt.tc/api'
+      window.location.href = `${API_URL}/auth/google/url`; 
     } catch (err) {
-      setError("Failed to establish secure link with Google.");
+      setError("Failed to initialize Google uplink.");
     }
   };
-
   const handleAuth = async (e) => {
     if (e) e.preventDefault(); 
     setError(""); setSuccess("");

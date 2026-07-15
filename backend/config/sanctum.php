@@ -38,31 +38,29 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Expiration Minutes
+    | Expiration Minutes (THE VAULT TIMER)
     |--------------------------------------------------------------------------
     |
-    | This value controls the number of minutes until an issued token will be
-    | considered expired. This will override any values set in the token's
-    | "expires_at" attribute, but first-party sessions are not affected.
+    | 🔒 THE SHIELD: Tokens will now automatically self-destruct after 24 hours 
+    | (1440 minutes). You can override this in your .env file using 
+    | SANCTUM_TOKEN_EXPIRATION if you want them to last longer (e.g., 10080 for a week).
     |
     */
 
-    'expiration' => null,
+    'expiration' => env('SANCTUM_TOKEN_EXPIRATION', 1440),
 
     /*
     |--------------------------------------------------------------------------
-    | Token Prefix
+    | Token Prefix (THE TRACKER)
     |--------------------------------------------------------------------------
     |
-    | Sanctum can prefix new tokens in order to take advantage of numerous
-    | security scanning initiatives maintained by open source platforms
-    | that notify developers if they commit tokens into repositories.
-    |
-    | See: https://docs.github.com/en/code-security/secret-scanning/about-secret-scanning
+    | 🔒 THE SHIELD: Adding a 'hl_os_' prefix to all generated tokens. If you 
+    | or a teammate accidentally paste a token into a public GitHub repo, 
+    | secret-scanning bots will instantly flag it as a HyperLife OS token.
     |
     */
 
-    'token_prefix' => env('SANCTUM_TOKEN_PREFIX', ''),
+    'token_prefix' => env('SANCTUM_TOKEN_PREFIX', 'hl_os_'),
 
     /*
     |--------------------------------------------------------------------------

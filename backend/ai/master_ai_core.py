@@ -4,22 +4,42 @@ import json
 import warnings
 import tempfile
 import numpy as np
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, abort
 from flask_cors import CORS
 from sklearn.linear_model import LinearRegression
 from dotenv import load_dotenv
 from groq import Groq
 from waitress import serve
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 # 🚀 INITIALIZE ENVIRONMENT
 warnings.filterwarnings('ignore')
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app) # Allow frontend/backend connections
 
-# 🚀 INITIALIZE GROQ (Bypasses Gemini 429 Rate Limits)
+# 🔒 THE SHIELD 1: Strict CORS
+# Only your specific frontends and backend are allowed to even handshake with this server.
+CORS(app, origins=[
+    os.getenv("FRONTEND_URL", "http://localhost:5173"),
+    os.getenv("BACKEND_URL", "http://127.0.0.1:8000"),
+    "http://localhost:3000"
+])
+
+# 🔒 THE SHIELD 2: Rate Limiting
+# Prevents DoS attacks and API bill spikes. Maximum 100 requests per day per IP.
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    default_limits=["100 per day", "20 per hour"],
+    storage_uri="memory://"
+)
+
+# 🚀 INITIALIZE GROQ 
 API_KEY = os.getenv("GROQ_API_KEY")
+SYSTEM_AUTH_KEY = os.getenv("HYPER_AI_SECRET_KEY") # 🔒 The Internal API Key
+
 if not API_KEY:
     print("⚠️ WARNING: GROQ_API_KEY not set. AI routes will use offline fallbacks.")
     client = None
@@ -27,13 +47,58 @@ else:
     client = Groq(api_key=API_KEY)
 
 # ==========================================
+# 🛡️ THE PERIMETER: AUTHORIZATION MIDDLEWARE
+# ==========================================
+@app.before_request
+def require_api_key():
+    # Allow the ping/health check through without a token so Render/Railway can verify the server is alive
+    if request.endpoint == 'read_root':
+        return
+    
+    # 🔒 Drop any request that doesn't have the exact secret key
+    auth_header = request.headers.get("Authorization")
+    if not SYSTEM_AUTH_KEY or auth_header != f"Bearer {SYSTEM_AUTH_KEY}":
+        print(f"⚠️ UNAUTHORIZED INTRUSION ATTEMPT BLOCKED FROM IP: {request.remote_addr}")
+        abort(401, description="ACCESS DENIED: Invalid or missing clearance key.")
+
+# ==========================================
+# 🛡️ HELPER: PROMPT SANITIZER (Anti-Jailbreak)
+# ==========================================
+def sanitize_input(text, max_length=1000):
+    """Caps text length and strips prompt injection vectors to protect the LLM."""
+    if not text: 
+        return ""
+    
+    # Cap length to prevent token-exhaustion attacks
+    clean = str(text)[:max_length]
+    
+    # Strip common jailbreak attempts
+    injection_phrases = [
+        r"ignore all previous", r"system prompt", r"disregard", 
+        r"forget all instructions", r"you are no longer", r"bypass"
+    ]
+    for phrase in injection_phrases:
+        clean = re.sub(phrase, "[REDACTED]", clean, flags=re.IGNORECASE)
+        
+    return clean.strip()
+
+def clean_json_response(raw_text):
+    """Strips markdown blocks from LLM output to guarantee valid JSON."""
+    clean_text = raw_text.strip()
+    clean_text = re.sub(r"^```json\s*", "", clean_text, flags=re.IGNORECASE)
+    clean_text = re.sub(r"^```\s*", "", clean_text)
+    clean_text = re.sub(r"\s*```$", "", clean_text).strip()
+    return json.loads(clean_text)
+
+# ==========================================
 # 🌐 HEALTH CHECK
 # ==========================================
 @app.route('/', methods=['GET'])
+@limiter.exempt # Exclude from rate limiting so uptime monitors don't get blocked
 def read_root():
     return jsonify({
         "status": "Online",
-        "message": "HyperLife Master AI Core is active."
+        "message": "HyperLife Master AI Core is active and secured."
     }), 200
 
 # ==========================================
@@ -88,7 +153,7 @@ def sentient_analysis():
         insight = analyze_telemetry(activities)
         return jsonify({'insight': insight}), 200
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return jsonify({'error': "Telemetry analysis failed."}), 500
 
 # ==========================================
 # ⚙️ MODULE 2: NEURAL ENGINE (Machine Learning)
@@ -147,16 +212,6 @@ def predict():
         print(f"[ERROR] Neural Engine Failure: {str(e)}")
         return jsonify({"insight": "The AI is analyzing your data. Check back soon!"}), 500
 
-# ==========================================
-# 🛠️ HELPER: JSON CLEANER
-# ==========================================
-def clean_json_response(raw_text):
-    """Strips markdown blocks from LLM output to guarantee valid JSON."""
-    clean_text = raw_text.strip()
-    clean_text = re.sub(r"^```json\s*", "", clean_text, flags=re.IGNORECASE)
-    clean_text = re.sub(r"^```\s*", "", clean_text)
-    clean_text = re.sub(r"\s*```$", "", clean_text).strip()
-    return json.loads(clean_text)
 
 # ==========================================
 # 🔮 MODULE 3: OMNI-PROCESS (LLaMA-3 Text)
@@ -165,7 +220,9 @@ def clean_json_response(raw_text):
 def omni_process():
     try:
         data = request.get_json(silent=True) or {}
-        text_input = data.get('telemetry_text', data.get('text', ''))
+        # 🔒 THE SHIELD: Sanitize incoming data before feeding it to the LLM
+        raw_text = data.get('telemetry_text', data.get('text', ''))
+        text_input = sanitize_input(raw_text, max_length=500)
 
         if not client:
             raise Exception("API Key missing.")
@@ -214,23 +271,23 @@ def omni_process_audio():
         if not client:
             raise Exception("API Key missing.")
 
-        # 1. Save browser audio to temp file for Whisper
         with tempfile.NamedTemporaryFile(delete=False, suffix=".webm") as temp_audio:
             audio_file.save(temp_audio.name)
             temp_path = temp_audio.name
 
         try:
-            # 2. Whisper Transcription
             with open(temp_path, "rb") as file:
                 transcription = client.audio.transcriptions.create(
                     file=("audio.webm", file.read()),
                     model="whisper-large-v3"
                 )
-            text_input = transcription.text
+            
+            # 🔒 THE SHIELD: Sanitize the AI's transcription before passing it to the secondary LLM
+            text_input = sanitize_input(transcription.text, max_length=1500)
+            
         finally:
-            os.remove(temp_path) # Cleanup
+            os.remove(temp_path) 
 
-        # 3. LLaMA-3 XP Scoring
         prompt = f"""
         You are the friendly AI coach of HyperLife OS. 
         I am giving you an audio transcription of my daily log: "{text_input}"
@@ -269,7 +326,10 @@ def omni_process_audio():
 @app.route('/psych-eval', methods=['POST'])
 def psych_eval():
     data = request.get_json(silent=True) or {}
-    log_text = data.get('log_text', data.get('text', data.get('content', data.get('entry', ''))))
+    raw_log = data.get('log_text', data.get('text', data.get('content', data.get('entry', ''))))
+    
+    # 🔒 THE SHIELD: Sanitize the journal entry
+    log_text = sanitize_input(raw_log, max_length=2000)
 
     if not log_text:
         return jsonify({
@@ -316,6 +376,6 @@ def psych_eval():
 # ==========================================
 if __name__ == '__main__':
     print("\n" + "="*60)
-    print(" 🧠 HYPERLIFE OS: MASTER AI CORE ONLINE (PORT 5000)")
+    print(" 🧠 HYPERLIFE OS: MASTER AI CORE ONLINE & SECURED (PORT 5000)")
     print("="*60)
     serve(app, host='0.0.0.0', port=5000)

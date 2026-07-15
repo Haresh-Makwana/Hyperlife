@@ -29,21 +29,41 @@ use App\Models\Contact;
 
 /*
 |--------------------------------------------------------------------------
-| PUBLIC ROUTES
+| PUBLIC ROUTES (Unsecured Ping)
 |--------------------------------------------------------------------------
 */
 Route::get('/ping', function () {
-    return response()->json(['status' => 'ok', 'message' => 'API Is Working']);
+    return response()->json(['status' => 'ok', 'message' => 'System Online']);
 });
-
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/contact', [ContactController::class, 'store']); 
-Route::post('/admin/login', [AdminController::class, 'login']);
 
 /*
 |--------------------------------------------------------------------------
-| PROTECTED ROUTES (Login Token Required)
+| 🛡️ THE PERIMETER: RATE-LIMITED PUBLIC ROUTES
+| Prevents brute-force attacks and OTP spam (Max 5 requests per minute)
+|--------------------------------------------------------------------------
+*/
+Route::middleware('throttle:5,1')->group(function () {
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/admin/login', [AdminController::class, 'login']);
+    
+    // Contact & OTP endpoints are heavy targets for automated bots
+    Route::post('/contact', [ContactController::class, 'store']); 
+    Route::post('/verify-email-otp', [AuthController::class, 'verifyEmailOtp']);
+    Route::post('/password/send-otp', [PasswordResetController::class, 'sendOtp']);
+    Route::post('/password/verify-otp', [PasswordResetController::class, 'verifyOtp']);
+    Route::post('/password/reset', [PasswordResetController::class, 'resetPassword']);
+    
+    // Google Auth Init
+    Route::get('/auth/google/url', [AuthController::class, 'redirectToGoogle']);
+});
+
+// Google Callback (Excluded from strict throttle to prevent redirect drops)
+Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallback']);
+
+/*
+|--------------------------------------------------------------------------
+| PROTECTED ROUTES (Requires valid Sanctum Token)
 |--------------------------------------------------------------------------
 */
 Route::middleware('auth:sanctum')->group(function () {
@@ -122,9 +142,11 @@ Route::middleware('auth:sanctum')->group(function () {
         return response()->json($topUsers);
     });
 
-    /* 🧠 OMNI-PROCESS */
-    Route::post('/omni-process', [OmniController::class, 'process']);
-    Route::post('/omni-process-audio', [OmniController::class, 'processAudio']); // 🚀 NEW AUDIO ROUTE ADDED HERE
+    /* 🧠 OMNI-PROCESS (Heavily throttled to prevent resource exhaustion) */
+    Route::middleware('throttle:10,1')->group(function () {
+        Route::post('/omni-process', [OmniController::class, 'process']);
+        Route::post('/omni-process-audio', [OmniController::class, 'processAudio']);
+    });
 
     /* ✅ SYSTEM PROTOCOLS */
     Route::get('/system/status', [AdminController::class, 'getSystemStatus']);
@@ -175,8 +197,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/analytics/weekly', [AnalyticsController::class, 'weekly']);
 
-    /* 🚀 AI PREDICTIONS */
-    Route::post('/ai-suggestions', function (Request $request) {
+    /* 🛡️ AI PREDICTIONS (Protected from spam & dynamic routing applied) */
+    Route::middleware('throttle:15,1')->post('/ai-suggestions', function (Request $request) {
         $activities = $request->input('activities');
 
         if (!$activities || count($activities) === 0) {
@@ -184,7 +206,10 @@ Route::middleware('auth:sanctum')->group(function () {
         }
 
         try {
-            $response = Http::timeout(15)->post('http://127.0.0.1:5000/sentient-analysis', [
+            // Dynamically pull the AI server address from the .env file. Never hardcode localhost in production.
+            $aiServiceUrl = env('AI_MICROSERVICE_URL', 'http://127.0.0.1:5000') . '/sentient-analysis';
+            
+            $response = Http::timeout(15)->post($aiServiceUrl, [
                 'activities' => $activities
             ]);
 
@@ -202,20 +227,13 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 });
 
-// 🚀 GOOGLE AUTH ROUTES
-Route::get('/auth/google/url', [AuthController::class, 'redirectToGoogle']);
-Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallback']);
-
 // 🚀 EMAIL VERIFICATION 
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
-    return redirect('http://localhost:5173/login?verified=1');
+    
+    // Dynamically pull the frontend URL from the environment, stripped of trailing slashes
+    $frontendUrl = rtrim(env('FRONTEND_URL', 'http://localhost:5173'), '/');
+    return redirect("{$frontendUrl}/login?verified=1");
+    
 })->middleware(['auth:sanctum', 'signed'])->name('verification.verify');
-
-Route::post('/verify-email-otp', [\App\Http\Controllers\Api\AuthController::class, 'verifyEmailOtp']);
-
-// Reset password routes
-Route::post('/password/send-otp', [PasswordResetController::class, 'sendOtp']);
-Route::post('/password/verify-otp', [PasswordResetController::class, 'verifyOtp']);
-Route::post('/password/reset', [PasswordResetController::class, 'resetPassword']);

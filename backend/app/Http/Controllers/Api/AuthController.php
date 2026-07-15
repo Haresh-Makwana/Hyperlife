@@ -164,11 +164,12 @@ class AuthController extends Controller
         }
     }
 
-    public function handleGoogleCallback()
+  public function handleGoogleCallback()
     {
-        // 🚀 THE FIX: Use the Vercel URL from Railway environment variables, NEVER hardcode localhost in production
-// Force the exact live domain, ignoring the cache
-            $frontendUrl = 'https://hyperlife-tau.vercel.app';
+        // 🚀 THE FIX: rtrim() removes accidental trailing slashes.
+        // Fallback set to 3000 based on your previous URL, but reads from .env first!
+        $frontendUrl = rtrim(env('FRONTEND_URL', 'http://localhost:3000'), '/');
+
         try {
             $guzzleClient = new \GuzzleHttp\Client(['verify' => false]);
 
@@ -188,6 +189,7 @@ class AuthController extends Controller
                     'role' => 'operator',
                     'email_verified_at' => now(), 
                 ]);
+                
                 $this->initializeUniverse($user);
             } else {
                 if (!$user->google_id) {
@@ -198,12 +200,15 @@ class AuthController extends Controller
             $token = $user->createToken('auth_token')->plainTextToken;
             
             $safeToken = urlencode($token);
-            $safeRole = urlencode($user->role);
+            $safeRole = urlencode($user->role ?? 'operator');
             
-            // Redirects to Vercel dynamically!
+            // Redirects perfectly to your React app
             return redirect("{$frontendUrl}/login?token={$safeToken}&role={$safeRole}");
 
         } catch (\Exception $e) {
+            // 🚀 THE FIX: Logs the exact error to storage/logs/laravel.log so we aren't blind
+            \Illuminate\Support\Facades\Log::error('Google Callback Crash: ' . $e->getMessage());
+            
             $errorMsg = urlencode($e->getMessage());
             return redirect("{$frontendUrl}/login?error={$errorMsg}");
         }
