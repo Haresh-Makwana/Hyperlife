@@ -25,4 +25,5 @@ RUN composer install --optimize-autoloader --no-dev
 RUN chmod -R 777 storage bootstrap/cache
 
 # BYPASS PRE-DEPLOY & NUKE CACHE: Clear config, run migration, then boot the server
-CMD php artisan config:clear && php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=$PORT
+# The definitive wipe-and-run command
+CMD php artisan config:clear && php artisan cache:clear && php artisan route:clear && php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=$PORT
