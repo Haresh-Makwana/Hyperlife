@@ -24,5 +24,5 @@ RUN composer install --optimize-autoloader --no-dev
 # Unlock internal memory folders
 RUN chmod -R 777 storage bootstrap/cache
 
-# Boot the application using Render's dynamic port assignment
-CMD php artisan serve --host=0.0.0.0 --port=$PORT
+# BYPASS PRE-DEPLOY: Run migration, then boot the server automatically
+CMD php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=$PORT
