@@ -24,5 +24,5 @@ RUN composer install --optimize-autoloader --no-dev
 # Unlock internal memory folders
 RUN chmod -R 777 storage bootstrap/cache
 
-# BYPASS PRE-DEPLOY: Run migration, then boot the server automatically
-CMD php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=$PORT
+# BYPASS PRE-DEPLOY & NUKE CACHE: Clear config, run migration, then boot the server
+CMD php artisan config:clear && php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=$PORT
