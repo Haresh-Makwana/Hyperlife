@@ -97,8 +97,8 @@ export default function ThreeDashboard() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // 🏆 THE ULTIMATE FIX: 127.0.0.1 is dead. It will ALWAYS fall back to Railway now.
-  const API_URL = import.meta.env.VITE_API_BASE_URL || "https://hyperlife-backend.gt.tc/api";
+  // 🏆 Configured dynamic endpoint tracking cleanly
+  const API_URL = import.meta.env.VITE_API_BASE_URL || "https://hyperlife-backend.onrender.com";
 
   const [isSignup, setIsSignup] = useState(location.pathname === "/register");
   const [showPassword, setShowPassword] = useState(false);
@@ -142,15 +142,23 @@ export default function ThreeDashboard() {
     }
   }, [location.pathname, location.search, navigate]);
 
- const handleGoogleLogin = () => {
+const handleGoogleLogin = async () => {
     try {
-      // 🚀 THE FIX: Direct browser navigation bypasses CORS fetch blocks entirely.
-      // Ensure API_URL evaluates to 'https://hyperlife-backend.gt.tc/api'
-      window.location.href = `${API_URL}/auth/google/url`; 
+      // 1. Ping the backend to request the Google target coordinates
+      const response = await fetch(`${API_URL}/api/auth/google/url`);
+      const data = await response.json();
+
+      // 2. Unpack the JSON and manually route the browser to Google
+      if (data.url) {
+        window.location.href = data.url; 
+      } else {
+        setError("Invalid coordinates received from core engine.");
+      }
     } catch (err) {
       setError("Failed to initialize Google uplink.");
     }
   };
+
   const handleAuth = async (e) => {
     if (e) e.preventDefault(); 
     setError(""); setSuccess("");
@@ -163,7 +171,7 @@ export default function ThreeDashboard() {
       setError("System Override Key is required for Admin clearance."); return;
     }
 
-    setLoading(true);
+    loading(true);
 
     const endpoint = isSignup ? "register" : "login";
     
@@ -172,7 +180,7 @@ export default function ThreeDashboard() {
       : { email, password };
 
     try {
-      const res = await fetch(`${API_URL}/${endpoint}`, {
+      const res = await fetch(`${API_URL}/api/${endpoint}`, {
         method: "POST",
         headers: { "Content-Type": "application/json", "Accept": "application/json" },
         body: JSON.stringify(payload),
@@ -216,7 +224,7 @@ export default function ThreeDashboard() {
     e.preventDefault();
     setLoading(true); setError(""); setSuccess("");
     try {
-      const res = await fetch(`${API_URL}/verify-email-otp`, {
+      const res = await fetch(`${API_URL}/api/verify-email-otp`, {
         method: "POST", 
         headers: { "Content-Type": "application/json", "Accept": "application/json" },
         body: JSON.stringify({ email, otp })

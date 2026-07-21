@@ -11,9 +11,12 @@ Route::get('/login', function () {
     return redirect('https://hyperlife-lemon.vercel.app/login');
 });
 
-// 🚀 THE FIX: This forces Laravel to serve your React UI for any route that isn't an API call.
-Route::get('/{any}', function () {
-    return file_get_contents(public_path('index.html'));
-})->where('any', '.*');
+Route::get('/', function () {
+    return response()->json([
+        'status' => 'online',
+        'core' => 'HyperLife Backend Engine Active',
+        'client_uplink' => env('FRONTEND_URL')
+    ]);
+});
 
 require __DIR__.'/auth.php';

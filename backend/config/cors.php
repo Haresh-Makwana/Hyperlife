@@ -22,7 +22,7 @@ return [
         'http://localhost:3000', // Keeping your local dev environment open
         
         // 🔒 Uncomment and add your exact Vercel URL here before pushing to InfinityFree!
-        // 'https://hyperlife-tau.vercel.app', 
+        'https://hyperlife-lemon.vercel.app', 
     ],
 
     'allowed_origins_patterns' => [],
