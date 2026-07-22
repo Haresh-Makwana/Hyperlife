@@ -13,7 +13,7 @@ export default function UniverseSummary({ universeId }) {
     setSummary("");
 
     // Securely fetch the summary from your Laravel backend
-    fetch(`http://127.0.0.1:8000/api/universes/${universeId}/summary`, {
+    fetch(`https://hyperlife-backend.onrender.com/api/universes/${universeId}/summary`, {
       headers: {
         "Authorization": `Bearer ${getToken()}`, 
         "Accept": "application/json"

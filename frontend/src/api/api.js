@@ -2,7 +2,7 @@ import axios from "axios";
 
 const api = axios.create({
   // Using the standard Laravel development URL from your .env
-  baseURL: "http://127.0.0.1:8000/api", 
+  baseURL: "https://hyperlife-backend.onrender.com/api", 
   withCredentials: true,
   headers: {
     "X-Requested-With": "XMLHttpRequest",
@@ -14,7 +14,7 @@ const api = axios.create({
 // Must be called before login or POST/PUT requests
 export const getCsrfToken = () => {
     // Note: Sanctum routes usually sit outside the /api prefix
-    return axios.get("http://127.0.0.1:8000/sanctum/csrf-cookie", { withCredentials: true });
+    return axios.get("https://hyperlife-backend.onrender.com/sanctum/csrf-cookie", { withCredentials: true });
 };
 
 // 2. Universe Data Endpoints

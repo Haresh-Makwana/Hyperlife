@@ -2,7 +2,7 @@ import { getToken } from "./auth";
 
 // 🏆 THE FIX IS HERE 🏆
 // This tells React: "Use the Vercel variable if it exists. If not, use localhost."
-const API_URL = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000/api";
+const API_URL = import.meta.env.VITE_API_BASE_URL || "https://hyperlife-backend.onrender.com/api";
 
 export const apiFetch = async (endpoint, options = {}) => {
   // ❌ Prevent passing full URLs

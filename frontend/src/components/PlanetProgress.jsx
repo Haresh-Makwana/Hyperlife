@@ -33,7 +33,7 @@ export default function PlanetProgress({ planet, onProgressSaved }) {
 
   const fetchProgress = async () => {
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/planets/${planet.id}/progress`, {
+      const res = await fetch(`https://hyperlife-backend.onrender.com/api/planets/${planet.id}/progress`, {
         headers: { "Authorization": `Bearer ${getToken()}`, "Accept": "application/json" }
       });
       if (res.ok) {
@@ -74,7 +74,7 @@ export default function PlanetProgress({ planet, onProgressSaved }) {
     setError("");
 
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/planets/${planet.id}/progress/${editingId}`, {
+      const res = await fetch(`https://hyperlife-backend.onrender.com/api/planets/${planet.id}/progress/${editingId}`, {
         method: "DELETE",
         headers: {
           "Authorization": `Bearer ${getToken()}`,
@@ -107,8 +107,8 @@ export default function PlanetProgress({ planet, onProgressSaved }) {
     setError("");
 
     const url = editingId 
-      ? `http://127.0.0.1:8000/api/planets/${planet.id}/progress/${editingId}`
-      : `http://127.0.0.1:8000/api/planets/${planet.id}/progress`;
+      ? `https://hyperlife-backend.onrender.com/api/planets/${planet.id}/progress/${editingId}`
+      : `https://hyperlife-backend.onrender.com/api/planets/${planet.id}/progress`;
     const method = editingId ? "PUT" : "POST";
 
     try {

@@ -21,7 +21,7 @@ export default defineConfig({
         secure: false
       },
       '/ai': {
-        target: 'http://127.0.0.1:8000',
+        target: 'https://hyperlife-backend.onrender.com',
         changeOrigin: true,
         secure: false
       }

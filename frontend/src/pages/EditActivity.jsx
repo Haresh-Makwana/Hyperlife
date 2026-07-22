@@ -19,7 +19,7 @@ export default function EditActivity() {
   // Load activity data
   useEffect(() => {
     const loadActivity = async () => {
-      const res = await fetch(`http://127.0.0.1:8000/api/activities/${id}`, {
+      const res = await fetch(`https://hyperlife-backend.onrender.com/api/activities/${id}`, {
         headers: {
           Authorization: `Bearer ${getToken()}`,
           Accept: "application/json",
@@ -38,7 +38,7 @@ export default function EditActivity() {
     e.preventDefault();
 
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/activities/${id}`, {
+      const res = await fetch(`https://hyperlife-backend.onrender.com/api/activities/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

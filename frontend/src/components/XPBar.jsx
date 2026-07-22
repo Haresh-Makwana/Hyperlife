@@ -5,7 +5,7 @@ export default function XPBar() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/gamification")
+    fetch("https://hyperlife-backend.onrender.com/api/gamification")
       .then(res => res.json())
       .then(setData)
       .catch(() => setError("Failed to load XP"));

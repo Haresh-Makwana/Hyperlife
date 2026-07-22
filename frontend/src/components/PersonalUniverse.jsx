@@ -159,18 +159,18 @@ export default function PersonalUniverse({ onTransmissionSuccess }) {
       const cacheBuster = `?t=${new Date().getTime()}`;
       
       // 🚀 1. Fetch User Role to enforce Tier Limits
-      const meRes = await fetch(`http://127.0.0.1:8000/api/me${cacheBuster}`, { headers });
+      const meRes = await fetch(`https://hyperlife-backend.onrender.com/api/me${cacheBuster}`, { headers });
       if (meRes.ok) {
           const meData = await meRes.json();
           setUserRole(meData.role || 'operator');
       }
 
       // 2. Fetch Planets
-      const coreRes = await fetch(`http://127.0.0.1:8000/api/planets${cacheBuster}`, { headers });
+      const coreRes = await fetch(`https://hyperlife-backend.onrender.com/api/planets${cacheBuster}`, { headers });
       let corePlanets = coreRes.ok ? await coreRes.json() : [];
       corePlanets = Array.isArray(corePlanets) ? corePlanets : (corePlanets.data || []);
       
-      const customRes = await fetch(`http://127.0.0.1:8000/api/forge/nodes${cacheBuster}`, { headers });
+      const customRes = await fetch(`https://hyperlife-backend.onrender.com/api/forge/nodes${cacheBuster}`, { headers });
       let customNodes = customRes.ok ? await customRes.json() : [];
       customNodes = Array.isArray(customNodes) ? customNodes.map(n => ({ ...n, type: 'Custom' })) : [];
 
@@ -200,7 +200,7 @@ export default function PersonalUniverse({ onTransmissionSuccess }) {
     if (!newPlanetName.trim()) return;
     setIsSynthesizing(true);
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/forge/synthesize`, {
+      const res = await fetch(`https://hyperlife-backend.onrender.com/api/forge/synthesize`, {
         method: 'POST',
         headers: { "Authorization": `Bearer ${getToken()}`, "Content-Type": "application/json", "Accept": "application/json" },
         body: JSON.stringify({ name: newPlanetName, type: "Custom", size: 1.5 })
@@ -226,8 +226,8 @@ export default function PersonalUniverse({ onTransmissionSuccess }) {
       setIsDeleting(true);
       try {
           const endpoint = focusedPlanet.type === 'Custom' 
-              ? `http://127.0.0.1:8000/api/forge/nodes/${focusedPlanet.id}`
-              : `http://127.0.0.1:8000/api/planets/${focusedPlanet.id}`;
+              ? `https://hyperlife-backend.onrender.com/api/forge/nodes/${focusedPlanet.id}`
+              : `https://hyperlife-backend.onrender.com/api/planets/${focusedPlanet.id}`;
               
           const res = await fetch(endpoint, { 
               method: 'DELETE', 
@@ -256,7 +256,7 @@ export default function PersonalUniverse({ onTransmissionSuccess }) {
       const timeoutId = setTimeout(() => controller.abort(), 12000);
 
       try {
-          const aiRes = await fetch(`http://127.0.0.1:8000/api/omni-process`, {
+          const aiRes = await fetch(`https://hyperlife-backend.onrender.com/api/omni-process`, {
               method: 'POST',
               headers: { "Authorization": `Bearer ${getToken()}`, "Content-Type": "application/json", "Accept": "application/json" },
               body: JSON.stringify({ telemetry_text: `[${focusedPlanet.name} Sector]: ${hudInput}` }),
@@ -272,7 +272,7 @@ export default function PersonalUniverse({ onTransmissionSuccess }) {
           if (aiData.gamification && aiData.gamification.xp_gained !== undefined) xpGained = aiData.gamification.xp_gained;
           else if (aiData.xp_gained !== undefined) xpGained = aiData.xp_gained;
 
-          const injectRes = await fetch(`http://127.0.0.1:8000/api/forge/inject-mass`, {
+          const injectRes = await fetch(`https://hyperlife-backend.onrender.com/api/forge/inject-mass`, {
               method: 'POST',
               headers: { "Authorization": `Bearer ${getToken()}`, "Content-Type": "application/json", "Accept": "application/json" },
               body: JSON.stringify({ id: focusedPlanet.id, is_custom: focusedPlanet.type === 'Custom', xp_gained: xpGained })

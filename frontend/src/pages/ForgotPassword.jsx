@@ -22,7 +22,7 @@ export default function ForgotPassword() {
     e.preventDefault();
     setLoading(true); setError(""); setMessage("");
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/password/send-otp", {
+      const res = await fetch("https://hyperlife-backend.onrender.com/api/password/send-otp", {
         method: "POST", headers: { "Content-Type": "application/json", "Accept": "application/json" },
         body: JSON.stringify({ email })
       });
@@ -38,7 +38,7 @@ export default function ForgotPassword() {
     e.preventDefault();
     setLoading(true); setError(""); setMessage("");
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/password/verify-otp", {
+      const res = await fetch("https://hyperlife-backend.onrender.com/api/password/verify-otp", {
         method: "POST", headers: { "Content-Type": "application/json", "Accept": "application/json" },
         body: JSON.stringify({ email, otp })
       });
@@ -55,7 +55,7 @@ export default function ForgotPassword() {
     if (password !== confirmPassword) { setError("Passwords do not match."); return; }
     setLoading(true); setError(""); setMessage("");
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/password/reset", {
+      const res = await fetch("https://hyperlife-backend.onrender.com/api/password/reset", {
         method: "POST", headers: { "Content-Type": "application/json", "Accept": "application/json" },
         body: JSON.stringify({ email, otp, password, password_confirmation: confirmPassword })
       });

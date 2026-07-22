@@ -104,8 +104,8 @@ export default function AdminDashboard() {
       const headers = { "Authorization": `Bearer ${token}`, "Accept": "application/json", "Cache-Control": "no-cache" };
       const cacheBuster = `?t=${new Date().getTime()}`;
       
-      let userRes = await fetch(`http://127.0.0.1:8000/api/user${cacheBuster}`, { headers });
-      if (!userRes.ok) userRes = await fetch(`http://127.0.0.1:8000/api/me${cacheBuster}`, { headers });
+      let userRes = await fetch(`https://hyperlife-backend.onrender.com/api/user${cacheBuster}`, { headers });
+      if (!userRes.ok) userRes = await fetch(`https://hyperlife-backend.onrender.com/api/me${cacheBuster}`, { headers });
       if (!userRes.ok) throw new Error("Backend authentication missing.");
 
       const userData = await userRes.json();
@@ -114,7 +114,7 @@ export default function AdminDashboard() {
       if (String(userRole).trim().toLowerCase() !== 'admin') { navigate("/dashboard"); return; }
 
       try {
-          const statsRes = await fetch(`http://127.0.0.1:8000/api/admin/overview${cacheBuster}`, { headers });
+          const statsRes = await fetch(`https://hyperlife-backend.onrender.com/api/admin/overview${cacheBuster}`, { headers });
           if (statsRes.ok) {
               const statsData = await statsRes.json();
               setStats({ totalUsers: statsData.total_users || 0, totalPlanets: statsData.total_planets || 0, totalHabits: statsData.total_habits || 0, globalXp: statsData.global_xp || 0 });
@@ -123,22 +123,22 @@ export default function AdminDashboard() {
       } catch (e) {}
 
       try {
-          const usersRes = await fetch(`http://127.0.0.1:8000/api/admin/users${cacheBuster}`, { headers });
+          const usersRes = await fetch(`https://hyperlife-backend.onrender.com/api/admin/users${cacheBuster}`, { headers });
           if (usersRes.ok) setUsers(await usersRes.json());
       } catch (e) {}
 
       try {
-          const omniRes = await fetch(`http://127.0.0.1:8000/api/admin/omniverse${cacheBuster}`, { headers });
+          const omniRes = await fetch(`https://hyperlife-backend.onrender.com/api/admin/omniverse${cacheBuster}`, { headers });
           if (omniRes.ok) setOmniverseData(await omniRes.json());
       } catch (e) {}
 
       try {
-          const feedRes = await fetch(`http://127.0.0.1:8000/api/admin/feed${cacheBuster}`, { headers });
+          const feedRes = await fetch(`https://hyperlife-backend.onrender.com/api/admin/feed${cacheBuster}`, { headers });
           if (feedRes.ok) setLiveFeed(await feedRes.json());
       } catch (e) {}
 
       try {
-          const statusRes = await fetch(`http://127.0.0.1:8000/api/system/status${cacheBuster}`, { headers });
+          const statusRes = await fetch(`https://hyperlife-backend.onrender.com/api/system/status${cacheBuster}`, { headers });
           if (statusRes.ok) {
               const statusData = await statusRes.json();
               setIsBlackoutActive(statusData.blackout || false);
@@ -213,7 +213,7 @@ export default function AdminDashboard() {
           let successCount = 0;
           for (let user of targets) {
               const newXp = (user.xp || 0) + Number(airdropAmount);
-              await fetch(`http://127.0.0.1:8000/api/admin/users/${user.id}`, {
+              await fetch(`https://hyperlife-backend.onrender.com/api/admin/users/${user.id}`, {
                   method: "PUT",
                   headers: { "Authorization": `Bearer ${getToken()}`, "Content-Type": "application/json" },
                   body: JSON.stringify({ xp: newXp, role: user.role })
@@ -236,7 +236,7 @@ export default function AdminDashboard() {
       
       setIsLoadingActivities(true);
       try {
-          const res = await fetch(`http://127.0.0.1:8000/api/admin/users/${user.id}/activities`, {
+          const res = await fetch(`https://hyperlife-backend.onrender.com/api/admin/users/${user.id}/activities`, {
               headers: { "Authorization": `Bearer ${getToken()}`, "Accept": "application/json" }
           });
           if (res.ok) setSelectedUserActivities(await res.json());
@@ -247,7 +247,7 @@ export default function AdminDashboard() {
   const handleUpdateUser = async () => {
       setIsUpdating(true);
       try {
-          const res = await fetch(`http://127.0.0.1:8000/api/admin/users/${selectedUser.id}`, {
+          const res = await fetch(`https://hyperlife-backend.onrender.com/api/admin/users/${selectedUser.id}`, {
               method: "PUT",
               headers: { "Authorization": `Bearer ${getToken()}`, "Content-Type": "application/json", "Accept": "application/json" },
               body: JSON.stringify({ xp: editXp, role: editRole })
@@ -260,7 +260,7 @@ export default function AdminDashboard() {
       if (!directiveText.trim()) return;
       setIsTransmitting(true);
       try {
-          const res = await fetch(`http://127.0.0.1:8000/api/admin/directive`, {
+          const res = await fetch(`https://hyperlife-backend.onrender.com/api/admin/directive`, {
               method: "POST",
               headers: { "Authorization": `Bearer ${getToken()}`, "Content-Type": "application/json", "Accept": "application/json" },
               body: JSON.stringify({ message: directiveText })
@@ -279,7 +279,7 @@ export default function AdminDashboard() {
       if (!confirm) return;
 
       try {
-          const res = await fetch(`http://127.0.0.1:8000/api/admin/blackout`, {
+          const res = await fetch(`https://hyperlife-backend.onrender.com/api/admin/blackout`, {
               method: "POST",
               headers: { "Authorization": `Bearer ${getToken()}`, "Accept": "application/json" }
           });
@@ -295,7 +295,7 @@ export default function AdminDashboard() {
       if (!confirmPurge) return;
 
       try {
-          const res = await fetch(`http://127.0.0.1:8000/api/admin/users/${userId}`, {
+          const res = await fetch(`https://hyperlife-backend.onrender.com/api/admin/users/${userId}`, {
               method: "DELETE",
               headers: { "Authorization": `Bearer ${getToken()}`, "Accept": "application/json" }
           });

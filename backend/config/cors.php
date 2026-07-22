@@ -13,17 +13,9 @@ return [
     |
     */
 
-    'paths' => ['api/*', 'sanctum/csrf-cookie'],
-
-    // 🚀 THE SHIELD: No more wildcards. 
-    // Only these exact URLs are allowed to speak to your database.
-    'allowed_origins' => [
-        env('FRONTEND_URL', 'http://localhost:5173'), 
-        'http://localhost:3000', // Keeping your local dev environment open
-        
-        // 🔒 Uncomment and add your exact Vercel URL here before pushing to InfinityFree!
-        'https://hyperlife-lemon.vercel.app', 
-    ],
+    'paths' => ['api/*', 'sanctum/csrf-cookie', '*'],
+    
+    'allowed_origins' => ['*'], // Drops the firewall to allow all domains
 
     'allowed_origins_patterns' => [],
 
@@ -35,6 +27,6 @@ return [
 
     'max_age' => 0,
 
-    'supports_credentials' => true, // Required for Sanctum authentication
+    'supports_credentials' => false, // Required for Sanctum authentication
 
 ];

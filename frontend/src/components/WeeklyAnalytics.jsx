@@ -24,7 +24,7 @@ export default function WeeklyAnalytics() {
   const [activities, setActivities] = useState([]);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/analytics/weekly", {
+    fetch("https://hyperlife-backend.onrender.com/api/analytics/weekly", {
       headers: {
         Authorization: `Bearer ${getToken()}`,
         Accept: "application/json",

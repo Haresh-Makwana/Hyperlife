@@ -11,7 +11,7 @@ use App\Http\Controllers\Api\ActivityController;
 use App\Http\Controllers\Api\PlanetProgressController;
 use App\Http\Controllers\Api\GamificationController;
 use App\Http\Controllers\Api\AnalyticsController;
-use App\Http\Controllers\API\HabitController;
+use App\Http\Controllers\Api\HabitController; // 🚨 FIXED: 'Api' capitalization for strict Linux environments
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Api\AdminAuthController; 
 use App\Http\Controllers\Api\AdminController;
@@ -97,7 +97,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/rewards/{id}/purchase', [ArsenalController::class, 'purchase']);
 
     /* ✅ USER PROFILE & AUTHENTICATION */
-    Route::get('/me', [AuthController::class, 'me']);
+    // 🚨 FIXED: Inlined the /me route to guarantee it never fails due to a missing controller method
+    Route::get('/me', function (Request $request) { 
+        return response()->json($request->user()); 
+    });
     Route::get('/user', function (Request $request) { return $request->user(); }); 
     Route::post('/logout', [AuthController::class, 'logout']);
 
@@ -206,7 +209,7 @@ Route::middleware('auth:sanctum')->group(function () {
         }
 
         try {
-            // Dynamically pull the AI server address from the .env file. Never hardcode localhost in production.
+            // Dynamically pull the AI server address from the .env file.
             $aiServiceUrl = env('AI_MICROSERVICE_URL', 'http://127.0.0.1:5000') . '/sentient-analysis';
             
             $response = Http::timeout(15)->post($aiServiceUrl, [
@@ -232,8 +235,8 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
     
-    // Dynamically pull the frontend URL from the environment, stripped of trailing slashes
-    $frontendUrl = rtrim(env('FRONTEND_URL', 'http://localhost:5173'), '/');
+    // 🚨 FIXED: Hard-coded safe fallback to your Vercel frontend
+    $frontendUrl = rtrim(env('FRONTEND_URL', 'https://hyperlife-lemon.vercel.app'), '/');
     return redirect("{$frontendUrl}/login?verified=1");
     
 })->middleware(['auth:sanctum', 'signed'])->name('verification.verify');

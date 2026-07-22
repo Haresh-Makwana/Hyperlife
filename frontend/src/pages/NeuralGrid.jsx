@@ -37,7 +37,7 @@ export default function NeuralGrid() {
     const token = getToken();
     if (!token) { navigate("/login"); return; }
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/skills", {
+      const res = await fetch("https://hyperlife-backend.onrender.com/api/skills", {
         headers: { "Authorization": `Bearer ${token}`, "Accept": "application/json" }
       });
       if (res.ok) setSkills(await res.json());
@@ -51,7 +51,7 @@ export default function NeuralGrid() {
     e.preventDefault();
     if (!newName.trim()) return;
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/skills", {
+      const res = await fetch("https://hyperlife-backend.onrender.com/api/skills", {
         method: "POST",
         headers: { "Authorization": `Bearer ${getToken()}`, "Content-Type": "application/json" },
         body: JSON.stringify({ domain: newDomain, name: newName })
@@ -73,7 +73,7 @@ export default function NeuralGrid() {
 
       try {
           // 1. Send the text to Omni-Process (Gemini) to evaluate the action
-          const aiRes = await fetch(`http://127.0.0.1:8000/api/omni-process`, { 
+          const aiRes = await fetch(`https://hyperlife-backend.onrender.com/api/omni-process`, { 
               method: 'POST', 
               headers: { "Authorization": `Bearer ${getToken()}`, "Content-Type": "application/json" },
               body: JSON.stringify({ telemetry_text: `[Training Skill: ${skill.name}]: ${actionInput}` }) 
@@ -87,7 +87,7 @@ export default function NeuralGrid() {
           const aiFeedback = aiData.analysis || "Action logged and verified.";
 
           // 2. Inject that calculated XP into the skill
-          const injectRes = await fetch(`http://127.0.0.1:8000/api/skills/${skill.id}/inject`, {
+          const injectRes = await fetch(`https://hyperlife-backend.onrender.com/api/skills/${skill.id}/inject`, {
               method: "POST",
               headers: { "Authorization": `Bearer ${getToken()}`, "Content-Type": "application/json" },
               body: JSON.stringify({ xp_gained: earnedXp }) 
@@ -118,7 +118,7 @@ export default function NeuralGrid() {
   const handleDelete = async (id) => {
       if(!window.confirm("Delete this skill? This will sever the neural pathway permanently.")) return;
       try {
-          await fetch(`http://127.0.0.1:8000/api/skills/${id}`, {
+          await fetch(`https://hyperlife-backend.onrender.com/api/skills/${id}`, {
               method: "DELETE", headers: { "Authorization": `Bearer ${getToken()}` }
           });
           fetchData();

@@ -23,7 +23,7 @@ app = Flask(__name__)
 # Only your specific frontends and backend are allowed to even handshake with this server.
 CORS(app, origins=[
     os.getenv("FRONTEND_URL", "http://localhost:5173"),
-    os.getenv("BACKEND_URL", "http://127.0.0.1:8000"),
+    os.getenv("BACKEND_URL", "https://hyperlife-backend.onrender.com"),
     "http://localhost:3000"
 ])
 

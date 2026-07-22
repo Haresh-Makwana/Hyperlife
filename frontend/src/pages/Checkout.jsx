@@ -52,7 +52,7 @@ export default function Checkout() {
     }
 
     try {
-      const orderRes = await fetch("http://127.0.0.1:8000/api/create-razorpay-order", {
+      const orderRes = await fetch("https://hyperlife-backend.onrender.com/api/create-razorpay-order", {
         method: "POST",
         headers: { "Authorization": `Bearer ${token}`, "Content-Type": "application/json", "Accept": "application/json" },
         body: JSON.stringify({ plan: tier.name.toLowerCase(), isAnnual }) 
@@ -72,7 +72,7 @@ export default function Checkout() {
         handler: async function (response) {
           setLoading(true);
           try {
-            const verifyRes = await fetch("http://127.0.0.1:8000/api/verify-razorpay-payment", {
+            const verifyRes = await fetch("https://hyperlife-backend.onrender.com/api/verify-razorpay-payment", {
               method: "POST",
               headers: { "Authorization": `Bearer ${token}`, "Content-Type": "application/json", "Accept": "application/json" },
               body: JSON.stringify({

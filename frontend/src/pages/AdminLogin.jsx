@@ -17,7 +17,7 @@ export default function AdminLogin() {
 
     try {
       // Pointing strictly to the new dedicated Admin API endpoint
-      const res = await fetch("http://127.0.0.1:8000/api/admin/login", {
+      const res = await fetch("https://hyperlife-backend.onrender.com/api/admin/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

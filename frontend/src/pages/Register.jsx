@@ -23,7 +23,7 @@ export default function Register() {
   // 🚀 HANDLE GOOGLE SSO CLICK
   const handleGoogleSignup = async () => {
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/auth/google/url");
+      const res = await fetch("https://hyperlife-backend.onrender.com/api/auth/google/url");
       const data = await res.json();
       if (data.url) window.location.href = data.url;
     } catch (err) {
@@ -38,7 +38,7 @@ export default function Register() {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/register", {
+      const response = await fetch("https://hyperlife-backend.onrender.com/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },
         body: JSON.stringify(form)

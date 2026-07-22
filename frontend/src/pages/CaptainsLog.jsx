@@ -54,7 +54,7 @@ export default function CaptainsLog() {
         const token = getToken();
         if (!token) { navigate("/login"); return; }
         try {
-            const res = await fetch("http://127.0.0.1:8000/api/journal", {
+            const res = await fetch("https://hyperlife-backend.onrender.com/api/journal", {
                 headers: { "Authorization": `Bearer ${token}`, "Accept": "application/json" }
             });
             if (res.ok) {
@@ -98,7 +98,7 @@ export default function CaptainsLog() {
         setIsAnalyzing(true);
         
         try {
-            const res = await fetch("http://127.0.0.1:8000/api/journal", {
+            const res = await fetch("https://hyperlife-backend.onrender.com/api/journal", {
                 method: "POST",
                 headers: { 
                     "Authorization": `Bearer ${getToken()}`, 
@@ -125,7 +125,7 @@ export default function CaptainsLog() {
     const handleDelete = async (id) => {
         if (!window.confirm("Purge this memory from the matrix?")) return;
         try {
-            await fetch(`http://127.0.0.1:8000/api/journal/${id}`, {
+            await fetch(`https://hyperlife-backend.onrender.com/api/journal/${id}`, {
                 method: "DELETE", headers: { "Authorization": `Bearer ${getToken()}` }
             });
             fetchData();

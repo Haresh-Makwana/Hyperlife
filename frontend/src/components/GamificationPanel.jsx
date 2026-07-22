@@ -4,7 +4,7 @@ export default function GamificationPanel() {
   const [data, setData] = useState(null);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/gamification")
+    fetch("https://hyperlife-backend.onrender.com/api/gamification")
       .then(res => res.json())
       .then(setData)
       .catch(console.error);

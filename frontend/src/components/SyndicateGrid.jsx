@@ -6,13 +6,16 @@ export default function SyndicateGrid() {
   const [leaders, setLeaders] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // 🏆 Cleanly lock in the base URL to prevent protocol duplication
+    const API_URL = "https://hyperlife-backend.onrender.com";
   useEffect(() => {
     const fetchSyndicate = async () => {
       try {
         const token = getToken();
         if (!token) return;
 
-        const res = await fetch(`http://127.0.0.1:8000/api/syndicate?t=${new Date().getTime()}`, {
+        // 🚀 Bypassed the http:// trap using the clean API_URL variable
+        const res = await fetch(`${API_URL}/api/syndicate?t=${new Date().getTime()}`, {
           headers: { 
             "Authorization": `Bearer ${token}`, 
             "Accept": "application/json" 

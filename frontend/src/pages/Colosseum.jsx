@@ -35,8 +35,8 @@ export default function Colosseum() {
     try {
       const headers = { "Authorization": `Bearer ${token}`, "Accept": "application/json" };
       
-      let userRes = await fetch("http://127.0.0.1:8000/api/user", { headers });
-      if (!userRes.ok) userRes = await fetch("http://127.0.0.1:8000/api/me", { headers });
+      let userRes = await fetch("https://hyperlife-backend.onrender.com/api/user", { headers });
+      if (!userRes.ok) userRes = await fetch("https://hyperlife-backend.onrender.com/api/me", { headers });
       
       if (userRes.ok) {
           const userData = await userRes.json();
@@ -45,10 +45,10 @@ export default function Colosseum() {
           throw new Error("Failed to authenticate user.");
       }
 
-      const opsRes = await fetch("http://127.0.0.1:8000/api/colosseum/operators", { headers });
+      const opsRes = await fetch("https://hyperlife-backend.onrender.com/api/colosseum/operators", { headers });
       if (opsRes.ok) setOperators(await opsRes.json() || []);
 
-      const duelsRes = await fetch("http://127.0.0.1:8000/api/colosseum/duels", { headers });
+      const duelsRes = await fetch("https://hyperlife-backend.onrender.com/api/colosseum/duels", { headers });
       if (duelsRes.ok) setDuels(await duelsRes.json() || []);
       
       setErrorMsg(null);
@@ -68,7 +68,7 @@ export default function Colosseum() {
     if (!window.confirm(`Initiate duel? ${wager} XP will be locked in the Colosseum vault.`)) return;
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/colosseum/challenge", {
+      const res = await fetch("https://hyperlife-backend.onrender.com/api/colosseum/challenge", {
         method: "POST",
         headers: { "Authorization": `Bearer ${getToken()}`, "Content-Type": "application/json" },
         body: JSON.stringify({ opponent_id: opponentId, title, wager: parseInt(wager), target_score: parseInt(targetScore) })
@@ -87,7 +87,7 @@ export default function Colosseum() {
   const handleAccept = async (id, wagerAmount) => {
     if (!window.confirm(`Accept duel? ${wagerAmount} XP will be deducted as your bet.`)) return;
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/colosseum/${id}/accept`, {
+      const res = await fetch(`https://hyperlife-backend.onrender.com/api/colosseum/${id}/accept`, {
         method: "POST", headers: { "Authorization": `Bearer ${getToken()}` }
       });
       if (res.ok) { 
@@ -106,7 +106,7 @@ export default function Colosseum() {
 
       try {
           // 1. Send Proof to AI for Verification
-          const aiRes = await fetch("http://127.0.0.1:8000/api/omni-process", {
+          const aiRes = await fetch("https://hyperlife-backend.onrender.com/api/omni-process", {
               method: "POST",
               headers: { "Authorization": `Bearer ${getToken()}`, "Content-Type": "application/json" },
               body: JSON.stringify({ telemetry_text: `[Colosseum Duel: ${duel.title}] Proof of action: ${proofInput}` })
@@ -115,7 +115,7 @@ export default function Colosseum() {
           const aiFeedback = aiData.analysis || "Action verified by system.";
 
           // 2. If AI didn't crash, log the strike to the backend
-          const res = await fetch(`http://127.0.0.1:8000/api/colosseum/${duel.id}/strike`, {
+          const res = await fetch(`https://hyperlife-backend.onrender.com/api/colosseum/${duel.id}/strike`, {
               method: "POST", headers: { "Authorization": `Bearer ${getToken()}` }
           });
           

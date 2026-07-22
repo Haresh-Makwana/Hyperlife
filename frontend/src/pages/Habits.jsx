@@ -33,7 +33,7 @@ export default function Habits() {
 
   const fetchHabits = async () => {
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/habits", {
+      const res = await fetch("https://hyperlife-backend.onrender.com/api/habits", {
         headers: { "Authorization": `Bearer ${getToken()}`, "Accept": "application/json" }
       });
       if (res.ok) {
@@ -95,7 +95,7 @@ export default function Habits() {
     if (!title.trim()) { setError("Habit title cannot be empty."); return; }
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/habits", {
+      const res = await fetch("https://hyperlife-backend.onrender.com/api/habits", {
         method: "POST",
         headers: { "Content-Type": "application/json", "Authorization": `Bearer ${getToken()}`, "Accept": "application/json" },
         body: JSON.stringify({ title: title, planet_key: category.toLowerCase() })
@@ -111,7 +111,7 @@ export default function Habits() {
 
   const handleComplete = async (id) => {
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/habits/${id}/complete`, {
+      const res = await fetch(`https://hyperlife-backend.onrender.com/api/habits/${id}/complete`, {
         method: "POST", headers: { "Authorization": `Bearer ${getToken()}`, "Accept": "application/json" }
       });
       const data = await res.json();
@@ -127,7 +127,7 @@ export default function Habits() {
   const handleDelete = async (id) => {
     if (!window.confirm("Delete this habit permanently? This will cost you 10 XP.")) return;
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/habits/${id}`, {
+      const res = await fetch(`https://hyperlife-backend.onrender.com/api/habits/${id}`, {
         method: "DELETE", headers: { "Authorization": `Bearer ${getToken()}`, "Accept": "application/json" }
       });
       if (res.ok) {

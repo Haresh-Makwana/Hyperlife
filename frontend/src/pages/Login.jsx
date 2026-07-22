@@ -56,7 +56,7 @@ export default function Login() {
   // 🚀 2. HANDLE GOOGLE SSO CLICK
   const handleGoogleLogin = async () => {
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/auth/google/url");
+      const res = await fetch("https://hyperlife-backend.onrender.com/api/auth/google/url");
       const data = await res.json();
       if (data.url) {
         window.location.href = data.url;
@@ -73,7 +73,7 @@ export default function Login() {
     setSuccessMsg("");
     setIsSubmitting(true);
 
-    const endpoint = isLogin ? "http://127.0.0.1:8000/api/login" : "http://127.0.0.1:8000/api/register";
+    const endpoint = isLogin ? "https://hyperlife-backend.onrender.com/api/login" : "https://hyperlife-backend.onrender.com/api/register";
     
     // 🚀 FIXED: Added the 'role' property because Laravel's validator requires it!
     const payload = isLogin 

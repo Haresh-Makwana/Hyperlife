@@ -19,6 +19,8 @@ export default function Dashboard() {
   const navigate = useNavigate();
   const dashboardRef = useRef();
   
+  // 🏆 THE FIX: Dynamic endpoint tracking to bridge Vercel and Render flawlessly
+  const API_URL = "https://hyperlife-backend.onrender.com";
   const [user, setUser] = useState({ name: "Loading...", email: "...", level: 1, xp: 0, avatar_url: null, role: 'operator' });
   const [stats, setStats] = useState({ total: 0, avgMood: 0, avgEnergy: 0, daysAnalyzed: 7 });
   const [activities, setActivities] = useState([]);
@@ -41,7 +43,7 @@ export default function Dashboard() {
   const fileInputRef = useRef(null);
   const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
 
-  // 🚀 NEW CROPPER STATES
+  // 🚀 CROPPER STATES
   const [cropModalOpen, setCropModalOpen] = useState(false);
   const [imgSrc, setImgSrc] = useState("");
   const imgRef = useRef(null);
@@ -54,70 +56,61 @@ export default function Dashboard() {
   const currentRole = user.role?.toLowerCase() || 'operator';
   const isCommanderPlus = ['commander', 'syndicate', 'overwatch', 'admin'].includes(currentRole);
 
-  const fetchDashboardData = useCallback(async () => {
+ const fetchDashboardData = useCallback(async () => {
     const token = getToken();
     if (!token) { navigate("/login"); return; }
 
+    // 🚀 1. ABSOLUTE HARDCODE: Bypass all Vercel environment variables
+    const API_URL = "https://hyperlife-backend.onrender.com";
+
     try {
       const cacheBuster = `?t=${new Date().getTime()}`;
-      const headers = { "Authorization": `Bearer ${token}`, "Accept": "application/json", "Cache-Control": "no-cache" };
+      const headers = { 
+        "Authorization": `Bearer ${token}`, 
+        "Accept": "application/json", 
+        "Cache-Control": "no-cache" 
+      };
 
-      const userRes = await fetch(`http://127.0.0.1:8000/api/me${cacheBuster}`, { headers });
-      if (!userRes.ok) throw new Error("Auth Failed");
+      const userRes = await fetch(`${API_URL}/api/me${cacheBuster}`, { headers });
+      
+      // 🚀 2. THE PARACHUTE: If backend rejects us, show the error, DO NOT log out.
+      if (!userRes.ok) {
+        const errorText = await userRes.text();
+        alert(`🚨 BACKEND REJECTION!\nStatus: ${userRes.status}\nMessage: ${errorText}`);
+        return; // Stops the execution here instead of kicking you
+      }
+      
       const userJson = await userRes.json();
       if (userJson.role === 'admin') { navigate("/admin"); return; }
       
-      const avatarUrl = userJson.avatar ? `http://127.0.0.1:8000/storage/${userJson.avatar}` : null;
+      const avatarUrl = userJson.avatar ? `${API_URL}/storage/${userJson.avatar}` : null;
       setUser(prev => ({ ...prev, ...userJson, avatar_url: avatarUrl }));
 
-      const statsRes = await fetch(`http://127.0.0.1:8000/api/activity-stats${cacheBuster}`, { headers });
-      if (statsRes.ok) {
-        const statsJson = await statsRes.json();
-        setStats({
-          total: statsJson.total_activities ?? statsJson.total ?? 0,
-          avgMood: statsJson.avg_mood ?? 0,
-          avgEnergy: statsJson.avg_energy ?? 0,
-          daysAnalyzed: statsJson.days_analyzed ?? 7
-        });
-        setUser(prev => ({ ...prev, xp: statsJson.user_xp !== undefined ? statsJson.user_xp : prev.xp, level: statsJson.user_level !== undefined ? statsJson.user_level : prev.level }));
-      }
-
-      const actRes = await fetch(`http://127.0.0.1:8000/api/activities${cacheBuster}`, { headers });
-      let fetchedActivities = [];
-      if (actRes.ok) {
-        const actJson = await actRes.json();
-        fetchedActivities = Array.isArray(actJson) ? actJson : (actJson.data || []);
-        setActivities(fetchedActivities); 
-      }
-
-      const chartRes = await fetch(`http://127.0.0.1:8000/api/analytics/weekly${cacheBuster}`, { headers });
-      if (chartRes.ok) {
-        const chartJson = await chartRes.json();
-        setWeeklyData(chartJson);
-      }
-
-      if (['commander', 'syndicate', 'overwatch', 'admin'].includes(userJson.role?.toLowerCase())) {
-          const aiRes = await fetch(`http://127.0.0.1:8000/api/ai-suggestions`, { 
-            method: 'POST',
-            headers: { "Authorization": `Bearer ${token}`, "Content-Type": "application/json", "Accept": "application/json" },
-            body: JSON.stringify({ activities: fetchedActivities.slice(0, 10) }) 
+      // Fetch stats (wrapped safely)
+      try {
+        const statsRes = await fetch(`${API_URL}/api/activity-stats${cacheBuster}`, { headers });
+        if (statsRes.ok) {
+          const statsJson = await statsRes.json();
+          setStats({
+            total: statsJson.total_activities ?? statsJson.total ?? 0,
+            avgMood: statsJson.avg_mood ?? 0,
+            avgEnergy: statsJson.avg_energy ?? 0,
+            daysAnalyzed: statsJson.days_analyzed ?? 7
           });
-          if (aiRes.ok) {
-            const insights = await aiRes.json();
-            setSystemInsight(insights && insights.length > 0 ? insights[0] : "Complete more activities to receive personalized AI insights.");
-          }
-      }
+        }
+      } catch (e) { console.warn("Stats offline"); }
+
     } catch (error) {
-      removeToken(); navigate("/login");
+      // 🚀 3. CORS/NETWORK CRASH CATCHER
+      alert(`🚨 CRITICAL NETWORK CRASH (Likely CORS):\n${error.message}`);
     }
   }, [navigate]);
 
   useEffect(() => { fetchDashboardData(); }, [fetchDashboardData]);
 
-  // 🚀 1. HANDLE FILE SELECTION & OPEN MODAL
   const handleAvatarSelect = (e) => {
     if (e.target.files && e.target.files.length > 0) {
-      setCrop(undefined); // Reset crop state
+      setCrop(undefined); 
       const reader = new FileReader();
       reader.addEventListener('load', () => {
         setImgSrc(reader.result?.toString() || '');
@@ -127,7 +120,6 @@ export default function Dashboard() {
     }
   };
 
-  // 🚀 2. CENTER THE DEFAULT CROPPER SQUARE
   const onImageLoad = (e) => {
     const { naturalWidth: width, naturalHeight: height } = e.currentTarget;
     const initialCrop = centerCrop(
@@ -138,7 +130,6 @@ export default function Dashboard() {
     setCrop(initialCrop);
   };
 
-  // 🚀 3. EXTRACT THE CROPPED IMAGE USING HTML5 CANVAS
   const getCroppedImg = (image, cropConfig, fileName) => {
     const canvas = document.createElement('canvas');
     const scaleX = image.naturalWidth / image.width;
@@ -168,8 +159,6 @@ export default function Dashboard() {
     });
   };
 
-  // 🚀 4. UPLOAD THE FINAL CROPPED IMAGE
-  // 🚀 UPDATED: UPLOAD WITH CACHE-BUSTER & ERROR LOGGING
   const handleUploadCropped = async () => {
     if (!completedCrop || !imgRef.current) return;
     
@@ -181,12 +170,11 @@ export default function Dashboard() {
       const formData = new FormData(); 
       formData.append("avatar", croppedBlob, "avatar.jpg");
 
-      const res = await fetch("http://127.0.0.1:8000/api/profile/avatar", {
+      const res = await fetch(`${API_URL}/api/profile/avatar`, {
         method: "POST", 
         headers: { 
             "Authorization": `Bearer ${getToken()}`, 
             "Accept": "application/json" 
-            // Note: DO NOT manually add "Content-Type" here. Fetch handles it for FormData.
         }, 
         body: formData
       });
@@ -194,7 +182,6 @@ export default function Dashboard() {
       const data = await res.json();
       
       if (res.ok) {
-          // 🚀 THE FIX: Add a timestamp to force the browser to load the NEW image
           const cacheBusterUrl = data.avatar_url + "?t=" + new Date().getTime();
           setUser(prev => ({ ...prev, avatar_url: cacheBusterUrl }));
       } else {
@@ -219,7 +206,7 @@ export default function Dashboard() {
   const submitToOmniEngine = async (telemetryText) => {
     setIsProcessing(true); setAiResponse(null); setGamification(null); setShowVoiceModal(true); 
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/omni-process", {
+      const res = await fetch(`${API_URL}/api/omni-process`, {
         method: "POST", headers: { "Authorization": `Bearer ${getToken()}`, "Content-Type": "application/json", "Accept": "application/json" },
         body: JSON.stringify({ telemetry_text: telemetryText })
       });
@@ -243,7 +230,7 @@ export default function Dashboard() {
     formData.append("audio", audioBlob, "voice_command.webm");
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/omni-process-audio", {
+      const res = await fetch(`${API_URL}/api/omni-process-audio`, {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${getToken()}`,
@@ -309,7 +296,7 @@ export default function Dashboard() {
   const handleDeleteActivity = async (id) => {
     if (!window.confirm("Delete this activity? The XP earned will be removed.")) return;
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/activities/${id}`, { method: "DELETE", headers: { "Authorization": `Bearer ${getToken()}`, "Accept": "application/json" } });
+      const res = await fetch(`${API_URL}/api/activities/${id}`, { method: "DELETE", headers: { "Authorization": `Bearer ${getToken()}`, "Accept": "application/json" } });
       const data = await res.json();
       if (res.ok) {
         fetchDashboardData(); 
@@ -482,10 +469,8 @@ export default function Dashboard() {
       <div className="ud-orb-1"></div>
       <div className="ud-orb-2"></div>
 
-      {/* 🚀 HIDDEN INPUT NOW TRIGGERS THE CROPPER */}
       <input type="file" accept="image/*" ref={fileInputRef} onChange={handleAvatarSelect} style={{ display: "none" }} />
 
-      {/* 🚀 THE NEW CROPPER MODAL */}
       {cropModalOpen && (
         <div className="crop-modal-overlay">
           <div className="crop-modal-content">

@@ -28,13 +28,13 @@ export default function Arsenal() {
     try {
       const headers = { "Authorization": `Bearer ${token}`, "Accept": "application/json" };
       // Get User XP
-      const userRes = await fetch("http://127.0.0.1:8000/api/user", { headers });
+      const userRes = await fetch("https://hyperlife-backend.onrender.com/api/user", { headers });
       if (userRes.ok) {
           const userData = await userRes.json();
           setUserStats({ level: userData.level || 1, xp: userData.xp || 0 });
       }
       // Get Rewards
-      const rewardRes = await fetch("http://127.0.0.1:8000/api/rewards", { headers });
+      const rewardRes = await fetch("https://hyperlife-backend.onrender.com/api/rewards", { headers });
       if (rewardRes.ok) setRewards(await rewardRes.json());
     } catch (err) { console.error(err); }
     finally { setLoading(false); }
@@ -46,7 +46,7 @@ export default function Arsenal() {
     e.preventDefault();
     if (!newTitle || !newCost) return;
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/rewards", {
+      const res = await fetch("https://hyperlife-backend.onrender.com/api/rewards", {
         method: "POST",
         headers: { "Authorization": `Bearer ${getToken()}`, "Content-Type": "application/json" },
         body: JSON.stringify({ title: newTitle, cost: parseInt(newCost) })
@@ -82,7 +82,7 @@ export default function Arsenal() {
       // Simulate a network decryption delay for visual effect
       setTimeout(async () => {
           try {
-            const res = await fetch(`http://127.0.0.1:8000/api/rewards/${reward.id}/purchase`, {
+            const res = await fetch(`https://hyperlife-backend.onrender.com/api/rewards/${reward.id}/purchase`, {
               method: "POST",
               headers: { "Authorization": `Bearer ${getToken()}`, "Accept": "application/json" }
             });
@@ -104,7 +104,7 @@ export default function Arsenal() {
 
   const handleDelete = async (id) => {
       try {
-          await fetch(`http://127.0.0.1:8000/api/rewards/${id}`, {
+          await fetch(`https://hyperlife-backend.onrender.com/api/rewards/${id}`, {
               method: "DELETE", headers: { "Authorization": `Bearer ${getToken()}` }
           });
           showToast("PROTOCOL DELETED.", "error");
