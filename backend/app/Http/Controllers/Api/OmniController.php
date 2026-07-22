@@ -25,8 +25,10 @@ class OmniController extends Controller
         $rawText = $request->telemetry_text;
 
         try {
-            // 🚀 FIXED: Cleaned up the Markdown link formatting
-            $aiResponse = Http::timeout(15)->post('http://127.0.0.1:5000/omni-process', [
+            // 🚀 FIXED: Dynamically pull the AI node URL, falling back to local for dev
+            $aiUrl = env('AI_MICROSERVICE_URL', 'http://127.0.0.1:5000');
+            
+            $aiResponse = Http::timeout(15)->post($aiUrl . '/omni-process', [
                 'telemetry_text' => $rawText
             ]);
 
@@ -74,10 +76,12 @@ class OmniController extends Controller
             $audioContent = file_get_contents($file->getRealPath());
             $filename = $file->getClientOriginalName() ?: 'voice_command.webm';
 
-            // 🚀 FIXED: Cleaned up the Markdown link formatting
+            // 🚀 FIXED: Dynamically pull the AI node URL here as well
+            $aiUrl = env('AI_MICROSERVICE_URL', 'http://127.0.0.1:5000');
+            
             $aiResponse = Http::timeout(60)
                 ->attach('audio', $audioContent, $filename)
-                ->post('http://127.0.0.1:5000/omni-process-audio'); 
+                ->post($aiUrl . '/omni-process-audio'); 
 
             if ($aiResponse->successful()) {
                 $aiData = $aiResponse->json();

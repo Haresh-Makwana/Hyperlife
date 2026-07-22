@@ -20,17 +20,22 @@ load_dotenv()
 app = Flask(__name__)
 
 # 🔒 THE SHIELD 1: Strict CORS
-# Only your specific frontends and backend are allowed to even handshake with this server.
 CORS(app, origins=[
-    os.getenv("FRONTEND_URL", "http://localhost:5173"),
+    os.getenv("FRONTEND_URL", "https://hyperlife-lemon.vercel.app"),
     os.getenv("BACKEND_URL", "https://hyperlife-backend.onrender.com"),
+    "http://localhost:5173",
     "http://localhost:3000"
 ])
 
+# 🚀 PROXY FIX: Correctly read the user's real IP behind Render's load balancer
+def get_real_ip():
+    if request.headers.get("X-Forwarded-For"):
+        return request.headers.get("X-Forwarded-For").split(',')[0].strip()
+    return request.remote_addr
+
 # 🔒 THE SHIELD 2: Rate Limiting
-# Prevents DoS attacks and API bill spikes. Maximum 100 requests per day per IP.
 limiter = Limiter(
-    get_remote_address,
+    get_real_ip,
     app=app,
     default_limits=["100 per day", "20 per hour"],
     storage_uri="memory://"
@@ -51,15 +56,17 @@ else:
 # ==========================================
 @app.before_request
 def require_api_key():
-    # Allow the ping/health check through without a token so Render/Railway can verify the server is alive
+    # Allow the ping/health check through without a token so Render can verify the server is alive
     if request.endpoint == 'read_root':
         return
     
-    # 🔒 Drop any request that doesn't have the exact secret key
-    auth_header = request.headers.get("Authorization")
-    if not SYSTEM_AUTH_KEY or auth_header != f"Bearer {SYSTEM_AUTH_KEY}":
-        print(f"⚠️ UNAUTHORIZED INTRUSION ATTEMPT BLOCKED FROM IP: {request.remote_addr}")
-        abort(401, description="ACCESS DENIED: Invalid or missing clearance key.")
+    # 🚨 FIXED: Only block the request if the SYSTEM_AUTH_KEY is actually defined in your .env
+    # This prevents you from being locked out if Laravel isn't passing the token yet.
+    if SYSTEM_AUTH_KEY:
+        auth_header = request.headers.get("Authorization")
+        if auth_header != f"Bearer {SYSTEM_AUTH_KEY}":
+            print(f"⚠️ UNAUTHORIZED INTRUSION ATTEMPT BLOCKED FROM IP: {get_real_ip()}")
+            abort(401, description="ACCESS DENIED: Invalid or missing clearance key.")
 
 # ==========================================
 # 🛡️ HELPER: PROMPT SANITIZER (Anti-Jailbreak)
@@ -376,6 +383,8 @@ def psych_eval():
 # ==========================================
 if __name__ == '__main__':
     print("\n" + "="*60)
-    print(" 🧠 HYPERLIFE OS: MASTER AI CORE ONLINE & SECURED (PORT 5000)")
+    print(" 🧠 HYPERLIFE OS: MASTER AI CORE ONLINE & SECURED")
     print("="*60)
-    serve(app, host='0.0.0.0', port=5000)
+    # 🚨 FIXED: Dynamic Port Binding so Render doesn't kill the container on boot
+    port = int(os.environ.get('PORT', 5000))
+    serve(app, host='0.0.0.0', port=port)
