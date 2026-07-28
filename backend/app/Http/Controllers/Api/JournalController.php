@@ -24,11 +24,12 @@ class JournalController extends Controller
         $sentiment = 5;
 
         try {
-            // 🚀 THE FIX: Removed the invalid ->asJson() method that caused the 500 crash.
-            // Laravel automatically sends as JSON when passing an array to post().
+            // 🚀 THE FIX: Dynamically pull the AI URL from Render environment variables
+            $aiUrl = env('AI_MICROSERVICE_URL', 'http://127.0.0.1:5000');
+            
             $aiRes = Http::timeout(30)
                 ->acceptJson()
-                ->post('http://127.0.0.1:5000/psych-eval', [
+                ->post($aiUrl . '/psych-eval', [
                     'log_text' => $request->log_text
                 ]);
 
