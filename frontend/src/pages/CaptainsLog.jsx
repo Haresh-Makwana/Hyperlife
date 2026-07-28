@@ -50,11 +50,14 @@ export default function CaptainsLog() {
     const [isListening, setIsListening] = useState(false);
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
+    // 🚀 CENTRALIZED API URL: Safely falls back to Render if env is missing
+    const API_URL = import.meta.env.VITE_API_BASE_URL || "https://hyperlife-backend.onrender.com";
+
     const fetchData = useCallback(async () => {
         const token = getToken();
         if (!token) { navigate("/login"); return; }
         try {
-            const res = await fetch("https://hyperlife-backend.onrender.com/api/journal", {
+            const res = await fetch(`${API_URL}/api/journal`, {
                 headers: { "Authorization": `Bearer ${token}`, "Accept": "application/json" }
             });
             if (res.ok) {
@@ -70,7 +73,7 @@ export default function CaptainsLog() {
             }
         } catch (err) { console.error(err); }
         finally { setLoading(false); }
-    }, [navigate]);
+    }, [navigate, API_URL]);
 
     useEffect(() => { fetchData(); }, [fetchData]);
 
@@ -92,13 +95,12 @@ export default function CaptainsLog() {
         recognition.start();
     };
 
-    // 🚀 THE SECURE FIX: Routing exclusively through Laravel
     const handleSubmit = async () => {
         if (!currentEntry.trim()) return;
         setIsAnalyzing(true);
         
         try {
-            const res = await fetch("https://hyperlife-backend.onrender.com/api/journal", {
+            const res = await fetch(`${API_URL}/api/journal`, {
                 method: "POST",
                 headers: { 
                     "Authorization": `Bearer ${getToken()}`, 
@@ -125,7 +127,7 @@ export default function CaptainsLog() {
     const handleDelete = async (id) => {
         if (!window.confirm("Purge this memory from the matrix?")) return;
         try {
-            await fetch(`https://hyperlife-backend.onrender.com/api/journal/${id}`, {
+            await fetch(`${API_URL}/api/journal/${id}`, {
                 method: "DELETE", headers: { "Authorization": `Bearer ${getToken()}` }
             });
             fetchData();

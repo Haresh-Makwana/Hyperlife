@@ -1,8 +1,10 @@
 import axios from "axios";
 
+// 🚀 CENTRALIZED API URL: Dynamically adapts to local dev or Vercel cloud
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://hyperlife-backend.onrender.com";
+
 const api = axios.create({
-  // Using the standard Laravel development URL from your .env
-  baseURL: "https://hyperlife-backend.onrender.com/api", 
+  baseURL: `${API_BASE_URL}/api`, 
   withCredentials: true,
   headers: {
     "X-Requested-With": "XMLHttpRequest",
@@ -13,19 +15,18 @@ const api = axios.create({
 // 1. Sanctum CSRF Protection
 // Must be called before login or POST/PUT requests
 export const getCsrfToken = () => {
-    // Note: Sanctum routes usually sit outside the /api prefix
-    return axios.get("https://hyperlife-backend.onrender.com/sanctum/csrf-cookie", { withCredentials: true });
+    return axios.get(`${API_BASE_URL}/sanctum/csrf-cookie`, { withCredentials: true });
 };
 
 // 2. Universe Data Endpoints
-// Fetches the collection of universes defined in your migrations [cite: 12]
+// Fetches the collection of universes defined in your migrations
 export const getUniverses = () => api.get("/universes");
 
-// Fetches specific planets linked to a universe ID [cite: 12, 13]
+// Fetches specific planets linked to a universe ID
 export const getPlanets = (universeId) => api.get(`/universes/${universeId}/planets`);
 
 // 3. User Progress & Interactions
-// Updates planet-specific progress (like XP or streaks) [cite: 12]
+// Updates planet-specific progress (like XP or streaks)
 export const updatePlanetProgress = (planetId, data) => api.put(`/planets/${planetId}/progress`, data);
 
 export default api;

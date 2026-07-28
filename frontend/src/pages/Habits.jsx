@@ -22,6 +22,9 @@ export default function Habits() {
   const [isListening, setIsListening] = useState(false);
   const [showVoiceModal, setShowVoiceModal] = useState(false);
 
+  // 🚀 CENTRALIZED API URL
+  const API_URL = import.meta.env.VITE_API_BASE_URL || "https://hyperlife-backend.onrender.com";
+
   useEffect(() => {
     const token = getToken();
     if (!token) {
@@ -33,7 +36,7 @@ export default function Habits() {
 
   const fetchHabits = async () => {
     try {
-      const res = await fetch("https://hyperlife-backend.onrender.com/api/habits", {
+      const res = await fetch(`${API_URL}/api/habits`, {
         headers: { "Authorization": `Bearer ${getToken()}`, "Accept": "application/json" }
       });
       if (res.ok) {
@@ -67,13 +70,13 @@ export default function Habits() {
 
     recognition.onstart = () => {
       setIsListening(true);
-      setShowVoiceModal(true); // Open the visual modal!
+      setShowVoiceModal(true); 
     };
 
     recognition.onresult = (event) => {
       const transcript = event.results[0][0].transcript;
       const formattedTranscript = transcript.charAt(0).toUpperCase() + transcript.slice(1);
-      setTitle(formattedTranscript); // Instantly sets the input box text!
+      setTitle(formattedTranscript); 
     };
 
     recognition.onerror = (event) => {
@@ -84,7 +87,7 @@ export default function Habits() {
 
     recognition.onend = () => {
       setIsListening(false);
-      setShowVoiceModal(false); // Close the modal as soon as speaking stops
+      setShowVoiceModal(false); 
     };
 
     recognition.start();
@@ -95,7 +98,7 @@ export default function Habits() {
     if (!title.trim()) { setError("Habit title cannot be empty."); return; }
 
     try {
-      const res = await fetch("https://hyperlife-backend.onrender.com/api/habits", {
+      const res = await fetch(`${API_URL}/api/habits`, {
         method: "POST",
         headers: { "Content-Type": "application/json", "Authorization": `Bearer ${getToken()}`, "Accept": "application/json" },
         body: JSON.stringify({ title: title, planet_key: category.toLowerCase() })
@@ -111,7 +114,7 @@ export default function Habits() {
 
   const handleComplete = async (id) => {
     try {
-      const res = await fetch(`https://hyperlife-backend.onrender.com/api/habits/${id}/complete`, {
+      const res = await fetch(`${API_URL}/api/habits/${id}/complete`, {
         method: "POST", headers: { "Authorization": `Bearer ${getToken()}`, "Accept": "application/json" }
       });
       const data = await res.json();
@@ -127,7 +130,7 @@ export default function Habits() {
   const handleDelete = async (id) => {
     if (!window.confirm("Delete this habit permanently? This will cost you 10 XP.")) return;
     try {
-      const res = await fetch(`https://hyperlife-backend.onrender.com/api/habits/${id}`, {
+      const res = await fetch(`${API_URL}/api/habits/${id}`, {
         method: "DELETE", headers: { "Authorization": `Bearer ${getToken()}`, "Accept": "application/json" }
       });
       if (res.ok) {
