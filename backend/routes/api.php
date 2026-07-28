@@ -11,7 +11,7 @@ use App\Http\Controllers\Api\ActivityController;
 use App\Http\Controllers\Api\PlanetProgressController;
 use App\Http\Controllers\Api\GamificationController;
 use App\Http\Controllers\Api\AnalyticsController;
-use App\Http\Controllers\Api\HabitController; // 🚨 FIXED: 'Api' capitalization for strict Linux environments
+use App\Http\Controllers\Api\HabitController; 
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Api\AdminAuthController; 
 use App\Http\Controllers\Api\AdminController;
@@ -34,6 +34,19 @@ use App\Models\Contact;
 */
 Route::get('/ping', function () {
     return response()->json(['status' => 'ok', 'message' => 'System Online']);
+});
+
+/*
+|--------------------------------------------------------------------------
+| 🛠️ SYSTEM RESET (Temporary Bypass for Render Cache)
+|--------------------------------------------------------------------------
+*/
+Route::get('/system/purge-cache', function () {
+    \Illuminate\Support\Facades\Artisan::call('optimize:clear');
+    return response()->json([
+        'status' => 'success', 
+        'message' => 'Matrix Cache Cleared. Laravel will now read the live Environment Variables.'
+    ]);
 });
 
 /*
