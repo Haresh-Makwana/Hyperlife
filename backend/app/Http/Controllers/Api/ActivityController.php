@@ -45,9 +45,13 @@ class ActivityController extends Controller
             // 🚀 SUBSCRIPTION GATEKEEPER: Only Commander+ gets premium AI parsing
             if ($request->user()->canUseAIInsights()) {
                 try {
-                    $aiRes = Http::timeout(10)->acceptJson()->post('http://127.0.0.1:5000/psych-eval', [
+                    // 🚨 FIXED: Ripped out 127.0.0.1 and replaced it with the dynamic cloud URL
+                    $aiUrl = rtrim(env('AI_MICROSERVICE_URL', 'https://hyperlife-ai-v2.onrender.com'), '/');
+                    
+                    $aiRes = Http::timeout(10)->acceptJson()->post($aiUrl . '/psych-eval', [
                         'log_text' => $telemetryText
                     ]);
+                    
                     if ($aiRes->successful()) {
                         $mood_level = $aiRes->json()['sentiment_score'] ?? 5;
                     }

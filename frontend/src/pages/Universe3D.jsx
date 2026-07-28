@@ -31,7 +31,6 @@ const getOrbitData = (planet, ringIndex = 2) => {
   return { radius, speed, yOffset };
 };
 
-// Renamed from getEntropyState for user readability
 const getGoalStatus = (planet, futureDays = 0) => {
   if (!planet || !planet.updated_at) return { isAtRisk: false, isHealthy: true, sizeMultiplier: 1 };
   
@@ -51,7 +50,6 @@ const getGoalStatus = (planet, futureDays = 0) => {
   return { isAtRisk, isHealthy, sizeMultiplier };
 };
 
-// Renamed from SpatialWormhole
 function DailyBonusPortal({ onClick }) {
     const ref = useRef();
     const [hovered, setHovered] = useState(false);
@@ -81,7 +79,6 @@ function DailyBonusPortal({ onClick }) {
     );
 }
 
-// Renamed from DataPrism
 function RewardCrystal({ planetSize, color }) {
     const ref = useRef();
     useFrame((state, delta) => {
@@ -100,7 +97,6 @@ function RewardCrystal({ planetSize, color }) {
     );
 }
 
-// Renamed from ThreatAsteroid
 function WarningMeteor({ planetSize, onDefend }) {
     const groupRef = useRef();
     const [isExploding, setIsExploding] = useState(false);
@@ -158,7 +154,6 @@ function HabitMoon({ index, total, planetSize, color, onComplete }) {
     );
 }
 
-// Renamed from SynergyLines
 function ConnectionLines({ links, planets, orbitMappings, timePaused }) {
     const linesRef = useRef([]);
     useFrame(({ clock }) => {
@@ -238,7 +233,6 @@ function CameraController({ activePlanet, orbitMappings, controlsRef, mode, isBo
   return null;
 }
 
-// Renamed from CinematicSun
 function CentralCore({ level, onClick }) {
   const ref = useRef();
   const diskRef = useRef();
@@ -707,10 +701,24 @@ export default function Universe3D() {
   const handleWormholeClick = async () => {
       setActivePlanetData(null); setIsBonusPortalActive(true); setBountyText("Checking for your Daily Reward...");
       try {
-          const res = await fetch(`http://127.0.0.1:5000/predict`, { method: 'POST', headers: { "Content-Type": "application/json" }, body: JSON.stringify({ activities: [] }) });
-          if (res.ok) { const data = await res.json(); setBountyText(data.insight); } 
-          else setBountyText("Bonus currently unavailable. Please try again later.");
-      } catch (err) { setBountyText("Connection failed."); }
+          // 🚨 FIXED: The ghost is eliminated. Replaced with dynamic AI environment variable.
+          const AI_URL = import.meta.env.VITE_AI_BASE_URL || "https://hyperlife-ai-v2.onrender.com";
+          
+          const res = await fetch(`${AI_URL}/predict`, { 
+            method: 'POST', 
+            headers: { "Content-Type": "application/json" }, 
+            body: JSON.stringify({ activities: [] }) 
+          });
+          
+          if (res.ok) { 
+              const data = await res.json(); 
+              setBountyText(data.insight); 
+          } else {
+              setBountyText("Bonus currently unavailable. Please try again later.");
+          }
+      } catch (err) { 
+          setBountyText("Connection failed."); 
+      }
   };
 
   const handleDeleteGoal = async () => {

@@ -14,18 +14,18 @@ export default defineConfig({
     host: '0.0.0.0',
     port: 5173,
 
+    // 🚨 FIXED: Proxies now route exactly where they are supposed to in the cloud
     proxy: {
       '/api': {
-        target: 'http://127.0.0.1:5000',
+        target: 'https://hyperlife-backend.onrender.com', // Rerouted to Laravel
         changeOrigin: true,
-        secure: false
+        secure: false,
       },
       '/ai': {
-        target: 'https://hyperlife-backend.onrender.com',
+        target: 'https://hyperlife-ai-v2.onrender.com', // Rerouted to the new Python V2 AI Core
         changeOrigin: true,
-        secure: false
+        secure: false,
       }
     }
   },
-
 });

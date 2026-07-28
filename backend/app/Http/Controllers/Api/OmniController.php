@@ -25,8 +25,8 @@ class OmniController extends Controller
         $rawText = $request->telemetry_text;
 
         try {
-            // 🚀 FIXED: Dynamically pull the AI node URL, falling back to local for dev
-            $aiUrl = env('AI_MICROSERVICE_URL', 'http://127.0.0.1:5000');
+            // 🚨 FIXED: Hard-wired to the V2 AI Cloud node. The 127.0.0.1 ghost is dead.
+            $aiUrl = rtrim(env('AI_MICROSERVICE_URL', 'https://hyperlife-ai-v2.onrender.com'), '/');
             
             $aiResponse = Http::timeout(15)->post($aiUrl . '/omni-process', [
                 'telemetry_text' => $rawText
@@ -76,8 +76,8 @@ class OmniController extends Controller
             $audioContent = file_get_contents($file->getRealPath());
             $filename = $file->getClientOriginalName() ?: 'voice_command.webm';
 
-            // 🚀 FIXED: Dynamically pull the AI node URL here as well
-            $aiUrl = env('AI_MICROSERVICE_URL', 'http://127.0.0.1:5000');
+            // 🚨 FIXED: Hard-wired to the V2 AI Cloud node.
+            $aiUrl = rtrim(env('AI_MICROSERVICE_URL', 'https://hyperlife-ai-v2.onrender.com'), '/');
             
             $aiResponse = Http::timeout(60)
                 ->attach('audio', $audioContent, $filename)
