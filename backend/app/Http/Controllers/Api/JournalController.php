@@ -25,7 +25,7 @@ class JournalController extends Controller
 
         try {
             // 🚀 THE FIX: Dynamically pull the AI URL from Render environment variables
-            $aiUrl = env('AI_MICROSERVICE_URL', 'http://127.0.0.1:5000');
+           $aiUrl = 'https://hyperlife-ai.onrender.com'; // 🚨 Replace this if your AI name is slightly different!
             
             $aiRes = Http::timeout(30)
                 ->acceptJson()

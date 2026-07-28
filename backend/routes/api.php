@@ -223,7 +223,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
         try {
             // Dynamically pull the AI server address from the .env file.
-            $aiServiceUrl = env('AI_MICROSERVICE_URL', 'http://127.0.0.1:5000') . '/sentient-analysis';
+            $aiServiceUrl = 'https://hyperlife-ai.onrender.com/sentient-analysis'; // 🚨 Replace with your real AI URL
             
             $response = Http::timeout(15)->post($aiServiceUrl, [
                 'activities' => $activities
