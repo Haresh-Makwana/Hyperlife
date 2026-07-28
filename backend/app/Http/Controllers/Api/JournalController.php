@@ -45,7 +45,7 @@ class JournalController extends Controller
             if (str_contains($errorMsg, 'Connection refused')) {
                 $evalText = "Offline Mode: Connection Refused. Ensure Python server is running on port 5000.";
             } else {
-                $evalText = "Offline Mode: Connection Failed -> " . $errorMsg;
+                $evalText = "GHOST PROTOCOL: Cloud Bypass Failed -> " . $errorMsg;
             }
             Log::error("Psych-Eval Connection Error: " . $errorMsg);
         }
