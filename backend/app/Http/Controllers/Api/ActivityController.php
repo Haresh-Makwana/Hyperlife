@@ -45,11 +45,8 @@ class ActivityController extends Controller
             // 🚀 SUBSCRIPTION GATEKEEPER: Only Commander+ gets premium AI parsing
             if ($request->user()->canUseAIInsights()) {
                 try {
-                    // 🚨 FIXED: Uses dynamic AI Core cloud URL from config/env and prevents 127.0.0.1 localhost traps in production
-                    $aiUrl = rtrim(config('services.ai.url', env('AI_CORE_URL', env('AI_MICROSERVICE_URL', 'https://hyperlife-ai-core.onrender.com'))), '/');
-                    if (app()->isProduction() && (str_contains($aiUrl, '127.0.0.1') || str_contains($aiUrl, 'localhost'))) {
-                        $aiUrl = 'https://hyperlife-ai-core.onrender.com';
-                    }
+                    // 🚨 FIXED: Ripped out 127.0.0.1 and replaced it with the dynamic cloud URL
+                    $aiUrl = rtrim(env('AI_MICROSERVICE_URL', 'https://hyperlife-ai-v2.onrender.com'), '/');
                     
                     $aiRes = Http::timeout(10)->acceptJson()->post($aiUrl . '/psych-eval', [
                         'log_text' => $telemetryText

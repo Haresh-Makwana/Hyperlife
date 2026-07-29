@@ -25,11 +25,8 @@ class OmniController extends Controller
         $rawText = $request->telemetry_text;
 
         try {
-            // 🚨 FIXED: Uses dynamic AI Core cloud URL from config/env and prevents 127.0.0.1 localhost traps in production
-            $aiUrl = rtrim(config('services.ai.url', env('AI_CORE_URL', env('AI_MICROSERVICE_URL', 'https://hyperlife-ai-core.onrender.com'))), '/');
-            if (app()->isProduction() && (str_contains($aiUrl, '127.0.0.1') || str_contains($aiUrl, 'localhost'))) {
-                $aiUrl = 'https://hyperlife-ai-core.onrender.com';
-            }
+            // 🚨 FIXED: Hard-wired to the V2 AI Cloud node. The 127.0.0.1 ghost is dead.
+            $aiUrl = rtrim(env('AI_MICROSERVICE_URL', 'https://hyperlife-ai-v2.onrender.com'), '/');
             
             $aiResponse = Http::timeout(15)->post($aiUrl . '/omni-process', [
                 'telemetry_text' => $rawText
@@ -79,11 +76,8 @@ class OmniController extends Controller
             $audioContent = file_get_contents($file->getRealPath());
             $filename = $file->getClientOriginalName() ?: 'voice_command.webm';
 
-            // 🚨 FIXED: Uses dynamic AI Core cloud URL from config/env and prevents 127.0.0.1 localhost traps in production
-            $aiUrl = rtrim(config('services.ai.url', env('AI_CORE_URL', env('AI_MICROSERVICE_URL', 'https://hyperlife-ai-core.onrender.com'))), '/');
-            if (app()->isProduction() && (str_contains($aiUrl, '127.0.0.1') || str_contains($aiUrl, 'localhost'))) {
-                $aiUrl = 'https://hyperlife-ai-core.onrender.com';
-            }
+            // 🚨 FIXED: Hard-wired to the V2 AI Cloud node.
+            $aiUrl = rtrim(env('AI_MICROSERVICE_URL', 'https://hyperlife-ai-v2.onrender.com'), '/');
             
             $aiResponse = Http::timeout(60)
                 ->attach('audio', $audioContent, $filename)

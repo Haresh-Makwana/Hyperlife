@@ -701,8 +701,8 @@ export default function Universe3D() {
   const handleWormholeClick = async () => {
       setActivePlanetData(null); setIsBonusPortalActive(true); setBountyText("Checking for your Daily Reward...");
       try {
-          // 🚨 FIXED: The ghost is eliminated. Replaced with dynamic AI environment variable pointing to ai-core.
-          const AI_URL = import.meta.env.VITE_AI_BASE_URL || "https://hyperlife-ai-core.onrender.com";
+          // 🚨 FIXED: The ghost is eliminated. Replaced with dynamic AI environment variable.
+          const AI_URL = import.meta.env.VITE_AI_BASE_URL || "https://hyperlife-ai-v2.onrender.com";
           
           const res = await fetch(`${AI_URL}/predict`, { 
             method: 'POST', 
