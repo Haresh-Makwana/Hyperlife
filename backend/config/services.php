@@ -14,6 +14,10 @@ return [
     |
     */
 
+    'ai' => [
+        'url' => rtrim(env('AI_CORE_URL', env('AI_MICROSERVICE_URL', 'https://hyperlife-ai-core.onrender.com')), '/'),
+    ],
+
   'google' => [
     'client_id' => env('GOOGLE_CLIENT_ID'),
     'client_secret' => env('GOOGLE_CLIENT_SECRET'),

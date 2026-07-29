@@ -222,8 +222,12 @@ Route::middleware('auth:sanctum')->group(function () {
         }
 
         try {
-            // Dynamically pull the AI server address from the .env file.
-            $aiServiceUrl = 'https://hyperlife-ai.onrender.com/sentient-analysis'; // 🚨 Replace with your real AI URL
+            // 🚨 FIXED: Dynamically pull the AI Core server address from config/env
+            $aiUrl = rtrim(config('services.ai.url', env('AI_CORE_URL', env('AI_MICROSERVICE_URL', 'https://hyperlife-ai-core.onrender.com'))), '/');
+            if (app()->isProduction() && (str_contains($aiUrl, '127.0.0.1') || str_contains($aiUrl, 'localhost'))) {
+                $aiUrl = 'https://hyperlife-ai-core.onrender.com';
+            }
+            $aiServiceUrl = $aiUrl . '/sentient-analysis';
             
             $response = Http::timeout(15)->post($aiServiceUrl, [
                 'activities' => $activities

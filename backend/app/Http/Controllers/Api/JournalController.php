@@ -24,8 +24,11 @@ class JournalController extends Controller
         $sentiment = 5;
 
         try {
-            // 🚨 FIXED: Hard-wired to the new V2 AI Core.
-            $aiUrl = rtrim(env('AI_MICROSERVICE_URL', 'https://hyperlife-ai-v2.onrender.com'), '/');
+            // 🚨 FIXED: Uses dynamic AI Core cloud URL from config/env and prevents 127.0.0.1 localhost traps in production
+            $aiUrl = rtrim(config('services.ai.url', env('AI_CORE_URL', env('AI_MICROSERVICE_URL', 'https://hyperlife-ai-core.onrender.com'))), '/');
+            if (app()->isProduction() && (str_contains($aiUrl, '127.0.0.1') || str_contains($aiUrl, 'localhost'))) {
+                $aiUrl = 'https://hyperlife-ai-core.onrender.com';
+            }
             
             $aiRes = Http::timeout(30)
                 ->acceptJson()

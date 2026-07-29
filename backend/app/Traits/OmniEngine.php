@@ -15,8 +15,12 @@ trait OmniEngine
         $title = ucfirst($text);
 
         try {
-            // 🚀 Send the text to your new Python Gemini API running on port 8001!
-            $response = Http::timeout(10)->post('http://127.0.0.1:8001/analyze', [
+            // 🚀 Send the text to your Python AI Core cloud API
+            $aiUrl = rtrim(config('services.ai.url', env('AI_CORE_URL', env('AI_MICROSERVICE_URL', 'https://hyperlife-ai-core.onrender.com'))), '/');
+            if (app()->isProduction() && (str_contains($aiUrl, '127.0.0.1') || str_contains($aiUrl, 'localhost'))) {
+                $aiUrl = 'https://hyperlife-ai-core.onrender.com';
+            }
+            $response = Http::timeout(10)->post($aiUrl . '/analyze', [
                 'text' => $text
             ]);
 

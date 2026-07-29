@@ -22,7 +22,7 @@ export default defineConfig({
         secure: false,
       },
       '/ai': {
-        target: 'https://hyperlife-ai-v2.onrender.com', // Rerouted to the new Python V2 AI Core
+        target: 'https://hyperlife-ai-core.onrender.com', // Rerouted to the Python AI Core
         changeOrigin: true,
         secure: false,
       }
