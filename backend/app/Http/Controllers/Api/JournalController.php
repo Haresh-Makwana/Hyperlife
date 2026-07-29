@@ -24,8 +24,8 @@ class JournalController extends Controller
         $sentiment = 5;
 
         try {
-            // 🚀 THE FIX: Dynamically pull the AI URL from Render environment variables
-           $aiUrl = 'https://hyperlife-ai.onrender.com'; // 🚨 Replace this if your AI name is slightly different!
+            // 🚨 FIXED: Hard-wired to the new V2 AI Core.
+            $aiUrl = rtrim(env('AI_MICROSERVICE_URL', 'https://hyperlife-ai-v2.onrender.com'), '/');
             
             $aiRes = Http::timeout(30)
                 ->acceptJson()
@@ -42,11 +42,7 @@ class JournalController extends Controller
             }
         } catch (\Exception $e) {
             $errorMsg = $e->getMessage();
-            if (str_contains($errorMsg, 'Connection refused')) {
-                $evalText = "Offline Mode: Connection Refused. Ensure Python server is running on port 5000.";
-            } else {
-                $evalText = "GHOST PROTOCOL: Cloud Bypass Failed -> " . $errorMsg;
-            }
+            $evalText = "GHOST PROTOCOL: Cloud Bypass Failed -> " . $errorMsg;
             Log::error("Psych-Eval Connection Error: " . $errorMsg);
         }
 
