@@ -70,27 +70,28 @@ class AuthController extends Controller
             'created_at' => \Carbon\Carbon::now()
         ]);
 
-      config([
+      // 🚀 THE FIX: Switched to Port 465 and SSL to bypass cloud firewall blocks
+        config([
             'mail.default' => 'smtp',
             'mail.mailers.smtp.transport' => 'smtp',
             'mail.mailers.smtp.host' => 'smtp.gmail.com',
-            'mail.mailers.smtp.port' => 587,
-            'mail.mailers.smtp.encryption' => 'tls',
+            'mail.mailers.smtp.port' => 465, // Changed from 587
+            'mail.mailers.smtp.encryption' => 'ssl', // Changed from tls
             'mail.mailers.smtp.username' => 'hareshratilal2003@gmail.com', 
-            'mail.mailers.smtp.password' => 'pceisowlspixtqgw', // Verify this is still active in your Google Account
+            'mail.mailers.smtp.password' => 'pceisowlspixtqgw', 
             'mail.from.address' => 'hareshratilal2003@gmail.com',
             'mail.from.name' => 'HyperLife Sentient Core',
         ]);
 
-        // 🚀 THE FIX: Force Laravel to clear the old mail config and use the Gmail credentials above
+        // Force Laravel to clear the old mail config and use the new SSL port
         app()->forgetInstance('mail.manager');
         \Illuminate\Support\Facades\Mail::clearResolvedInstances();
 
-        // 🚨 Wrapped SMTP call in try/catch to prevent ghost users
+        // Send the transmission
         try {
             \Illuminate\Support\Facades\Mail::to($user->email)->send(new \App\Mail\VerifyAccountOtp($otp));
         } catch (\Exception $e) {
-            $user->delete(); // Nuke the ghost user so they can try again
+            $user->delete(); 
             \Illuminate\Support\Facades\Log::error('SMTP Failure: ' . $e->getMessage());
             return response()->json(['message' => 'Email server offline. Failed to send decryption key. ' . $e->getMessage()], 500);
         }
