@@ -159,7 +159,7 @@ const handleGoogleLogin = async () => {
     }
   };
 
-  const handleAuth = async (e) => {
+const handleAuth = async (e) => {
     if (e) e.preventDefault(); 
     setError(""); setSuccess("");
     
@@ -167,16 +167,13 @@ const handleGoogleLogin = async () => {
       setError("Passwords do not match"); return;
     }
 
-    if (isSignup && role === "admin" && !adminCode) {
-      setError("System Override Key is required for Admin clearance."); return;
-    }
-
-    loading(true);
+    // 🚀 FIXED: Changed from loading(true) to setLoading(true)
+    setLoading(true);
 
     const endpoint = isSignup ? "register" : "login";
     
     const payload = isSignup 
-      ? { name, email, password, password_confirmation: confirmPassword, admin_code: adminCode, role: role } 
+      ? { name, email, password, password_confirmation: confirmPassword, admin_code: adminCode } 
       : { email, password };
 
     try {
@@ -196,19 +193,23 @@ const handleGoogleLogin = async () => {
         } else {
             setError(data.message || "Authentication failed.");
         }
+        // 🚀 FIXED: Make sure this is also setLoading
         setLoading(false); return;
       }
 
-      if (data.status === 'pending_verification') {
-        setSuccess(data.message);
+      if (data.status === 'pending_verification' || isSignup) {
+        setSuccess(data.message || "Initialization complete. Check email to verify identity.");
         setVerificationPhase(true); 
+        // 🚀 FIXED
         setLoading(false);
         return;
       }
 
       setToken(data.token);
-      const userRole = data?.user?.role || 'user';
+      const userRole = data?.user?.role || 'operator';
       localStorage.setItem('user_role', userRole);
+      
+      // 🚀 FIXED
       setLoading(false); 
 
       if (String(userRole).trim().toLowerCase() === "admin") navigate("/admin");
@@ -216,6 +217,7 @@ const handleGoogleLogin = async () => {
       
     } catch (err) {
       setError("Cannot connect to server.");
+      // 🚀 FIXED
       setLoading(false); 
     }
   };
