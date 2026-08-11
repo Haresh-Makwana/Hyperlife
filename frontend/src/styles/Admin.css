@@ -1,17 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
-/* --- Global Admin Layout --- */
+/* =========================================
+   GLOBAL ADMIN LAYOUT
+   ========================================= */
 .admin-layout {
   display: flex;
   width: 100vw;
-  height: 100vh;
+  /* Use 100dvh for mobile browsers to account for dynamic URL bars */
+  height: 100dvh; 
+  max-width: 100%;
   background-color: #030407;
   color: #fff;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
   overflow: hidden;
   position: relative;
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 /* --- Animated Holographic Grid Background --- */
@@ -35,9 +40,12 @@
   100% { transform: translateY(40px); }
 }
 
-/* --- Glass Sidebar --- */
+/* =========================================
+   GLASS SIDEBAR
+   ========================================= */
 .admin-sidebar {
-  width: 280px;
+  /* Fluid width scaling on desktop */
+  width: clamp(240px, 20vw, 280px);
   height: 100%;
   background: rgba(10, 12, 18, 0.7);
   backdrop-filter: blur(24px);
@@ -47,21 +55,23 @@
   flex-direction: column;
   z-index: 10;
   box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
+  flex-shrink: 0;
 }
 
 .admin-brand {
-  padding: 30px;
-  font-size: 1.8rem;
+  padding: clamp(20px, 3vw, 30px);
+  font-size: clamp(1.4rem, 2.5vw, 1.8rem);
   font-weight: 800;
   letter-spacing: -1px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   display: flex;
   align-items: center;
   gap: 12px;
+  white-space: nowrap;
 }
 
 .admin-nav {
-  padding: 20px 15px;
+  padding: clamp(15px, 2vw, 20px) 15px;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -72,16 +82,17 @@
   display: flex;
   align-items: center;
   gap: 15px;
-  padding: 14px 20px;
+  padding: clamp(10px, 1.5vw, 14px) clamp(15px, 2vw, 20px);
   border-radius: 12px;
   color: #8b92a5;
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: clamp(0.85rem, 1.5vw, 0.95rem);
   background: transparent;
   cursor: pointer;
   transition: all 0.3s ease;
   border: 1px solid transparent;
   text-align: left;
+  white-space: nowrap;
 }
 
 .admin-nav-item:hover {
@@ -98,13 +109,13 @@
 }
 
 .sidebar-footer {
-  padding: 20px;
+  padding: clamp(15px, 2vw, 20px);
   border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .logout-btn {
   width: 100%;
-  padding: 12px;
+  padding: clamp(10px, 1.5vw, 12px);
   background: rgba(239, 68, 68, 0.1);
   border: 1px solid rgba(239, 68, 68, 0.3);
   color: #fca5a5;
@@ -112,13 +123,16 @@
   font-weight: bold;
   cursor: pointer;
   transition: all 0.3s;
+  font-size: clamp(0.85rem, 1.5vw, 1rem);
 }
 
 .logout-btn:hover {
   background: rgba(239, 68, 68, 0.2);
 }
 
-/* --- Main Content Area --- */
+/* =========================================
+   MAIN CONTENT AREA
+   ========================================= */
 .admin-main {
   flex: 1;
   display: flex;
@@ -126,6 +140,7 @@
   z-index: 10;
   height: 100%;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .admin-main::-webkit-scrollbar { width: 8px; }
@@ -135,8 +150,8 @@
 
 /* --- Top Header --- */
 .admin-header {
-  height: 80px;
-  padding: 0 40px;
+  height: clamp(65px, 8vh, 80px);
+  padding: 0 clamp(15px, 3vw, 40px);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -146,16 +161,17 @@
   position: sticky;
   top: 0;
   z-index: 20;
+  gap: 15px;
 }
 
 .search-bar {
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 10px 20px;
+  padding: clamp(8px, 1.5vw, 10px) clamp(15px, 2vw, 20px);
   border-radius: 20px;
-  width: 300px;
+  width: clamp(150px, 30vw, 300px);
   color: #fff;
-  font-size: 0.9rem;
+  font-size: clamp(0.85rem, 1.5vw, 0.9rem);
   outline: none;
   transition: all 0.3s;
 }
@@ -163,33 +179,37 @@
 .search-bar:focus {
   border-color: #7f5cff;
   box-shadow: 0 0 15px rgba(127, 92, 255, 0.2);
-  width: 350px;
+  width: clamp(200px, 35vw, 350px);
 }
 
 .admin-profile {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: clamp(10px, 2vw, 15px);
 }
 
 .admin-avatar {
-  width: 40px; height: 40px;
+  width: clamp(35px, 4vw, 40px); 
+  height: clamp(35px, 4vw, 40px);
   border-radius: 50%;
   background: linear-gradient(45deg, #00ffe7, #7f5cff);
   display: flex; align-items: center; justify-content: center;
   font-weight: 800; color: #000;
   box-shadow: 0 0 15px rgba(0, 255, 231, 0.3);
+  flex-shrink: 0;
 }
 
-/* --- Dashboard Content --- */
+/* =========================================
+   DASHBOARD CONTENT
+   ========================================= */
 .admin-content {
-  padding: 40px;
+  padding: clamp(20px, 4vw, 40px);
 }
 
 .page-title {
-  font-size: 2rem;
+  font-size: clamp(1.5rem, 4vw, 2rem);
   font-weight: 800;
-  margin: 0 0 30px 0;
+  margin: 0 0 clamp(20px, 4vw, 30px) 0;
   background: linear-gradient(45deg, #fff, #a0a5ba);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -198,16 +218,17 @@
 /* --- Stat Cards Grid --- */
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 25px;
-  margin-bottom: 40px;
+  /* 🚀 THE FIX: min(100%, 240px) ensures cards scale down safely on small screens */
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  gap: clamp(15px, 3vw, 25px);
+  margin-bottom: clamp(30px, 5vw, 40px);
 }
 
 .stat-card {
   background: rgba(15, 18, 28, 0.6);
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 20px;
-  padding: 25px;
+  padding: clamp(20px, 3vw, 25px);
   display: flex;
   flex-direction: column;
   position: relative;
@@ -233,21 +254,21 @@
   align-items: center;
   margin-bottom: 15px;
   color: #8b92a5;
-  font-size: 0.9rem;
+  font-size: clamp(0.8rem, 1.5vw, 0.9rem);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 1px;
 }
 
 .stat-value {
-  font-size: 2.5rem;
+  font-size: clamp(2rem, 5vw, 2.5rem);
   font-weight: 800;
   color: #fff;
   margin: 0 0 10px 0;
 }
 
 .stat-trend {
-  font-size: 0.85rem;
+  font-size: clamp(0.75rem, 1.5vw, 0.85rem);
   font-weight: 600;
   display: flex;
   align-items: center;
@@ -256,12 +277,14 @@
 .trend-up { color: #10b981; }
 .trend-down { color: #ff5f6d; }
 
-/* --- Data Tables --- */
+/* =========================================
+   DATA TABLES
+   ========================================= */
 .data-section {
   background: rgba(15, 18, 28, 0.6);
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 20px;
-  padding: 30px;
+  padding: clamp(20px, 4vw, 30px);
   backdrop-filter: blur(10px);
 }
 
@@ -270,10 +293,12 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 25px;
+  flex-wrap: wrap; /* Safety wrap for long titles on mobile */
+  gap: 15px;
 }
 
 .section-header h3 {
-  font-size: 1.3rem;
+  font-size: clamp(1.1rem, 3vw, 1.3rem);
   font-weight: 700;
   margin: 0;
 }
@@ -284,7 +309,7 @@
   border: 1px solid rgba(0, 255, 231, 0.2);
   padding: 8px 16px;
   border-radius: 8px;
-  font-size: 0.85rem;
+  font-size: clamp(0.75rem, 1.5vw, 0.85rem);
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s;
@@ -296,30 +321,36 @@
   box-shadow: 0 0 15px rgba(0, 255, 231, 0.4);
 }
 
+/* 🚀 THE FIX: Makes the table horizontally scrollable on small screens so it never breaks the layout */
 .cyber-table {
   width: 100%;
   border-collapse: collapse;
+  display: block;
+  overflow-x: auto;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
 }
 
 .cyber-table th {
   text-align: left;
-  padding: 15px;
+  padding: clamp(10px, 2vw, 15px);
   color: #8b92a5;
-  font-size: 0.85rem;
+  font-size: clamp(0.75rem, 1.5vw, 0.85rem);
   text-transform: uppercase;
   letter-spacing: 1px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .cyber-table td {
-  padding: 15px;
+  padding: clamp(10px, 2vw, 15px);
   color: #fff;
   border-bottom: 1px solid rgba(255, 255, 255, 0.02);
-  font-size: 0.95rem;
+  font-size: clamp(0.85rem, 1.5vw, 0.95rem);
 }
 
 .cyber-table tr {
   transition: background 0.2s;
+  display: table-row; /* Forces proper row rendering inside block table */
 }
 
 .cyber-table tr:hover td {
@@ -329,9 +360,74 @@
 .status-badge {
   padding: 6px 12px;
   border-radius: 20px;
-  font-size: 0.8rem;
+  font-size: clamp(0.7rem, 1.2vw, 0.8rem);
   font-weight: 600;
   display: inline-block;
 }
 .status-active { background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
 .status-pending { background: rgba(255, 170, 0, 0.1); color: #ffaa00; border: 1px solid rgba(255, 170, 0, 0.3); }
+
+/* =========================================
+   HARD MEDIA QUERIES (MOBILE RE-FLOW)
+   ========================================= */
+@media (max-width: 900px) {
+  /* 🚀 Flip the layout entirely to column mode so the sidebar becomes a top-nav */
+  .admin-layout { 
+    flex-direction: column; 
+  }
+  
+  .admin-sidebar {
+    width: 100vw;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+    z-index: 30; /* Keeps it above content */
+  }
+  
+  .admin-brand { 
+    padding: 15px; 
+    justify-content: space-between; 
+    border-bottom: none;
+  }
+  
+  /* Convert vertical nav items to horizontal touch-scrollable pills */
+  .admin-nav {
+    flex-direction: row;
+    overflow-x: auto;
+    padding: 10px 15px;
+    -webkit-overflow-scrolling: touch;
+    gap: 12px;
+  }
+  
+  .admin-nav::-webkit-scrollbar { display: none; } /* Clean up scrollbar for mobile */
+  
+  .sidebar-footer {
+    padding: 10px 15px;
+    border-top: none;
+    display: flex;
+    justify-content: flex-end; /* Align logout button neatly if kept in flow */
+  }
+  
+  .admin-nav-item { 
+    padding: 8px 16px; 
+    border: 1px solid rgba(255,255,255,0.05); 
+    border-radius: 20px;
+  }
+  
+  .admin-nav-item:hover {
+    transform: none; /* Disable hover jumps on mobile */
+  }
+  
+  /* Swap the active border from left to bottom since they are horizontal now */
+  .admin-nav-item.active { 
+    border-left: none; 
+    border-bottom: 3px solid #00ffe7; 
+    background: rgba(0, 255, 231, 0.05);
+  }
+  
+  /* Adjust the search bar so it doesn't break header */
+  .search-bar:focus {
+    width: 100%; /* Take full available width on mobile focus */
+  }
+}
