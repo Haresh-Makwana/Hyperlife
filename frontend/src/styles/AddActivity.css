@@ -1,73 +1,175 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
-/* --- Layout & Dynamic Background --- */
+/* =========================================
+   LAYOUT & DYNAMIC BACKGROUND
+   ========================================= */
 .activity-container {
-  min-height: calc(100vh - 70px); width: 100%;
-  background-color: #030407; position: relative;
-  display: flex; justify-content: center; align-items: center;
-  color: #fff; font-family: 'Inter', sans-serif;
-  padding: 60px 5%; box-sizing: border-box; overflow: hidden;
+  min-height: calc(100vh - 70px); 
+  width: 100vw;
+  max-width: 100%;
+  background-color: #030407; 
+  position: relative;
+  display: flex; 
+  justify-content: center; 
+  align-items: center;
+  color: #fff; 
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  /* Fluid padding scaling */
+  padding: clamp(40px, 8vw, 60px) clamp(15px, 4vw, 5%); 
+  box-sizing: border-box; 
+  overflow: hidden;
 }
 
 .activity-bg-wrapper {
-  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-  overflow: hidden; pointer-events: none; z-index: 0;
+  position: absolute; 
+  top: 0; 
+  left: 0; 
+  width: 100%; 
+  height: 100%;
+  overflow: hidden; 
+  pointer-events: none; 
+  z-index: 0;
 }
 
 .activity-grid-overlay {
-  position: absolute; width: 100%; height: 100%;
+  position: absolute; 
+  width: 100%; 
+  height: 100%;
   background-image: radial-gradient(rgba(0, 255, 231, 0.15) 1px, transparent 1px);
   background-size: 40px 40px;
-  opacity: 0.4; z-index: 1;
+  opacity: 0.4; 
+  z-index: 1;
   mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
   -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
 }
 
 .activity-ambient-glow {
-  position: absolute; border-radius: 50%; filter: blur(140px); opacity: 0.25;
-  animation: activityCosmicFlow 20s infinite alternate ease-in-out; z-index: 0;
+  position: absolute; 
+  border-radius: 50%; 
+  filter: blur(140px); 
+  opacity: 0.25;
+  animation: activityCosmicFlow 20s infinite alternate ease-in-out; 
+  z-index: 0;
 }
-.activity-glow-cyan { width: 50vw; height: 50vw; background: radial-gradient(circle, #00ffe7 0%, transparent 70%); top: -10%; left: -20%; }
-.activity-glow-purple { width: 60vw; height: 60vw; background: radial-gradient(circle, #a855f7 0%, transparent 70%); bottom: -20%; right: -10%; animation-delay: -7s; }
+
+.activity-glow-cyan { 
+  width: clamp(250px, 50vw, 600px); 
+  height: clamp(250px, 50vw, 600px); 
+  background: radial-gradient(circle, #00ffe7 0%, transparent 70%); 
+  top: -10%; 
+  left: -20%; 
+}
+
+.activity-glow-purple { 
+  width: clamp(300px, 60vw, 700px); 
+  height: clamp(300px, 60vw, 700px); 
+  background: radial-gradient(circle, #a855f7 0%, transparent 70%); 
+  bottom: -20%; 
+  right: -10%; 
+  animation-delay: -7s; 
+}
 
 .activity-content {
-  position: relative; z-index: 10; width: 100%; max-width: 650px;
-  display: flex; flex-direction: column; gap: 30px;
+  position: relative; 
+  z-index: 10; 
+  width: 100%; 
+  max-width: 650px;
+  display: flex; 
+  flex-direction: column; 
+  /* Fluid vertical gap */
+  gap: clamp(20px, 4vw, 30px);
 }
 
-/* --- Header & Back Button --- */
-.activity-header { text-align: center; display: flex; flex-direction: column; align-items: center; }
-.back-btn {
-  background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: #9ca3af;
-  padding: 8px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; cursor: pointer;
-  transition: all 0.3s ease; display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
+/* =========================================
+   HEADER & BACK BUTTON
+   ========================================= */
+.activity-header { 
+  text-align: center; 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
 }
-.back-btn:hover { background: rgba(0, 255, 231, 0.1); color: #00ffe7; border-color: rgba(0, 255, 231, 0.3); transform: translateX(-5px); }
+
+.back-btn {
+  background: rgba(255, 255, 255, 0.05); 
+  border: 1px solid rgba(255, 255, 255, 0.1); 
+  color: #9ca3af;
+  padding: clamp(6px, 1.5vw, 8px) clamp(12px, 3vw, 16px); 
+  border-radius: 20px; 
+  font-size: clamp(0.75rem, 2vw, 0.85rem); 
+  font-weight: 600; 
+  cursor: pointer;
+  transition: all 0.3s ease; 
+  display: flex; 
+  align-items: center; 
+  gap: 8px; 
+  margin-bottom: 10px;
+}
+
+.back-btn:hover { 
+  background: rgba(0, 255, 231, 0.1); 
+  color: #00ffe7; 
+  border-color: rgba(0, 255, 231, 0.3); 
+  transform: translateX(-5px); 
+}
 
 .tagline-pill {
-  display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px;
-  border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 30px;
-  font-size: 0.8rem; font-weight: 600; color: #e5e7eb;
-  background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px);
+  display: inline-flex; 
+  align-items: center; 
+  gap: 8px; 
+  padding: clamp(4px, 1vw, 6px) clamp(10px, 2vw, 14px);
+  border: 1px solid rgba(255, 255, 255, 0.15); 
+  border-radius: 30px;
+  font-size: clamp(0.7rem, 2vw, 0.8rem); 
+  font-weight: 600; 
+  color: #e5e7eb;
+  background: rgba(255, 255, 255, 0.05); 
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
-.activity-title { font-size: clamp(2.5rem, 5vw, 3.5rem); font-weight: 800; letter-spacing: -1px; margin-top: 15px; }
-.text-gradient { background: linear-gradient(90deg, #00ffe7, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.activity-title { 
+  /* Fluid typography for extreme device scaling */
+  font-size: clamp(2rem, 5vw, 3.5rem); 
+  font-weight: 800; 
+  letter-spacing: -1px; 
+  margin-top: clamp(10px, 2vw, 15px); 
+  line-height: 1.1;
+}
 
-/* --- The Premium Glass Card --- */
+.text-gradient { 
+  background: linear-gradient(90deg, #00ffe7, #a855f7); 
+  -webkit-background-clip: text; 
+  -webkit-text-fill-color: transparent; 
+}
+
+/* =========================================
+   PREMIUM GLASS CARD
+   ========================================= */
 .activity-glass-card {
-  position: relative; width: 100%;
+  position: relative; 
+  width: 100%;
   background: rgba(12, 15, 24, 0.65);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
-  border-radius: 24px; padding: 40px;
+  backdrop-filter: blur(30px); 
+  -webkit-backdrop-filter: blur(30px);
+  border-radius: 24px; 
+  /* Scaled padding for mobile frames */
+  padding: clamp(25px, 5vw, 40px);
   box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7), inset 0 0 20px rgba(255,255,255,0.03);
+  box-sizing: border-box;
 }
 
 .activity-glass-card::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  content: ''; 
+  position: absolute; 
+  top: 0; 
+  left: 0; 
+  right: 0; 
+  height: 1px;
   background: linear-gradient(90deg, transparent, rgba(0, 255, 231, 0.5), transparent);
-  animation: scanline 4s linear infinite; opacity: 0.5;
+  animation: scanline 4s linear infinite; 
+  opacity: 0.5;
 }
 
 @keyframes scanline {
@@ -75,20 +177,52 @@
   100% { transform: translateX(100%); }
 }
 
-.system-alert { background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; color: #fca5a5; padding: 12px; border-radius: 12px; margin-bottom: 25px; text-align: center; font-size: 0.95rem; font-weight: 600;}
+.system-alert { 
+  background: rgba(239, 68, 68, 0.1); 
+  border: 1px solid #ef4444; 
+  color: #fca5a5; 
+  padding: clamp(10px, 2vw, 12px); 
+  border-radius: 12px; 
+  margin-bottom: clamp(15px, 3vw, 25px); 
+  text-align: center; 
+  font-size: clamp(0.85rem, 2vw, 0.95rem); 
+  font-weight: 600;
+}
 
-/* --- Modern Inputs --- */
-.input-group-modern { margin-bottom: 25px; display: flex; flex-direction: column; gap: 10px; }
-.input-group-modern label { font-size: 0.95rem; color: #9ca3af; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+/* =========================================
+   MODERN INPUTS
+   ========================================= */
+.input-group-modern { 
+  margin-bottom: clamp(15px, 4vw, 25px); 
+  display: flex; 
+  flex-direction: column; 
+  gap: clamp(6px, 1.5vw, 10px); 
+}
+
+.input-group-modern label { 
+  font-size: clamp(0.85rem, 2vw, 0.95rem); 
+  color: #9ca3af; 
+  font-weight: 600; 
+  display: flex; 
+  align-items: center; 
+  gap: 8px; 
+}
+
 .input-icon { opacity: 0.8; }
 
 .cyber-input-modern {
-  width: 100%; padding: 16px 20px;
+  width: 100%; 
+  padding: clamp(12px, 3vw, 16px) clamp(14px, 3vw, 20px);
   background: rgba(0, 0, 0, 0.3);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 14px; color: #fff; font-size: 1.05rem;
-  font-family: 'Inter', sans-serif; outline: none; resize: none;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); box-sizing: border-box;
+  border-radius: 14px; 
+  color: #fff; 
+  font-size: clamp(0.95rem, 2vw, 1.05rem);
+  font-family: 'Inter', system-ui, sans-serif; 
+  outline: none; 
+  resize: none;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); 
+  box-sizing: border-box;
 }
 
 .cyber-input-modern::placeholder { color: #4b5563; }
@@ -99,69 +233,121 @@
   transform: translateY(-2px);
 }
 
-/* 🚀 THE FIX: AI Auto-Calibration Box */
+/* =========================================
+   AI AUTO-CALIBRATION BOX
+   ========================================= */
 .ai-auto-box {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    background: rgba(168, 85, 247, 0.1);
-    border: 1px dashed rgba(168, 85, 247, 0.5);
-    padding: 20px;
-    border-radius: 14px;
-    margin-bottom: 25px;
+  display: flex;
+  align-items: center;
+  gap: clamp(10px, 3vw, 15px);
+  background: rgba(168, 85, 247, 0.1);
+  border: 1px dashed rgba(168, 85, 247, 0.5);
+  padding: clamp(15px, 4vw, 20px);
+  border-radius: 14px;
+  margin-bottom: clamp(15px, 4vw, 25px);
+  /* Prevents the box from blowing out flex width on narrow phones */
+  flex-wrap: wrap; 
 }
+
 .ai-pulse-icon {
-    width: 12px;
-    height: 12px;
-    background: #a855f7;
-    border-radius: 50%;
-    animation: aiPulse 1.5s infinite;
-    flex-shrink: 0;
+  width: clamp(10px, 2vw, 12px);
+  height: clamp(10px, 2vw, 12px);
+  background: #a855f7;
+  border-radius: 50%;
+  animation: aiPulse 1.5s infinite;
+  flex-shrink: 0;
 }
+
 @keyframes aiPulse {
-    0% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.6); }
-    70% { box-shadow: 0 0 0 15px rgba(168, 85, 247, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0); }
+  0% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.6); }
+  70% { box-shadow: 0 0 0 15px rgba(168, 85, 247, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0); }
 }
+
+/* 🚀 Flex scaling for the text inside the AI box */
+.ai-auto-text {
+  flex: 1 1 calc(100% - 30px);
+}
+
 .ai-auto-text strong {
-    display: block;
-    color: #a855f7;
-    font-size: 0.95rem;
-    letter-spacing: 1px;
-    margin-bottom: 5px;
+  display: block;
+  color: #a855f7;
+  font-size: clamp(0.85rem, 2vw, 0.95rem);
+  letter-spacing: 1px;
+  margin-bottom: 5px;
 }
+
 .ai-auto-text p {
-    margin: 0;
-    color: #d1d5db;
-    font-size: 0.85rem;
-    line-height: 1.4;
+  margin: 0;
+  color: #d1d5db;
+  font-size: clamp(0.75rem, 1.8vw, 0.85rem);
+  line-height: 1.4;
 }
 
 .date-input { color-scheme: dark; }
-.mt-4 { margin-top: 30px; }
 
-/* --- Ultimate Submit Button --- */
+.mt-4 { margin-top: clamp(20px, 5vw, 30px); }
+
+/* =========================================
+   ULTIMATE SUBMIT BUTTON
+   ========================================= */
 .btn-submit {
-  position: relative; width: 100%; padding: 18px; border-radius: 14px;
-  border: none; cursor: pointer; background: #030407; color: #fff;
-  margin-top: 10px; overflow: hidden; transition: transform 0.3s ease;
+  position: relative; 
+  width: 100%; 
+  padding: clamp(14px, 3.5vw, 18px); 
+  border-radius: 14px;
+  border: none; 
+  cursor: pointer; 
+  background: #030407; 
+  color: #fff;
+  margin-top: 10px; 
+  overflow: hidden; 
+  transition: transform 0.3s ease;
 }
 
 .btn-glow-layer {
-  position: absolute; top: 0; left: 0; width: 200%; height: 100%;
+  position: absolute; 
+  top: 0; 
+  left: 0; 
+  width: 200%; 
+  height: 100%;
   background: linear-gradient(90deg, #8b5cf6, #00ffe7, #8b5cf6);
-  background-size: 50% 100%; z-index: 1; transition: opacity 0.3s ease;
+  background-size: 50% 100%; 
+  z-index: 1; 
+  transition: opacity 0.3s ease;
 }
 
 .btn-submit:hover .btn-glow-layer { animation: btnFlow 2s linear infinite; }
 @keyframes btnFlow { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-.btn-text { position: relative; z-index: 2; font-size: 1.1rem; font-weight: 800; font-family: 'Inter', sans-serif; letter-spacing: 0.5px; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
-.btn-submit:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(0, 255, 231, 0.3); }
-.btn-submit:disabled .btn-glow-layer { animation: btnFlow 1s linear infinite; opacity: 0.7; }
+.btn-text { 
+  position: relative; 
+  z-index: 2; 
+  font-size: clamp(0.95rem, 2vw, 1.1rem); 
+  font-weight: 800; 
+  font-family: 'Inter', sans-serif; 
+  letter-spacing: 0.5px; 
+  text-shadow: 0 2px 10px rgba(0,0,0,0.5); 
+}
 
-/* --- Scoped Cascading Animations --- */
-.activity-entrance { opacity: 0; transform: translateY(20px); animation: cascadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.btn-submit:hover:not(:disabled) { 
+  transform: translateY(-3px); 
+  box-shadow: 0 15px 30px rgba(0, 255, 231, 0.3); 
+}
+
+.btn-submit:disabled .btn-glow-layer { 
+  animation: btnFlow 1s linear infinite; 
+  opacity: 0.7; 
+}
+
+/* =========================================
+   SCOPED CASCADING ANIMATIONS
+   ========================================= */
+.activity-entrance { 
+  opacity: 0; 
+  transform: translateY(20px); 
+  animation: cascadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; 
+}
 .activity-delay-1 { animation-delay: 0.0s; }
 .activity-delay-2 { animation-delay: 0.1s; }
 .activity-delay-3 { animation-delay: 0.2s; }
@@ -173,11 +359,19 @@
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
 @keyframes activityCosmicFlow {
   from { transform: scale(1) translate(0, 0); }
   to { transform: scale(1.1) translate(40px, -40px); }
 }
 
+/* =========================================
+   HARD MEDIA QUERIES (EDGE CASES)
+   ========================================= */
 @media (max-width: 600px) {
-  .activity-glass-card { padding: 30px 20px; }
+  /* The clamp() functions handle the padding mathematically, but we disable hover states on mobile to prevent sticky touch CSS issues */
+  .btn-submit:hover:not(:disabled) { 
+    transform: none; 
+    box-shadow: none; 
+  }
 }
