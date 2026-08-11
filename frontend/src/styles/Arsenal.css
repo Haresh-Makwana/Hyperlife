@@ -1,10 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap');
 
+/* =========================================
+   BASE WRAPPER & BACKGROUND
+   ========================================= */
 .arsenal-wrapper {
     background-color: #030407;
     min-height: 100vh;
-    padding: 40px;
-    font-family: 'Inter', sans-serif;
+    padding: clamp(20px, 5vw, 40px); /* Fluid padding */
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
     color: #fff;
     background-image: 
         radial-gradient(circle at 50% 0%, rgba(255, 184, 108, 0.08), transparent 50%),
@@ -14,24 +17,30 @@
     background-position: center top, center center, center center;
     position: relative;
     overflow-x: hidden;
+    box-sizing: border-box;
 }
 
+/* =========================================
+   HEADER
+   ========================================= */
 .arsenal-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 40px;
+    margin-bottom: clamp(25px, 5vw, 40px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    padding-bottom: 20px;
+    padding-bottom: clamp(15px, 3vw, 20px);
+    gap: 20px;
+    flex-wrap: wrap; /* Allows header and wallet to stack on mobile */
 }
 
 .arsenal-title { 
     margin: 0; 
-    font-size: 2.8rem; 
+    font-size: clamp(2rem, 6vw, 2.8rem); /* Fluid scaling */
     font-weight: 900; 
     color: #ffb86c; 
     text-transform: uppercase; 
-    letter-spacing: 3px; 
+    letter-spacing: clamp(1px, 2vw, 3px); 
     text-shadow: 0 0 20px rgba(255, 184, 108, 0.5); 
 }
 
@@ -39,33 +48,67 @@
     color: #8b92a5; 
     margin-top: 8px; 
     font-family: 'Space Mono', monospace; 
+    font-size: clamp(0.85rem, 2vw, 1rem);
 }
 
-/* --- WALLET UI --- */
+/* =========================================
+   WALLET UI
+   ========================================= */
 .wallet-card {
     background: rgba(10, 12, 18, 0.8);
     border: 1px solid rgba(255, 184, 108, 0.4);
-    padding: 15px 30px;
+    padding: clamp(12px, 3vw, 15px) clamp(20px, 4vw, 30px);
     border-radius: 12px;
     text-align: right;
     box-shadow: 0 0 25px rgba(255, 184, 108, 0.15), inset 0 0 10px rgba(255, 184, 108, 0.05);
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
-.wallet-label { display: block; color: #8b92a5; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; font-family: 'Space Mono', monospace;}
-.wallet-balance { font-weight: 900; font-family: 'Space Mono', monospace; display: flex; align-items: center; gap: 15px; }
-.wallet-lvl { color: #00ffe7; font-size: 1.2rem; text-shadow: 0 0 10px rgba(0, 255, 231, 0.4); }
-.wallet-xp { color: #ffb86c; font-size: 2.2rem; text-shadow: 0 0 15px rgba(255, 184, 108, 0.5); }
 
-/* --- TERMINAL (ADD REWARD) --- */
+.wallet-label { 
+    display: block; 
+    color: #8b92a5; 
+    font-size: clamp(0.7rem, 1.5vw, 0.8rem); 
+    text-transform: uppercase; 
+    letter-spacing: 1px; 
+    margin-bottom: 5px; 
+    font-family: 'Space Mono', monospace;
+}
+
+.wallet-balance { 
+    font-weight: 900; 
+    font-family: 'Space Mono', monospace; 
+    display: flex; 
+    align-items: center; 
+    justify-content: flex-end;
+    gap: clamp(10px, 2vw, 15px); 
+}
+
+.wallet-lvl { 
+    color: #00ffe7; 
+    font-size: clamp(1rem, 2.5vw, 1.2rem); 
+    text-shadow: 0 0 10px rgba(0, 255, 231, 0.4); 
+}
+
+.wallet-xp { 
+    color: #ffb86c; 
+    font-size: clamp(1.6rem, 4vw, 2.2rem); 
+    text-shadow: 0 0 15px rgba(255, 184, 108, 0.5); 
+}
+
+/* =========================================
+   TERMINAL (ADD REWARD)
+   ========================================= */
 .terminal-container {
     background: #0a0a0a;
     border: 1px solid #333;
     border-radius: 8px;
-    margin-bottom: 50px;
+    margin-bottom: clamp(30px, 6vw, 50px);
     overflow: hidden;
     box-shadow: 0 15px 35px rgba(0,0,0,0.5);
     font-family: 'Space Mono', monospace;
 }
+
 .terminal-top-bar {
     background: #1a1a1a;
     padding: 10px 15px;
@@ -73,19 +116,21 @@
     align-items: center;
     border-bottom: 1px solid #333;
 }
+
 .term-dots { display: flex; gap: 8px; margin-right: 20px; }
 .dot { width: 12px; height: 12px; border-radius: 50%; }
 .dot.red { background: #ef4444; }
 .dot.yellow { background: #eab308; }
 .dot.green { background: #10b981; }
-.term-title { color: #6b7280; font-size: 0.85rem; letter-spacing: 1px; }
+.term-title { color: #6b7280; font-size: clamp(0.75rem, 2vw, 0.85rem); letter-spacing: 1px; }
 
 .terminal-body {
     display: flex;
-    padding: 20px;
-    gap: 20px;
+    padding: clamp(15px, 3vw, 20px);
+    gap: clamp(15px, 3vw, 20px);
     align-items: center;
 }
+
 .term-input-group {
     display: flex;
     align-items: center;
@@ -95,30 +140,75 @@
     flex: 1;
     padding: 0 15px;
     transition: all 0.3s;
+    box-sizing: border-box;
 }
-.term-input-group:focus-within { border-color: #00ffe7; box-shadow: 0 0 15px rgba(0,255,231,0.2); }
-.term-prompt { color: #00ffe7; font-weight: bold; margin-right: 10px; }
-.terminal-body input {
-    background: transparent; border: none; color: #fff; width: 100%; padding: 15px 0; outline: none; font-family: 'Space Mono', monospace;
-}
-.term-btn {
-    background: rgba(0, 255, 231, 0.1); border: 1px solid #00ffe7; color: #00ffe7; font-weight: bold; padding: 0 25px; height: 50px; border-radius: 4px; cursor: pointer; transition: all 0.3s; font-family: inherit; white-space: nowrap;
-}
-.term-btn:hover { background: #00ffe7; color: #000; box-shadow: 0 0 20px rgba(0, 255, 231, 0.6); }
 
-/* --- REWARDS GRID --- */
+.term-input-group:focus-within { 
+    border-color: #00ffe7; 
+    box-shadow: 0 0 15px rgba(0,255,231,0.2); 
+}
+
+.term-prompt { 
+    color: #00ffe7; 
+    font-weight: bold; 
+    margin-right: 10px; 
+}
+
+.terminal-body input {
+    background: transparent; 
+    border: none; 
+    color: #fff; 
+    width: 100%; 
+    padding: 15px 0; 
+    outline: none; 
+    font-family: 'Space Mono', monospace;
+    font-size: clamp(0.9rem, 2vw, 1rem);
+}
+
+.term-btn {
+    background: rgba(0, 255, 231, 0.1); 
+    border: 1px solid #00ffe7; 
+    color: #00ffe7; 
+    font-weight: bold; 
+    padding: 0 clamp(15px, 3vw, 25px); 
+    height: 50px; 
+    border-radius: 4px; 
+    cursor: pointer; 
+    transition: all 0.3s; 
+    font-family: inherit; 
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.term-btn:hover { 
+    background: #00ffe7; 
+    color: #000; 
+    box-shadow: 0 0 20px rgba(0, 255, 231, 0.6); 
+}
+
+/* =========================================
+   REWARDS GRID
+   ========================================= */
 .arsenal-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 30px;
+    /* 🚀 THE FIX: min(100%, 300px) prevents blowout on tiny screens */
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+    gap: clamp(20px, 4vw, 30px);
 }
 
-.empty-state-msg { color: #8b92a5; font-family: 'Space Mono', monospace; font-style: italic; font-size: 1.1rem; }
+.empty-state-msg { 
+    color: #8b92a5; 
+    font-family: 'Space Mono', monospace; 
+    font-style: italic; 
+    font-size: clamp(0.9rem, 2vw, 1.1rem); 
+}
 
 .reward-card {
     background: rgba(12, 15, 22, 0.95);
     border: 1px solid #333;
-    padding: 30px 25px;
+    padding: clamp(20px, 4vw, 30px) clamp(15px, 3vw, 25px);
     border-radius: 16px;
     position: relative;
     display: flex;
@@ -126,22 +216,53 @@
     justify-content: space-between;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
 .reward-card:hover { transform: translateY(-5px); }
 
 .delete-reward {
-    position: absolute; top: 15px; right: 15px;
-    background: transparent; border: none; color: #ef4444; font-size: 1.2rem; cursor: pointer; opacity: 0; transition: 0.2s;
+    position: absolute; 
+    top: 15px; 
+    right: 15px;
+    background: transparent; 
+    border: none; 
+    color: #ef4444; 
+    font-size: 1.2rem; 
+    cursor: pointer; 
+    opacity: 0; 
+    transition: 0.2s;
 }
+
 .reward-card:hover .delete-reward { opacity: 0.6; }
 .delete-reward:hover { opacity: 1 !important; transform: scale(1.2); }
 
-.reward-card h4 { margin: 0 0 15px 0; font-size: 1.3rem; color: #fff; line-height: 1.4; }
-.reward-cost { font-size: 2rem; font-weight: 900; font-family: 'Space Mono', monospace; margin-bottom: 25px; }
+.reward-card h4 { 
+    margin: 0 0 15px 0; 
+    font-size: clamp(1.1rem, 2.5vw, 1.3rem); 
+    color: #fff; 
+    line-height: 1.4; 
+}
+
+.reward-cost { 
+    font-size: clamp(1.6rem, 4vw, 2rem); 
+    font-weight: 900; 
+    font-family: 'Space Mono', monospace; 
+    margin-bottom: 25px; 
+}
 
 .purchase-btn {
-    width: 100%; padding: 16px; border: none; border-radius: 8px; font-weight: 900; font-family: 'Space Mono', monospace; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s;
+    width: 100%; 
+    padding: 16px; 
+    border: none; 
+    border-radius: 8px; 
+    font-weight: 900; 
+    font-family: 'Space Mono', monospace; 
+    font-size: clamp(0.85rem, 2vw, 1rem);
+    cursor: pointer; 
+    text-transform: uppercase; 
+    letter-spacing: 1px; 
+    transition: all 0.3s;
 }
 
 /* 🟢 Affordable State */
@@ -165,14 +286,15 @@
 .purchase-btn.processing-state { background: #a855f7 !important; color: #000 !important; border-color: #a855f7 !important; cursor: wait; }
 .cyber-glitch-text { animation: textFlicker 0.1s infinite; }
 
-
-/* --- TOAST NOTIFICATIONS --- */
+/* =========================================
+   TOAST NOTIFICATIONS
+   ========================================= */
 .arsenal-toast {
     position: fixed;
-    bottom: 40px;
-    right: 40px;
+    bottom: clamp(20px, 4vw, 40px);
+    right: clamp(20px, 4vw, 40px);
     background: rgba(10, 12, 18, 0.95);
-    padding: 20px 25px;
+    padding: clamp(15px, 3vw, 20px) clamp(20px, 4vw, 25px);
     border-radius: 8px;
     display: flex;
     align-items: center;
@@ -189,10 +311,12 @@
 .arsenal-toast.error { border-left: 5px solid #ef4444; }
 .arsenal-toast.error .toast-icon { color: #ef4444; text-shadow: 0 0 10px #ef4444; }
 
-.toast-icon { font-size: 1.5rem; }
-.toast-msg { color: #fff; letter-spacing: 1px; }
+.toast-icon { font-size: clamp(1.2rem, 3vw, 1.5rem); }
+.toast-msg { color: #fff; letter-spacing: 1px; font-size: clamp(0.85rem, 2vw, 1rem); }
 
-/* --- KEYFRAMES --- */
+/* =========================================
+   KEYFRAMES
+   ========================================= */
 @keyframes errorShake {
     0%, 100% { transform: translateX(0); }
     20%, 60% { transform: translateX(-5px); }
@@ -223,4 +347,55 @@
 @keyframes slideUpToast {
     0% { transform: translateY(100px); opacity: 0; }
     100% { transform: translateY(0); opacity: 1; }
+}
+
+/* =========================================
+   HARD MEDIA QUERIES (MOBILE RE-FLOW)
+   ========================================= */
+@media (max-width: 900px) {
+    /* Stack terminal inputs vertically */
+    .terminal-body {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .term-btn {
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    /* Make delete button always visible on mobile since there is no hover state */
+    .delete-reward {
+        opacity: 0.6; 
+    }
+}
+
+@media (max-width: 600px) {
+    /* Stack header and wallet fully */
+    .arsenal-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .wallet-card {
+        width: 100%;
+        text-align: left;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-sizing: border-box;
+    }
+    
+    .wallet-label {
+        margin-bottom: 0;
+    }
+    
+    /* Center the toast notification on small phones */
+    .arsenal-toast {
+        left: 20px;
+        right: 20px;
+        bottom: 20px;
+        width: auto;
+        justify-content: center;
+    }
 }
