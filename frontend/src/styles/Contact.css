@@ -1,13 +1,23 @@
-/* --- Global Contact Page Wrapper --- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap');
+
+/* =========================================
+   GLOBAL CONTACT PAGE WRAPPER
+   ========================================= */
 .contact-page-wrapper {
-  background-color: #0b0c10; /* Restores the deep space background */
+  background-color: #0b0c10; 
   min-height: calc(100vh - 70px);
+  min-height: calc(100dvh - 70px); /* 🚀 Fixes mobile browser URL bar scroll jumping */
+  width: 100vw;
+  max-width: 100%;
   color: #ffffff;
-  padding: 60px 5%;
+  /* Fluid padding */
+  padding: clamp(40px, 8vw, 80px) clamp(15px, 4vw, 5%);
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: 'Inter', sans-serif; /* Assumes you are using Inter */
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .contact-container {
@@ -15,26 +25,29 @@
   justify-content: space-between;
   width: 100%;
   max-width: 1200px;
-  gap: 50px;
+  /* Fluid gap between left and right sides */
+  gap: clamp(30px, 5vw, 50px);
 }
 
-/* --- Left Side: Info --- */
+/* =========================================
+   LEFT SIDE: INFO
+   ========================================= */
 .contact-info {
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding-right: 20px;
+  padding-right: clamp(0px, 2vw, 20px);
 }
 
 .comm-badge {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 8px 16px;
+  padding: clamp(6px, 1.5vw, 8px) clamp(12px, 3vw, 16px);
   border-radius: 30px;
-  font-size: 0.85rem;
+  font-size: clamp(0.75rem, 1.5vw, 0.85rem);
   width: max-content;
-  margin-bottom: 25px;
+  margin-bottom: clamp(15px, 3vw, 25px);
   color: #c5c9d6;
   display: flex;
   align-items: center;
@@ -42,10 +55,11 @@
 }
 
 .contact-info h1 {
-  font-size: 4.5rem;
+  /* 🚀 Fluid Typography */
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
   font-weight: 800;
   line-height: 1.1;
-  margin: 0 0 20px 0;
+  margin: 0 0 clamp(15px, 3vw, 20px) 0;
   letter-spacing: -1px;
 }
 
@@ -57,23 +71,24 @@
 
 .contact-info p {
   color: #8b92a5;
-  font-size: 1.1rem;
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
   line-height: 1.6;
   max-width: 450px;
-  margin-bottom: 40px;
+  margin-bottom: clamp(25px, 5vw, 40px);
 }
 
 /* Info Cards */
 .info-card {
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid rgba(255, 255, 255, 0.05);
-  padding: 20px 25px;
+  padding: clamp(15px, 3vw, 20px) clamp(20px, 4vw, 25px);
   border-radius: 15px;
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: clamp(15px, 3vw, 20px);
   margin-bottom: 15px;
   transition: background 0.3s ease;
+  box-sizing: border-box;
 }
 
 .info-card:hover {
@@ -81,11 +96,12 @@
 }
 
 .info-icon {
-  font-size: 1.5rem;
+  font-size: clamp(1.2rem, 3vw, 1.5rem);
+  flex-shrink: 0;
 }
 
 .info-text strong {
-  font-size: 1.1rem;
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
   color: #ffffff;
   display: block;
   margin-bottom: 4px;
@@ -93,10 +109,12 @@
 
 .info-text span {
   color: #8b92a5;
-  font-size: 0.9rem;
+  font-size: clamp(0.85rem, 1.5vw, 0.9rem);
 }
 
-/* --- Right Side: Form --- */
+/* =========================================
+   RIGHT SIDE: FORM
+   ========================================= */
 .contact-form-wrapper {
   flex: 1;
   display: flex;
@@ -109,23 +127,24 @@
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.05);
-  padding: 40px;
+  padding: clamp(25px, 5vw, 40px);
   border-radius: 20px;
   width: 100%;
   max-width: 500px;
   box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+  box-sizing: border-box;
 }
 
 .glass-contact-card h2 {
-  font-size: 1.8rem;
-  margin-bottom: 30px;
+  font-size: clamp(1.4rem, 3vw, 1.8rem);
+  margin-bottom: clamp(20px, 4vw, 30px);
   font-weight: 700;
 }
 
 .contact-form {
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: clamp(20px, 4vw, 30px);
 }
 
 .contact-input {
@@ -135,10 +154,11 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.15);
   padding: 10px 0;
   color: #ffffff;
-  font-size: 1rem;
+  font-size: clamp(0.95rem, 2vw, 1rem);
   outline: none;
   transition: border-color 0.3s ease;
   resize: none;
+  box-sizing: border-box;
 }
 
 .contact-input::placeholder {
@@ -153,17 +173,18 @@
 .contact-submit-btn {
   background: linear-gradient(45deg, #7f5cff, #00ffe7);
   color: #000;
-  padding: 16px;
+  padding: clamp(14px, 3vw, 16px);
   border-radius: 12px;
   border: none;
   font-weight: 800;
-  font-size: 1.05rem;
+  font-size: clamp(0.95rem, 2vw, 1.05rem);
   cursor: pointer;
   margin-top: 10px;
   transition: filter 0.2s ease, transform 0.2s ease;
+  width: 100%;
 }
 
-.contact-submit-btn:hover {
+.contact-submit-btn:hover:not(:disabled) {
   filter: brightness(1.15);
   transform: translateY(-2px);
 }
@@ -176,11 +197,11 @@
 
 /* Status Messages */
 .status-msg {
-  padding: 15px;
+  padding: clamp(12px, 3vw, 15px);
   border-radius: 8px;
-  margin-bottom: 25px;
+  margin-bottom: clamp(20px, 4vw, 25px);
   font-weight: 500;
-  font-size: 0.95rem;
+  font-size: clamp(0.85rem, 2vw, 0.95rem);
   display: flex;
   align-items: center;
   gap: 10px;
@@ -198,22 +219,40 @@
   border: 1px solid rgba(255, 95, 109, 0.2);
 }
 
-/* Responsive Design */
+/* =========================================
+   HARD MEDIA QUERIES (MOBILE RE-FLOW)
+   ========================================= */
 @media (max-width: 900px) {
   .contact-container {
     flex-direction: column;
     align-items: center;
   }
+  
   .contact-info {
     text-align: center;
     align-items: center;
     padding-right: 0;
+    width: 100%;
   }
+  
   .info-card {
     text-align: left;
     width: 100%;
+    max-width: 500px; /* Keeps the cards from stretching infinitely on tablets */
   }
+  
   .contact-form-wrapper {
     justify-content: center;
+    width: 100%;
+  }
+
+  /* Disable physical hover states on mobile to prevent sticky touch CSS issues */
+  .info-card:hover {
+    background: rgba(255, 255, 255, 0.02);
+  }
+  
+  .contact-submit-btn:hover:not(:disabled) {
+    transform: none;
+    filter: none;
   }
 }
