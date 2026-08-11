@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
 /* =========================================
    HYPERLIFE OS - AUTHENTICATION STYLES
    ========================================= */
@@ -5,10 +7,14 @@
 .auth-container {
   display: flex;
   min-height: 100vh;
-  width: 100%;
-  background-color: #050505; /* Deep space black */
+  min-height: 100dvh; /* 🚀 Prevents mobile browser URL bar scroll glitches */
+  width: 100vw;
+  max-width: 100%;
+  background-color: #050505; 
   color: #ffffff;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
+  box-sizing: border-box;
 }
 
 /* 🌌 Left Side: Abstract Branding */
@@ -21,24 +27,26 @@
   background: radial-gradient(circle at center, #111827 0%, #050505 100%);
   position: relative;
   overflow: hidden;
+  padding: clamp(20px, 5vw, 40px);
 }
 
 /* Optional glow effect behind the logo */
 .auth-left::before {
   content: '';
   position: absolute;
-  width: 300px;
-  height: 300px;
+  width: clamp(200px, 40vw, 300px);
+  height: clamp(200px, 40vw, 300px);
   background: rgba(0, 255, 231, 0.1);
   filter: blur(100px);
   border-radius: 50%;
 }
 
 .auth-logo {
-  font-size: 3rem;
+  font-size: clamp(2rem, 5vw, 3rem); /* 🚀 Fluid Typography */
   font-weight: 800;
   letter-spacing: -1px;
   z-index: 1;
+  text-align: center;
 }
 
 .logo-icon {
@@ -51,7 +59,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
+  padding: clamp(20px, 5vw, 32px);
   z-index: 1;
 }
 
@@ -62,16 +70,17 @@
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 20px;
-  padding: 40px;
+  padding: clamp(25px, 6vw, 40px);
   width: 100%;
   max-width: 420px;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  box-sizing: border-box;
 }
 
 .auth-title {
-  font-size: 1.5rem;
+  font-size: clamp(1.25rem, 4vw, 1.5rem);
   font-weight: 600;
-  margin-bottom: 30px;
+  margin-bottom: clamp(20px, 5vw, 30px);
   color: #f3f4f6;
   text-align: center;
 }
@@ -81,19 +90,19 @@
    ========================================= */
 .google-sso-btn {
     width: 100%;
-    padding: 14px;
+    padding: clamp(12px, 3vw, 14px);
     background: #ffffff;
     color: #000000;
     border: none;
     border-radius: 10px;
     font-weight: bold;
-    font-size: 1rem;
+    font-size: clamp(0.9rem, 2.5vw, 1rem);
     cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 10px;
-    margin-bottom: 25px;
+    margin-bottom: clamp(20px, 4vw, 25px);
     transition: all 0.3s;
 }
 
@@ -103,8 +112,8 @@
 }
 
 .google-icon {
-    width: 20px;
-    height: 20px;
+    width: clamp(18px, 4vw, 20px);
+    height: clamp(18px, 4vw, 20px);
 }
 
 .auth-divider {
@@ -112,9 +121,9 @@
     align-items: center;
     text-align: center;
     color: #8b92a5;
-    font-size: 0.75rem;
+    font-size: clamp(0.7rem, 2vw, 0.75rem);
     letter-spacing: 1px;
-    margin-bottom: 25px;
+    margin-bottom: clamp(20px, 4vw, 25px);
 }
 
 .auth-divider::before,
@@ -126,6 +135,7 @@
 
 .auth-divider span {
     padding: 0 10px;
+    white-space: nowrap;
 }
 
 /* =========================================
@@ -134,17 +144,17 @@
 .auth-form {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: clamp(12px, 3vw, 15px);
 }
 
 .input-group input {
   width: 100%;
-  padding: 14px 16px;
+  padding: clamp(12px, 3vw, 14px) clamp(14px, 3vw, 16px);
   background: rgba(0, 0, 0, 0.3);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 10px;
   color: #fff;
-  font-size: 1rem;
+  font-size: clamp(0.95rem, 2.5vw, 1rem);
   outline: none;
   transition: all 0.3s ease;
   box-sizing: border-box;
@@ -162,13 +172,13 @@
 /* Submit Button */
 .auth-submit-btn {
   width: 100%;
-  padding: 14px;
+  padding: clamp(12px, 3vw, 14px);
   margin-top: 10px;
   background: linear-gradient(135deg, #00ffe7 0%, #00b3a6 100%);
   color: #000;
   border: none;
   border-radius: 10px;
-  font-size: 1rem;
+  font-size: clamp(0.95rem, 2.5vw, 1rem);
   font-weight: 700;
   cursor: pointer;
   transition: transform 0.2s ease, opacity 0.2s ease;
@@ -188,7 +198,7 @@
 .forgot-password {
   display: block;
   text-align: right;
-  font-size: 0.85rem;
+  font-size: clamp(0.8rem, 2vw, 0.85rem);
   color: #9ca3af;
   text-decoration: none;
   margin-top: -5px;
@@ -201,13 +211,14 @@
 }
 
 .auth-toggle {
-  margin-top: 25px;
+  margin-top: clamp(20px, 5vw, 25px);
   text-align: center;
-  font-size: 0.9rem;
+  font-size: clamp(0.85rem, 2.5vw, 0.9rem);
   color: #9ca3af;
   display: flex;
   justify-content: center;
   gap: 8px;
+  flex-wrap: wrap; /* Allows text to wrap safely on tiny screens */
 }
 
 .toggle-btn {
@@ -217,7 +228,7 @@
   font-weight: 600;
   cursor: pointer;
   padding: 0;
-  font-size: 0.9rem;
+  font-size: clamp(0.85rem, 2.5vw, 0.9rem);
 }
 
 .toggle-btn:hover {
@@ -230,9 +241,9 @@
 .error-message {
   color: #ff4d4d;
   background: rgba(255, 77, 77, 0.1);
-  padding: 12px;
+  padding: clamp(10px, 2.5vw, 12px);
   border-radius: 8px;
-  font-size: 0.9rem;
+  font-size: clamp(0.85rem, 2vw, 0.9rem);
   border: 1px solid rgba(255, 77, 77, 0.2);
   text-align: center;
   margin-top: 10px;
@@ -241,9 +252,9 @@
 .success-message {
   color: #10b981;
   background: rgba(16, 185, 129, 0.1);
-  padding: 12px;
+  padding: clamp(10px, 2.5vw, 12px);
   border-radius: 8px;
-  font-size: 0.9rem;
+  font-size: clamp(0.85rem, 2vw, 0.9rem);
   border: 1px solid rgba(16, 185, 129, 0.2);
   text-align: center;
   margin-top: 10px;
@@ -260,15 +271,19 @@
   
   .auth-left {
     flex: none;
-    padding: 40px 20px;
-  }
-  
-  .auth-logo {
-    font-size: 2rem;
+    /* Scale down the top branding area on mobile to leave room for the form */
+    padding: 30px 20px;
+    min-height: 200px;
   }
   
   .auth-right {
     padding: 20px;
-    align-items: flex-start;
+    align-items: center; /* Keeps the glass card perfectly centered on mobile */
+  }
+
+  /* Disable hover transform on mobile to prevent sticky touch CSS issues */
+  .auth-submit-btn:hover:not(:disabled),
+  .google-sso-btn:hover {
+    transform: none;
   }
 }
