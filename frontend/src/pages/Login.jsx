@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { setToken } from "../utils/auth";
 import "../styles/Auth.css"; 
 
@@ -17,7 +17,7 @@ export default function Login() {
   const [successMsg, setSuccessMsg] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // 🚀 1. HANDLE URL REDIRECTS (From Google or Email Verification)
+  // HANDLE URL REDIRECTS (From Google or Email Verification)
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const urlToken = params.get("token");
@@ -26,12 +26,10 @@ export default function Login() {
     const urlVerified = params.get("verified");
 
     if (urlToken) {
-      // Decode and sanitize the token from the URL
       const cleanToken = decodeURIComponent(urlToken).replace(/['"]+/g, '').trim();
       setToken(cleanToken);
       localStorage.setItem("user_role", urlRole || "user");
       
-      // Clear the URL string so it doesn't loop
       window.history.replaceState(null, "", "/login"); 
       navigate(String(urlRole).trim().toLowerCase() === "admin" ? "/admin" : "/dashboard", { replace: true });
     }
@@ -53,7 +51,7 @@ export default function Login() {
     setSuccessMsg("");
   }, [location.pathname]);
 
-  // 🚀 2. HANDLE GOOGLE SSO CLICK
+  // HANDLE GOOGLE SSO CLICK
   const handleGoogleLogin = async () => {
     try {
       const res = await fetch("https://hyperlife-backend.onrender.com/api/auth/google/url");
@@ -66,7 +64,7 @@ export default function Login() {
     }
   };
 
-  // 🚀 3. HANDLE STANDARD LOGIN/REGISTER
+  // HANDLE STANDARD LOGIN/REGISTER
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage("");
@@ -75,7 +73,6 @@ export default function Login() {
 
     const endpoint = isLogin ? "https://hyperlife-backend.onrender.com/api/login" : "https://hyperlife-backend.onrender.com/api/register";
     
-    // 🚀 FIXED: Added the 'role' property because Laravel's validator requires it!
     const payload = isLogin 
       ? { email, password } 
       : { 
@@ -113,7 +110,6 @@ export default function Login() {
           return; 
       }
 
-      // Safeguard against missing tokens
       if (!data.token) {
           setMessage("System Error: No authorization token received from matrix.");
           setIsSubmitting(false);
@@ -142,74 +138,116 @@ export default function Login() {
   };
 
   return (
-    <div className="auth-container">
-      <div className="auth-left">
-        <h1 className="auth-logo"><span className="logo-icon">🌌</span> HyperLife OS</h1>
-      </div>
+    <div className="auth-container animate-fade-in">
+      <div className="auth-ambient-glow"></div>
 
-      <div className="auth-right">
-        <div className="auth-glass-card">
-          <h2 className="auth-title">
-            {isLogin ? "Welcome to Your Life, Visualized." : "Initialize Your Universe."}
-          </h2>
+      <div className="auth-content-split">
+        
+        {/* Left Branding Column */}
+        <aside className="auth-left animate-drop">
+          <h1 className="auth-logo">
+            <span className="logo-icon">🌌</span> HyperLife <span className="highlight-cyan">OS</span>
+          </h1>
+          <p className="auth-brand-tagline">Architect your reality. Synchronize mind, body, and universe.</p>
+        </aside>
 
-          <button type="button" className="google-sso-btn" onClick={handleGoogleLogin}>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google" className="google-icon" />
-            Continue with Google
-          </button>
+        {/* Right Form Card Column */}
+        <section className="auth-right animate-rise">
+          <div className="auth-glass-card">
+            <h2 className="auth-title">
+              {isLogin ? "Welcome Back, Operator." : "Initialize Your Universe."}
+            </h2>
 
-          <div className="auth-divider">
-            <span>OR PROCEED MANUALLY</span>
-          </div>
+            <button type="button" className="google-sso-btn" onClick={handleGoogleLogin}>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" className="google-icon">
+                <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/>
+                <path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"/>
+                <path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"/>
+                <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"/>
+              </svg>
+              Continue with Google
+            </button>
 
-          <form onSubmit={handleSubmit} className="auth-form">
-            {!isLogin && (
+            <div className="auth-divider">
+              <span>OR PROCEED MANUALLY</span>
+            </div>
+
+            <form onSubmit={handleSubmit} className="auth-form">
+              {!isLogin && (
+                <div className="input-group">
+                  <label>OPERATOR_NAME</label>
+                  <input 
+                    type="text" 
+                    className="cryptic-input"
+                    placeholder="Full Name" 
+                    value={name} 
+                    onChange={(e) => setName(e.target.value)} 
+                    required 
+                  />
+                </div>
+              )}
+
               <div className="input-group">
-                <input type="text" placeholder="Full Name" value={name} onChange={(e) => setName(e.target.value)} required />
+                <label>COMMS_ADDRESS</label>
+                <input 
+                  type="email" 
+                  className="cryptic-input"
+                  placeholder="Email Address" 
+                  value={email} 
+                  onChange={(e) => setEmail(e.target.value)} 
+                  required 
+                />
               </div>
-            )}
 
-            <div className="input-group">
-              <input type="email" placeholder="Email Address" value={email} onChange={(e) => setEmail(e.target.value)} required />
-            </div>
-
-            <div className="input-group">
-              <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-            </div>
-
-            {!isLogin && (
-              <div className="input-group" style={{ marginTop: '10px' }}>
+              <div className="input-group">
+                <label>DECRYPTION_KEY</label>
                 <input 
                   type="password" 
-                  placeholder="System Override Key (Optional)" 
-                  value={adminCode} 
-                  onChange={(e) => setAdminCode(e.target.value)} 
-                  style={{ borderColor: adminCode ? '#ff003c' : 'rgba(255, 255, 255, 0.1)' }}
+                  className="cryptic-input"
+                  placeholder="Password" 
+                  value={password} 
+                  onChange={(e) => setPassword(e.target.value)} 
+                  required 
                 />
-                <small style={{ color: '#8b92a5', fontSize: '0.75rem', marginTop: '5px', display: 'block', paddingLeft: '5px' }}>
-                  *Leave blank for standard Operator clearance.
-                </small>
               </div>
-            )}
 
-            <button type="submit" className="auth-submit-btn" disabled={isSubmitting}>
-              {isSubmitting ? "Encrypting..." : (isLogin ? "Login" : "Sign Up")}
-            </button>
+              {!isLogin && (
+                <div className="input-group override-group">
+                  <label style={{ color: '#ef4444' }}>SYSTEM OVERRIDE KEY (OPTIONAL)</label>
+                  <input 
+                    type="password" 
+                    className="cryptic-input"
+                    placeholder="Admin Code..." 
+                    value={adminCode} 
+                    onChange={(e) => setAdminCode(e.target.value)} 
+                    style={{ borderColor: adminCode ? '#ef4444' : 'rgba(255, 255, 255, 0.1)' }}
+                  />
+                  <small className="override-hint">
+                    *Leave blank for standard Operator clearance.
+                  </small>
+                </div>
+              )}
 
-            {message && <p className="error-message">{message}</p>}
-            {successMsg && <p className="success-message" style={{ color: '#10b981', textAlign: 'center', marginTop: '15px', fontWeight: 'bold' }}>{successMsg}</p>}
+              <button type="submit" className={`auth-submit-btn ${isSubmitting ? 'processing' : ''}`} disabled={isSubmitting}>
+                {isSubmitting ? "Encrypting..." : (isLogin ? "LOGIN TO CONSOLE" : "INITIALIZE SIGNUP")}
+              </button>
 
-            {isLogin && <a href="/forgot-password" className="forgot-password">Forgot Password?</a>}
-          </form>
+              {message && <div className="auth-alert error animate-slide-down">⚠️ {message}</div>}
+              {successMsg && <div className="auth-alert success animate-slide-down">✓ {successMsg}</div>}
 
-          <div className="auth-toggle">
-            <span>{isLogin ? "Don't have an account?" : "Already have an account?"}</span>
-            <button type="button" className="toggle-btn" onClick={toggleAuthMode}>
-              {isLogin ? "Signup" : "Login"}
-            </button>
+              {isLogin && <Link to="/forgot-password" className="forgot-password-link">Forgot Password?</Link>}
+            </form>
+
+            <div className="auth-toggle">
+              <span>{isLogin ? "Don't have an account?" : "Already have an account?"}</span>
+              <button type="button" className="toggle-btn" onClick={toggleAuthMode}>
+                {isLogin ? "Signup" : "Login"}
+              </button>
+            </div>
+
           </div>
+        </section>
 
-        </div>
       </div>
     </div>
   );

@@ -110,7 +110,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/rewards/{id}/purchase', [ArsenalController::class, 'purchase']);
 
     /* ✅ USER PROFILE & AUTHENTICATION */
-    // 🚨 FIXED: Inlined the /me route to guarantee it never fails due to a missing controller method
     Route::get('/me', function (Request $request) { 
         return response()->json($request->user()); 
     });
@@ -222,8 +221,7 @@ Route::middleware('auth:sanctum')->group(function () {
         }
 
         try {
-            // Dynamically pull the AI server address from the .env file.
-            $aiServiceUrl = 'https://hyperlife-ai.onrender.com/sentient-analysis'; // 🚨 Replace with your real AI URL
+            $aiServiceUrl = 'https://hyperlife-ai.onrender.com/sentient-analysis'; 
             
             $response = Http::timeout(15)->post($aiServiceUrl, [
                 'activities' => $activities
@@ -243,13 +241,27 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 });
 
-// 🚀 EMAIL VERIFICATION 
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
-Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-    $request->fulfill();
+// 🚀 EMAIL VERIFICATION
+// 🚨 FIXED: Removed 'auth:sanctum' middleware and strictly verify hash directly. Users clicking links from their inbox do not have Bearer tokens!
+Route::get('/email/verify/{id}/{hash}', function (\Illuminate\Http\Request $request, $id, $hash) {
+    $user = \App\Models\User::find($id);
+
+    // Manually verify the hash matches the user's email
+    if (!$user || !hash_equals((string) $hash, sha1($user->getEmailForVerification()))) {
+        return response()->json(['message' => 'Invalid or expired verification link.'], 403);
+    }
+
+    if (!$user->hasVerifiedEmail()) {
+        $user->markEmailAsVerified();
+        event(new \Illuminate\Auth\Events\Verified($user));
+    }
+
+    // Safely route back to the frontend console
+    $frontendUrl = rtrim(config('services.frontend.url', env('FRONTEND_URL', 'https://hyperlife-lemon.vercel.app')), '/');
+    if (app()->isProduction() && (str_contains($frontendUrl, 'localhost') || str_contains($frontendUrl, '127.0.0.1'))) {
+        $frontendUrl = 'https://hyperlife-lemon.vercel.app';
+    }
     
-    // 🚨 FIXED: Hard-coded safe fallback to your Vercel frontend
-    $frontendUrl = rtrim(env('FRONTEND_URL', 'https://hyperlife-lemon.vercel.app'), '/');
     return redirect("{$frontendUrl}/login?verified=1");
-    
-})->middleware(['auth:sanctum', 'signed'])->name('verification.verify');
+
+})->middleware(['signed'])->name('verification.verify');

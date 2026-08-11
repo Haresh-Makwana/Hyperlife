@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Support\Facades\Log; // Added for debugging
+use Illuminate\Support\Facades\Log; 
 
 class AuthController extends Controller
 {
@@ -20,11 +20,12 @@ class AuthController extends Controller
     // ==========================================
     public function register(Request $request)
     {
+        // 🚨 FIXED: Made 'role' nullable since the frontend dynamically handles it via 'admin_code'
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6|confirmed',
-            'role' => 'required|string|in:user,operator,admin',
+            'role' => 'nullable|string|in:user,operator,admin',
             'admin_code' => 'nullable|string' 
         ]);
 
@@ -41,12 +42,15 @@ class AuthController extends Controller
         }
         // --- END SHIELD ---
 
-        // 🚀 SECURE CLEARANCE CHECK
-        if ($request->role === 'admin' && $request->admin_code !== env('ADMIN_SECRET_KEY', 'HYPER_ADMIN_777')) {
-            return response()->json(['message' => 'ACCESS DENIED: Invalid System Override Key.'], 403);
+        // 🚀 SECURE CLEARANCE CHECK & DYNAMIC ROLE ASSIGNMENT
+        $roleToAssign = 'operator';
+        if (!empty($request->admin_code)) {
+            if ($request->admin_code === env('ADMIN_SECRET_KEY', 'HYPER_ADMIN_777')) {
+                $roleToAssign = 'admin';
+            } else {
+                return response()->json(['message' => 'ACCESS DENIED: Invalid System Override Key.'], 403);
+            }
         }
-
-        $roleToAssign = $request->role === 'admin' ? 'admin' : 'operator';
 
         $user = User::create([
             'name' => $validated['name'],
@@ -54,6 +58,7 @@ class AuthController extends Controller
             'password' => \Illuminate\Support\Facades\Hash::make($validated['password']),
             'role' => $roleToAssign, 
         ]);
+        
         $this->initializeUniverse($user);
 
         // 🚀 THE OTP PROTOCOL
@@ -77,7 +82,14 @@ class AuthController extends Controller
             'mail.from.name' => 'HyperLife Sentient Core',
         ]);
 
-        \Illuminate\Support\Facades\Mail::to($user->email)->send(new \App\Mail\VerifyAccountOtp($otp));
+        // 🚨 FIXED: Wrapped SMTP call in try/catch to prevent ghost users if the email fails to send
+        try {
+            \Illuminate\Support\Facades\Mail::to($user->email)->send(new \App\Mail\VerifyAccountOtp($otp));
+        } catch (\Exception $e) {
+            $user->delete(); // Nuke the ghost user so they can try again
+            Log::error('SMTP Failure: ' . $e->getMessage());
+            return response()->json(['message' => 'Email server offline. Failed to send decryption key.'], 500);
+        }
 
         return response()->json([
             'status' => 'pending_verification',
@@ -137,6 +149,13 @@ class AuthController extends Controller
             'token' => $token
         ]);
     }
+    
+    // 🚨 FIXED: Added the missing logout function to prevent 500 errors when users leave the matrix
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+        return response()->json(['message' => 'Neural link severed. Logged out successfully.']);
+    }
 
     // ==========================================
     // 2. GOOGLE SINGLE SIGN-ON (SSO) 
@@ -155,7 +174,6 @@ class AuthController extends Controller
             return response()->json(['url' => $url]);
 
         } catch (\Exception $e) {
-            // 🚀 THE FIX: This will catch the 500 error and tell us exactly what is broken!
             Log::error('Google Auth Failed: ' . $e->getMessage());
             return response()->json([
                 'message' => 'Server failed to generate Google link.',
@@ -164,10 +182,8 @@ class AuthController extends Controller
         }
     }
 
-  public function handleGoogleCallback()
+    public function handleGoogleCallback()
     {
-        // 🚀 THE FIX: rtrim() removes accidental trailing slashes.
-        // Fallback set to 3000 based on your previous URL, but reads from .env first!
         $frontendUrl = rtrim(env('FRONTEND_URL', 'http://localhost:3000'), '/');
 
         try {
@@ -202,13 +218,10 @@ class AuthController extends Controller
             $safeToken = urlencode($token);
             $safeRole = urlencode($user->role ?? 'operator');
             
-            // Redirects perfectly to your React app
             return redirect("{$frontendUrl}/login?token={$safeToken}&role={$safeRole}");
 
         } catch (\Exception $e) {
-            // 🚀 THE FIX: Logs the exact error to storage/logs/laravel.log so we aren't blind
             \Illuminate\Support\Facades\Log::error('Google Callback Crash: ' . $e->getMessage());
-            
             $errorMsg = urlencode($e->getMessage());
             return redirect("{$frontendUrl}/login?error={$errorMsg}");
         }

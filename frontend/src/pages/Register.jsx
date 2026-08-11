@@ -1,5 +1,6 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import "../styles/Auth.css"; 
 
 export default function Register() {
   const navigate = useNavigate();
@@ -9,7 +10,7 @@ export default function Register() {
     email: "",
     password: "",
     password_confirmation: "",
-    admin_code: "" // 🚀 NEW: Added Admin Code to State
+    admin_code: "" 
   });
 
   const [error, setError] = useState("");
@@ -20,7 +21,7 @@ export default function Register() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // 🚀 HANDLE GOOGLE SSO CLICK
+  // HANDLE GOOGLE SSO CLICK
   const handleGoogleSignup = async () => {
     try {
       const res = await fetch("https://hyperlife-backend.onrender.com/api/auth/google/url");
@@ -40,7 +41,7 @@ export default function Register() {
     try {
       const response = await fetch("https://hyperlife-backend.onrender.com/api/register", {
         method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
         body: JSON.stringify(form)
       });
 
@@ -57,7 +58,7 @@ export default function Register() {
         return;
       }
 
-      // 🚀 STRICT VERIFICATION: Do not redirect to dashboard.
+      // STRICT VERIFICATION: Do not redirect immediately
       setSuccess("God-Mode Initialized! Please check your email to verify your identity before logging in.");
       setForm({ name: "", email: "", password: "", password_confirmation: "", admin_code: "" });
 
@@ -72,61 +73,130 @@ export default function Register() {
   };
 
   return (
-    <div style={{ maxWidth: "400px", margin: "50px auto", fontFamily: 'Inter, sans-serif' }}>
-      <h2 style={{ color: '#00ffe7', textAlign: 'center' }}>Initialize God-Mode</h2>
+    <div className="auth-container animate-fade-in">
+      <div className="auth-ambient-glow"></div>
 
-      {/* 🚀 GOOGLE SSO BUTTON */}
-      <button 
-          onClick={handleGoogleSignup}
-          type="button"
-          style={{ width: '100%', padding: '12px', background: '#fff', color: '#000', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px', marginBottom: '20px' }}
-      >
-          <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="G" style={{ width: '20px' }} />
-          Sign up with Google
-      </button>
+      <div className="auth-content-split">
+        
+        {/* Left Branding Side */}
+        <aside className="auth-left animate-drop">
+          <h1 className="auth-logo">
+            <span className="logo-icon">🌌</span> HyperLife <span className="highlight-cyan">OS</span>
+          </h1>
+          <p className="auth-brand-tagline">Initialize God-Mode. Forge your digital universe from the source code up.</p>
+        </aside>
 
-      <div style={{ textAlign: 'center', color: '#8b92a5', margin: '20px 0', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1px' }}>
-          Or Proceed Manually
+        {/* Right Form Card Side */}
+        <section className="auth-right animate-rise">
+          <div className="auth-glass-card">
+            <h2 className="auth-title">Initialize God-Mode</h2>
+
+            <button 
+                onClick={handleGoogleSignup}
+                type="button"
+                className="google-sso-btn hover-lift"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" className="google-icon">
+                  <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/>
+                  <path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"/>
+                  <path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"/>
+                  <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"/>
+                </svg>
+                Sign up with Google
+            </button>
+
+            <div className="auth-divider">
+                <span>OR PROCEED MANUALLY</span>
+            </div>
+
+            {error && <div className="auth-alert error animate-slide-down">⚠️ {error}</div>}
+            {success && <div className="auth-alert success animate-slide-down">✓ {success}</div>}
+
+            <form onSubmit={handleSubmit} className="auth-form">
+              <div className="input-group">
+                <label>OPERATOR_NAME</label>
+                <input 
+                  type="text" 
+                  name="name" 
+                  className="cryptic-input"
+                  value={form.name} 
+                  onChange={handleChange} 
+                  required 
+                  placeholder="Full Name"
+                />
+              </div>
+
+              <div className="input-group">
+                <label>COMMS_ADDRESS</label>
+                <input 
+                  type="email" 
+                  name="email" 
+                  className="cryptic-input"
+                  value={form.email} 
+                  onChange={handleChange} 
+                  required 
+                  placeholder="Email Address"
+                />
+              </div>
+
+              <div className="input-group">
+                <label>DECRYPTION_KEY</label>
+                <input 
+                  type="password" 
+                  name="password" 
+                  className="cryptic-input"
+                  value={form.password} 
+                  onChange={handleChange} 
+                  required 
+                  placeholder="Password"
+                />
+              </div>
+
+              <div className="input-group">
+                <label>CONFIRM_DECRYPTION_KEY</label>
+                <input 
+                  type="password" 
+                  name="password_confirmation" 
+                  className="cryptic-input"
+                  value={form.password_confirmation} 
+                  onChange={handleChange} 
+                  required 
+                  placeholder="Confirm Password"
+                />
+              </div>
+
+              <div className="input-group override-group">
+                <label style={{ color: '#ef4444' }}>SYSTEM OVERRIDE KEY (OPTIONAL)</label>
+                <input 
+                  type="password" 
+                  name="admin_code" 
+                  className="cryptic-input"
+                  placeholder="Admin Code..." 
+                  value={form.admin_code} 
+                  onChange={handleChange} 
+                  style={{ borderColor: form.admin_code ? '#ef4444' : 'rgba(255, 255, 255, 0.1)' }}
+                />
+                <small className="override-hint">*Leave blank for standard Operator clearance.</small>
+              </div>
+
+              <button 
+                type="submit" 
+                className={`auth-submit-btn ${isSubmitting ? 'processing' : ''}`} 
+                disabled={isSubmitting}
+              >
+                  {isSubmitting ? "Encrypting Data..." : "INITIALIZE SIGNUP"}
+              </button>
+            </form>
+
+            <div className="auth-toggle">
+              <span>Already have an account?</span> 
+              <Link to="/login" className="toggle-btn" style={{ textDecoration: 'none' }}>Login</Link>
+            </div>
+
+          </div>
+        </section>
+
       </div>
-
-      {error && <p style={{ color: "#ef4444", textAlign: 'center', fontWeight: 'bold', padding: '10px', border: '1px solid #ef4444', borderRadius: '4px', background: 'rgba(239,68,68,0.1)' }}>{error}</p>}
-      {success && <p style={{ color: "#10b981", textAlign: 'center', fontWeight: 'bold', padding: '15px', background: 'rgba(16, 185, 129, 0.1)', border: '1px solid #10b981', borderRadius: '6px' }}>{success}</p>}
-
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-        <div>
-          <label style={{ display: 'block', color: '#8b92a5', marginBottom: '5px' }}>Full Name</label>
-          <input type="text" name="name" value={form.name} onChange={handleChange} required style={{ width: '100%', padding: '10px', background: '#0a0c12', border: '1px solid #333', color: '#fff', borderRadius: '4px' }} />
-        </div>
-
-        <div>
-          <label style={{ display: 'block', color: '#8b92a5', marginBottom: '5px' }}>Email</label>
-          <input type="email" name="email" value={form.email} onChange={handleChange} required style={{ width: '100%', padding: '10px', background: '#0a0c12', border: '1px solid #333', color: '#fff', borderRadius: '4px' }} />
-        </div>
-
-        <div>
-          <label style={{ display: 'block', color: '#8b92a5', marginBottom: '5px' }}>Password</label>
-          <input type="password" name="password" value={form.password} onChange={handleChange} required style={{ width: '100%', padding: '10px', background: '#0a0c12', border: '1px solid #333', color: '#fff', borderRadius: '4px' }} />
-        </div>
-
-        <div>
-          <label style={{ display: 'block', color: '#8b92a5', marginBottom: '5px' }}>Confirm Password</label>
-          <input type="password" name="password_confirmation" value={form.password_confirmation} onChange={handleChange} required style={{ width: '100%', padding: '10px', background: '#0a0c12', border: '1px solid #333', color: '#fff', borderRadius: '4px' }} />
-        </div>
-
-        {/* 🚀 NEW: MANDATORY OVERRIDE KEY FOR ADMINS */}
-        <div>
-          <label style={{ display: 'block', color: '#ff003c', marginBottom: '5px', fontWeight: 'bold' }}>System Override Key</label>
-          <input type="password" name="admin_code" placeholder="Required for registration" value={form.admin_code} onChange={handleChange} required style={{ width: '100%', padding: '10px', background: 'rgba(255,0,60,0.05)', border: '1px solid #ff003c', color: '#ff003c', borderRadius: '4px' }} />
-        </div>
-
-        <button type="submit" disabled={isSubmitting} style={{ width: '100%', padding: '12px', background: '#00ffe7', color: '#000', border: 'none', borderRadius: '4px', fontWeight: 'bold', cursor: isSubmitting ? 'not-allowed' : 'pointer', marginTop: '10px' }}>
-            {isSubmitting ? "Encrypting Data..." : "Register"}
-        </button>
-      </form>
-
-      <p style={{ textAlign: 'center', marginTop: '20px', color: '#8b92a5' }}>
-        Already have an account? <Link to="/login" style={{ color: '#00ffe7', textDecoration: 'none' }}>Login</Link>
-      </p>
     </div>
   );
 }
