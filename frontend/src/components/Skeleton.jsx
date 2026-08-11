@@ -1,5 +1,7 @@
 import React from 'react';
-import '../styles/App.css'; // Make sure this points to where you put the CSS
+
+// 🚀 THE FIX: Removed the broken CSS import. 
+// Your global App.css already handles these classes natively.
 
 export default function Skeleton({ 
   variant = 'text', 
