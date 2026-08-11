@@ -143,6 +143,7 @@ export default function Header() {
               {/* 🔥 AUTHENTICATED LINKS */}
               <Link to="/dashboard" className={`nav-link ${location.pathname === '/dashboard' ? 'active' : ''}`}>Dashboard</Link>
               <Link to="/habits" className={`nav-link ${location.pathname === '/habits' ? 'active' : ''}`}>Habits</Link>
+              <Link to="/add-activity" className={`nav-link ${location.pathname === '/add-activity' ? 'active' : ''}`}>Add Activity</Link>
               <Link to="/universe-3d" className={`nav-link ${location.pathname === '/universe-3d' ? 'active' : ''}`}>3D Visualizer</Link>
               <Link to="/arsenal" className={`nav-link ${location.pathname === '/arsenal' ? 'active' : ''}`}>Inventory</Link>
               <Link to="/neural-grid" className={`nav-link ${location.pathname === '/neural-grid' ? 'active' : ''}`}>Analytics</Link>
