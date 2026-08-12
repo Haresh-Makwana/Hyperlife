@@ -1,9 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap');
 
-/* --- Layout & Background --- */
+/* =========================================
+   LAYOUT & BACKGROUND
+   ========================================= */
 .home-container {
   min-height: calc(100vh - 70px);
-  width: 100%;
+  min-height: calc(100dvh - 70px); /* 🚀 Fix for mobile browser URL bar */
+  width: 100vw;
+  max-width: 100%;
   background-color: #04050a;
   position: relative;
   overflow: hidden;
@@ -11,8 +15,9 @@
   justify-content: center;
   align-items: center;
   color: #fff;
-  font-family: 'Inter', sans-serif;
-  padding: 40px 0;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  padding: clamp(20px, 5vw, 40px) clamp(10px, 3vw, 20px);
+  box-sizing: border-box;
 }
 
 /* --- Ambient Glowing Waves --- */
@@ -27,16 +32,16 @@
 }
 
 .wave-blue {
-  width: 70vw;
-  height: 400px;
+  width: clamp(300px, 70vw, 800px);
+  height: clamp(200px, 40vw, 400px);
   background: radial-gradient(ellipse at center, rgba(0, 136, 255, 0.4) 0%, transparent 70%);
   top: 30%;
   left: -10%;
 }
 
 .wave-purple {
-  width: 60vw;
-  height: 400px;
+  width: clamp(250px, 60vw, 700px);
+  height: clamp(200px, 40vw, 400px);
   background: radial-gradient(ellipse at center, rgba(157, 0, 255, 0.3) 0%, transparent 70%);
   top: 50%;
   right: -10%;
@@ -44,8 +49,8 @@
 }
 
 .wave-orange {
-  width: 40vw;
-  height: 300px;
+  width: clamp(200px, 40vw, 500px);
+  height: clamp(150px, 30vw, 300px);
   background: radial-gradient(ellipse at center, rgba(255, 123, 0, 0.2) 0%, transparent 70%);
   top: 60%;
   right: 10%;
@@ -64,7 +69,9 @@
 .delay-3 { animation-delay: 0.5s; }
 .delay-4 { animation-delay: 0.7s; }
 
-/* --- Hero Content --- */
+/* =========================================
+   HERO CONTENT
+   ========================================= */
 .hyperlife-hero {
   position: relative;
   z-index: 10;
@@ -74,49 +81,53 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 0 20px;
+  padding: 0;
 }
 
-.hero-headers { margin-bottom: 20px; }
+.hero-headers { margin-bottom: clamp(15px, 4vw, 20px); }
 
 .hero-title {
-  font-size: clamp(3rem, 5vw, 4.5rem);
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
   font-weight: 800;
   letter-spacing: -1.5px;
-  margin-bottom: 12px;
+  margin-bottom: clamp(10px, 2vw, 12px);
   text-shadow: 0 4px 30px rgba(255, 255, 255, 0.2);
+  line-height: 1.1;
 }
 
 .hero-subtitle {
-  font-size: 1.1rem;
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
   font-weight: 400;
   color: #b4b8cc;
   max-width: 600px;
   margin: 0 auto;
+  line-height: 1.6;
 }
 
 .subtitle-lower {
-  margin-top: 20px;
-  margin-bottom: 40px;
+  margin-top: clamp(15px, 3vw, 20px);
+  margin-bottom: clamp(25px, 6vw, 40px);
 }
 
-/* --- CENTRAL 3D UNIVERSE VISUAL --- */
+/* =========================================
+   CENTRAL 3D UNIVERSE VISUAL
+   ========================================= */
 .universe-visual {
   position: relative;
   width: 100%;
   max-width: 800px;
-  height: 450px;
+  /* 🚀 Fluid Height */
+  height: clamp(300px, 50vw, 450px);
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 10px 0;
   transform-style: preserve-3d;
-  perspective: 1200px; /* Gives depth to the orbits */
-  cursor: pointer; /* Makes it clearly clickable */
-  transition: transform 0.4s ease; /* Smooth hover transition */
+  perspective: 1200px; 
+  cursor: pointer; 
+  transition: transform 0.4s ease; 
 }
 
-/* Zoom effect when hovering over the universe */
 .universe-visual:hover {
   transform: scale(1.02);
 }
@@ -125,27 +136,28 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  margin-top: -160px;
-  margin-left: -80px;
-  width: 160px;
-  height: 320px;
+  /* 🚀 Replaced rigid negative margins with responsive transform centering */
+  transform: translate(-50%, -50%) translateZ(10px);
+  width: clamp(90px, 20vw, 160px);
+  height: clamp(180px, 40vw, 320px);
   z-index: 5;
-  transform: translateZ(10px); /* Pushes human slightly forward */
 }
 
-/* --- TRUE 3D ORBIT SYSTEM --- */
+/* =========================================
+   TRUE 3D ORBIT SYSTEM
+   ========================================= */
 .orbit-system {
   position: absolute;
   top: 50%;
   left: 50%;
   transform-style: preserve-3d;
-  /* Tilts the solar system down to look like rings */
   transform: translate(-50%, -50%) rotateX(75deg); 
 }
 
-.system-1 { width: 350px; height: 350px; }
-.system-2 { width: 550px; height: 550px; }
-.system-3 { width: 750px; height: 750px; }
+/* 🚀 Fluid scaling for orbits so they don't blow out mobile screens */
+.system-1 { width: clamp(200px, 45vw, 350px); height: clamp(200px, 45vw, 350px); }
+.system-2 { width: clamp(320px, 70vw, 550px); height: clamp(320px, 70vw, 550px); }
+.system-3 { width: clamp(440px, 95vw, 750px); height: clamp(440px, 95vw, 750px); }
 
 .orbit-ring {
   position: absolute;
@@ -161,7 +173,6 @@
 .system-2 .orbit-ring { border-color: rgba(255, 215, 0, 0.2); }
 .system-3 .orbit-ring { border-color: rgba(138, 92, 255, 0.25); }
 
-/* The invisible arm that spins the planet */
 .planet-container {
   position: absolute;
   width: 100%;
@@ -170,7 +181,6 @@
   animation: orbitSpin linear infinite;
 }
 
-/* Speeds and starting positions (delays) */
 .system-1 .planet-container, .system-1 .planet-node { 
   animation-duration: 20s; animation-delay: -5s; 
 }
@@ -181,14 +191,12 @@
   animation-duration: 50s; animation-delay: -25s; 
 }
 
-/* The actual planet module attached to the spinning arm */
 .planet-node {
   position: absolute;
-  top: 0; /* Locked to the top edge of the ring */
+  top: 0; 
   left: 50%;
   display: flex;
   align-items: center;
-  /* Counter-spins backward so it stays upright to the screen */
   animation: counterSpin linear infinite;
 }
 
@@ -196,11 +204,11 @@
 .hud-line {
   height: 1px;
   background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
-  width: 60px;
+  width: clamp(20px, 5vw, 60px);
 }
 
 .hud-label {
-  font-size: 0.85rem;
+  font-size: clamp(0.6rem, 1.5vw, 0.85rem);
   color: #fff;
   font-weight: 500;
   letter-spacing: 0.5px;
@@ -209,10 +217,10 @@
   white-space: nowrap;
 }
 
-.hud-left { margin-right: 15px; }
-.hud-left-text { margin-right: 15px; }
-.hud-right { margin-left: 15px; }
-.hud-right-text { margin-left: 15px; }
+.hud-left { margin-right: clamp(5px, 2vw, 15px); }
+.hud-left-text { margin-right: clamp(5px, 2vw, 15px); }
+.hud-right { margin-left: clamp(5px, 2vw, 15px); }
+.hud-right-text { margin-left: clamp(5px, 2vw, 15px); }
 
 /* The Planets */
 .planet {
@@ -221,19 +229,22 @@
 }
 
 .p-health {
-  width: 45px; height: 45px;
+  width: clamp(25px, 6vw, 45px); 
+  height: clamp(25px, 6vw, 45px);
   background: radial-gradient(circle at 30% 30%, #4ade80, #06b6d4, #083344);
   box-shadow: 0 0 25px rgba(6, 182, 212, 0.6), inset -5px -5px 15px rgba(0,0,0,0.8);
 }
 
 .p-finance {
-  width: 55px; height: 55px;
+  width: clamp(30px, 7vw, 55px); 
+  height: clamp(30px, 7vw, 55px);
   background: radial-gradient(circle at 30% 30%, #fde047, #ca8a04, #422006);
   box-shadow: 0 0 30px rgba(202, 138, 4, 0.5), inset -8px -8px 15px rgba(0,0,0,0.8);
 }
 
 .p-knowledge {
-  width: 50px; height: 50px;
+  width: clamp(28px, 6.5vw, 50px); 
+  height: clamp(28px, 6.5vw, 50px);
   background: radial-gradient(circle at 30% 30%, #60a5fa, #2563eb, #1e3a8a);
   box-shadow: 0 0 30px rgba(37, 99, 235, 0.6), inset -5px -5px 15px rgba(0,0,0,0.8);
 }
@@ -241,30 +252,37 @@
 .planet-ring {
   position: absolute;
   top: 50%; left: 50%;
-  width: 85px; height: 85px;
+  transform: translate(-50%, -50%);
+  width: clamp(45px, 11vw, 85px); 
+  height: clamp(45px, 11vw, 85px);
   border: 2px solid rgba(0, 255, 255, 0.8);
   border-radius: 50%;
   box-shadow: 0 0 15px rgba(0, 255, 255, 0.5), inset 0 0 10px rgba(0, 255, 255, 0.5);
 }
 
-/* --- Buttons --- */
+/* =========================================
+   BUTTONS
+   ========================================= */
 .hero-actions {
   display: flex;
-  gap: 25px;
+  gap: clamp(15px, 4vw, 25px);
   justify-content: center;
+  width: 100%;
 }
 
 .neon-btn {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 10px;
-  padding: 16px 36px;
-  font-size: 1.1rem;
+  padding: clamp(14px, 3vw, 16px) clamp(24px, 5vw, 36px);
+  font-size: clamp(0.95rem, 2.5vw, 1.1rem);
   font-weight: 600;
   border-radius: 30px;
   cursor: pointer;
   transition: all 0.3s ease;
   color: #fff;
+  white-space: nowrap;
 }
 
 .sparkle { opacity: 0.8; }
@@ -291,7 +309,9 @@
   transform: translateY(-3px);
 }
 
-/* --- KEYFRAMES FOR ANIMATIONS --- */
+/* =========================================
+   KEYFRAMES FOR ANIMATIONS
+   ========================================= */
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(30px); }
   to { opacity: 1; transform: translateY(0); }
@@ -302,19 +322,16 @@
   to { transform: scale(1.1) translate(30px, -30px); }
 }
 
-/* Spins the invisible arm forward */
 @keyframes orbitSpin {
   from { transform: rotateZ(0deg); }
   to { transform: rotateZ(360deg); }
 }
 
-/* Spins the planet backward AND undoes the X-axis tilt to face the screen */
 @keyframes counterSpin {
   from { transform: translate(-50%, -50%) rotateZ(0deg) rotateX(-75deg); }
   to { transform: translate(-50%, -50%) rotateZ(-360deg) rotateX(-75deg); }
 }
 
-/* Continuous Floating / Zero-G effect */
 .floating { animation: floatZeroG 6s ease-in-out infinite; }
 @keyframes floatZeroG {
   0% { transform: translateY(0) translateZ(10px); }
@@ -322,7 +339,6 @@
   100% { transform: translateY(0) translateZ(10px); }
 }
 
-/* Glowing Pulse for Planets and Buttons */
 .pulse-glow { animation: glowingPulse 3s infinite alternate; }
 .pulse-btn { animation: btnPulse 2s infinite alternate; }
 
@@ -336,16 +352,39 @@
   100% { box-shadow: 0 0 35px currentColor; }
 }
 
-/* Ring Spin on Knowledge Planet */
 .spin-3d { animation: spinRing 8s linear infinite; }
 @keyframes spinRing {
   from { transform: translate(-50%, -50%) rotateX(70deg) rotateY(20deg) rotateZ(0deg); }
   to { transform: translate(-50%, -50%) rotateX(70deg) rotateY(20deg) rotateZ(360deg); }
 }
 
-/* --- Responsive --- */
+/* =========================================
+   HARD MEDIA QUERIES (MOBILE RE-FLOW)
+   ========================================= */
 @media (max-width: 900px) {
-  .universe-visual { height: 350px; transform: scale(0.65); }
-  .hero-actions { flex-direction: column; gap: 15px; }
-  .neon-btn { justify-content: center; }
+  /* 🚀 Replaced hardcoded transform scale with fluid clamps in the grid above */
+  .hero-actions { 
+    flex-direction: column; 
+    gap: 15px; 
+    width: 100%;
+    padding: 0 20px;
+    box-sizing: border-box;
+  }
+  
+  .neon-btn { 
+    width: 100%; 
+    justify-content: center; 
+  }
+}
+
+@media (max-width: 600px) {
+  /* Disable physical hover transforms on touch screens */
+  .universe-visual:hover {
+    transform: none;
+  }
+  
+  .btn-blue:hover, .btn-purple:hover {
+    transform: none;
+    box-shadow: 0 0 25px currentColor;
+  }
 }
