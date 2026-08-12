@@ -42,6 +42,8 @@ export default function Dashboard() {
 
   const fileInputRef = useRef(null);
   const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
+  // 🚀 REACT FIX: Safe state for broken images to prevent White Screen of Death
+  const [avatarError, setAvatarError] = useState(false);
 
   // 🚀 CROPPER STATES
   const [cropModalOpen, setCropModalOpen] = useState(false);
@@ -80,6 +82,9 @@ export default function Dashboard() {
       if (userJson.role === 'admin') { navigate("/admin"); return; }
       
       const avatarUrl = userJson.avatar ? `${API_URL}/storage/${userJson.avatar}` : null;
+      
+      // Reset avatar error state on fresh fetch
+      setAvatarError(false);
       setUser(prev => ({ ...prev, ...userJson, avatar_url: avatarUrl }));
 
       try {
@@ -117,7 +122,6 @@ export default function Dashboard() {
 
   const onImageLoad = (e) => {
     const { width, height } = e.currentTarget;
-    // 🚀 FIX: Use pixels instead of percentages so the canvas drawing works correctly
     const cropSize = Math.min(width, height) * 0.8;
     const initialCrop = centerCrop(
       makeAspectCrop({ unit: 'px', width: cropSize }, 1, width, height),
@@ -125,7 +129,6 @@ export default function Dashboard() {
       height
     );
     setCrop(initialCrop);
-    // 🚀 FIX: Set completed crop immediately so user can upload without adjusting
     setCompletedCrop(initialCrop);
   };
 
@@ -133,25 +136,30 @@ export default function Dashboard() {
     const canvas = document.createElement('canvas');
     const scaleX = image.naturalWidth / image.width;
     const scaleY = image.naturalHeight / image.height;
-    canvas.width = cropConfig.width;
-    canvas.height = cropConfig.height;
+    
+    // Safety net: Fallback to image dimensions if cropConfig is malformed
+    canvas.width = cropConfig.width || image.width;
+    canvas.height = cropConfig.height || image.height;
     const ctx = canvas.getContext('2d');
 
     ctx.drawImage(
       image,
-      cropConfig.x * scaleX,
-      cropConfig.y * scaleY,
-      cropConfig.width * scaleX,
-      cropConfig.height * scaleY,
+      (cropConfig.x || 0) * scaleX,
+      (cropConfig.y || 0) * scaleY,
+      (cropConfig.width || image.width) * scaleX,
+      (cropConfig.height || image.height) * scaleY,
       0,
       0,
-      cropConfig.width,
-      cropConfig.height
+      cropConfig.width || image.width,
+      cropConfig.height || image.height
     );
 
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       canvas.toBlob((blob) => {
-        if (!blob) return;
+        if (!blob) {
+          reject(new Error("Canvas to Blob conversion failed."));
+          return;
+        }
         blob.name = fileName;
         resolve(blob);
       }, 'image/jpeg');
@@ -181,17 +189,18 @@ export default function Dashboard() {
       const data = await res.json();
       
       if (res.ok) {
-          // 🚀 FIX: Manually construct URL with API_URL and avatar_path to bypass incorrect backend localhost configs
           const safeAvatarUrl = `${API_URL}/storage/${data.avatar_path}`;
           const cacheBusterUrl = safeAvatarUrl + "?t=" + new Date().getTime();
+          // Reset error state so the new image renders
+          setAvatarError(false);
           setUser(prev => ({ ...prev, avatar_url: cacheBusterUrl }));
       } else {
           console.error("Backend Error Details:", data);
           alert(`Backend Error: ${data.message}`);
       }
     } catch (err) { 
-      console.error("Network Fetch Error:", err);
-      alert("Network error while uploading avatar. Check console."); 
+      console.error("Network/Cropper Error:", err);
+      alert("Error while processing or uploading avatar. Check console."); 
     } finally { 
       setIsUploadingAvatar(false); 
       if (fileInputRef.current) fileInputRef.current.value = ""; 
@@ -478,7 +487,6 @@ export default function Dashboard() {
             <h3 style={{ color: '#fff', margin: '0 0 15px 0' }}>Adjust Profile Picture</h3>
             
             <div style={{ maxHeight: '60vh', overflow: 'hidden', borderRadius: '8px' }}>
-              {/* 🚀 FIX: Pass pixelCrop to setCrop instead of percentCrop to ensure canvas matches */}
               <ReactCrop crop={crop} onChange={(pixelCrop) => setCrop(pixelCrop)} onComplete={(c) => setCompletedCrop(c)} aspect={1} circularCrop>
                 <img ref={imgRef} src={imgSrc} alt="Upload Preview" onLoad={onImageLoad} style={{ maxHeight: '60vh', maxWidth: '100%', objectFit: 'contain' }} />
               </ReactCrop>
@@ -501,17 +509,17 @@ export default function Dashboard() {
               <div className="ud-avatar">
                 {isUploadingAvatar ? (
                     <div className="ud-avatar-loading"></div> 
-                ) : user.avatar_url ? (
+                ) : (user.avatar_url && !avatarError) ? (
                     <img 
                         src={user.avatar_url} 
                         alt="Profile" 
                         className="ud-avatar-image" 
                         style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
-                        // 🚀 FIX: Fallback to initials if the symlink on Render is broken
-                        onError={(e) => { e.target.style.display = 'none'; e.target.parentElement.innerHTML = user.name.charAt(0).toUpperCase(); }}
+                        // 🚀 REACT FIX: Safe state update instead of crashing DOM mutations
+                        onError={() => setAvatarError(true)}
                     /> 
                 ) : (
-                    user.name.charAt(0).toUpperCase()
+                    user.name ? user.name.charAt(0).toUpperCase() : 'U'
                 )}
               </div>
               <div className="ud-avatar-overlay"><span style={{ fontSize: '1.5rem' }}>📷</span></div>
