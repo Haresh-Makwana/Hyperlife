@@ -60,9 +60,6 @@ export default function Dashboard() {
     const token = getToken();
     if (!token) { navigate("/login"); return; }
 
-    // 🚀 1. ABSOLUTE HARDCODE: Bypass all Vercel environment variables
-    const API_URL = "https://hyperlife-backend.onrender.com";
-
     try {
       const cacheBuster = `?t=${new Date().getTime()}`;
       const headers = { 
@@ -73,11 +70,10 @@ export default function Dashboard() {
 
       const userRes = await fetch(`${API_URL}/api/me${cacheBuster}`, { headers });
       
-      // 🚀 2. THE PARACHUTE: If backend rejects us, show the error, DO NOT log out.
       if (!userRes.ok) {
         const errorText = await userRes.text();
         alert(`🚨 BACKEND REJECTION!\nStatus: ${userRes.status}\nMessage: ${errorText}`);
-        return; // Stops the execution here instead of kicking you
+        return; 
       }
       
       const userJson = await userRes.json();
@@ -86,7 +82,6 @@ export default function Dashboard() {
       const avatarUrl = userJson.avatar ? `${API_URL}/storage/${userJson.avatar}` : null;
       setUser(prev => ({ ...prev, ...userJson, avatar_url: avatarUrl }));
 
-      // Fetch stats (wrapped safely)
       try {
         const statsRes = await fetch(`${API_URL}/api/activity-stats${cacheBuster}`, { headers });
         if (statsRes.ok) {
@@ -101,7 +96,6 @@ export default function Dashboard() {
       } catch (e) { console.warn("Stats offline"); }
 
     } catch (error) {
-      // 🚀 3. CORS/NETWORK CRASH CATCHER
       alert(`🚨 CRITICAL NETWORK CRASH (Likely CORS):\n${error.message}`);
     }
   }, [navigate]);
@@ -111,6 +105,7 @@ export default function Dashboard() {
   const handleAvatarSelect = (e) => {
     if (e.target.files && e.target.files.length > 0) {
       setCrop(undefined); 
+      setCompletedCrop(null);
       const reader = new FileReader();
       reader.addEventListener('load', () => {
         setImgSrc(reader.result?.toString() || '');
@@ -121,13 +116,17 @@ export default function Dashboard() {
   };
 
   const onImageLoad = (e) => {
-    const { naturalWidth: width, naturalHeight: height } = e.currentTarget;
+    const { width, height } = e.currentTarget;
+    // 🚀 FIX: Use pixels instead of percentages so the canvas drawing works correctly
+    const cropSize = Math.min(width, height) * 0.8;
     const initialCrop = centerCrop(
-      makeAspectCrop({ unit: '%', width: 80 }, 1, width, height),
+      makeAspectCrop({ unit: 'px', width: cropSize }, 1, width, height),
       width,
       height
     );
     setCrop(initialCrop);
+    // 🚀 FIX: Set completed crop immediately so user can upload without adjusting
+    setCompletedCrop(initialCrop);
   };
 
   const getCroppedImg = (image, cropConfig, fileName) => {
@@ -182,7 +181,9 @@ export default function Dashboard() {
       const data = await res.json();
       
       if (res.ok) {
-          const cacheBusterUrl = data.avatar_url + "?t=" + new Date().getTime();
+          // 🚀 FIX: Manually construct URL with API_URL and avatar_path to bypass incorrect backend localhost configs
+          const safeAvatarUrl = `${API_URL}/storage/${data.avatar_path}`;
+          const cacheBusterUrl = safeAvatarUrl + "?t=" + new Date().getTime();
           setUser(prev => ({ ...prev, avatar_url: cacheBusterUrl }));
       } else {
           console.error("Backend Error Details:", data);
@@ -477,7 +478,8 @@ export default function Dashboard() {
             <h3 style={{ color: '#fff', margin: '0 0 15px 0' }}>Adjust Profile Picture</h3>
             
             <div style={{ maxHeight: '60vh', overflow: 'hidden', borderRadius: '8px' }}>
-              <ReactCrop crop={crop} onChange={(_, percentCrop) => setCrop(percentCrop)} onComplete={(c) => setCompletedCrop(c)} aspect={1} circularCrop>
+              {/* 🚀 FIX: Pass pixelCrop to setCrop instead of percentCrop to ensure canvas matches */}
+              <ReactCrop crop={crop} onChange={(pixelCrop) => setCrop(pixelCrop)} onComplete={(c) => setCompletedCrop(c)} aspect={1} circularCrop>
                 <img ref={imgRef} src={imgSrc} alt="Upload Preview" onLoad={onImageLoad} style={{ maxHeight: '60vh', maxWidth: '100%', objectFit: 'contain' }} />
               </ReactCrop>
             </div>
@@ -497,7 +499,20 @@ export default function Dashboard() {
           <div className="ud-profile-area">
             <div className="ud-avatar-ring" onClick={() => fileInputRef.current.click()} title="Change Profile Picture">
               <div className="ud-avatar">
-                {isUploadingAvatar ? <div className="ud-avatar-loading"></div> : user.avatar_url ? <img src={user.avatar_url} alt="Profile" className="ud-avatar-image" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : user.name.charAt(0).toUpperCase()}
+                {isUploadingAvatar ? (
+                    <div className="ud-avatar-loading"></div> 
+                ) : user.avatar_url ? (
+                    <img 
+                        src={user.avatar_url} 
+                        alt="Profile" 
+                        className="ud-avatar-image" 
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                        // 🚀 FIX: Fallback to initials if the symlink on Render is broken
+                        onError={(e) => { e.target.style.display = 'none'; e.target.parentElement.innerHTML = user.name.charAt(0).toUpperCase(); }}
+                    /> 
+                ) : (
+                    user.name.charAt(0).toUpperCase()
+                )}
               </div>
               <div className="ud-avatar-overlay"><span style={{ fontSize: '1.5rem' }}>📷</span></div>
             </div>
@@ -652,7 +667,7 @@ export default function Dashboard() {
 
           <div className="smooth-glass" style={{ padding: '30px', display: 'flex', flexDirection: 'column', maxHeight: '500px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '25px' }}>
-              <h2 style={{ margin: 0, fontSize: '1.3rem', color: '#fff', fontWeight: '700' }}>Recent Telemetry</h2>
+              <h2 style={{ margin: '0 0 1.3rem 0', fontSize: '1.3rem', color: '#fff', fontWeight: '700' }}>Recent Telemetry</h2>
               <span style={{ fontSize: '0.85rem', color: '#94a3b8' }}>Latest 5 entries</span>
             </div>
             
