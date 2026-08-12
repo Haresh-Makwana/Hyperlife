@@ -12,7 +12,13 @@ class ProfileController extends Controller
     public function uploadAvatar(Request $request)
     {
         try {
-            // 🚀 SAFETY NET: Explicitly grab the authenticated user
+            // 🚀 DIAGNOSTICS: See exactly what the frontend is sending
+            Log::info('Avatar Upload Attempt', [
+                'has_file' => $request->hasFile('avatar'),
+                'method' => $request->method(),
+                'payload_keys' => array_keys($request->all())
+            ]);
+
             $user = $request->user();
 
             if (!$user) {
@@ -21,26 +27,22 @@ class ProfileController extends Controller
                 ], 401);
             }
 
-            // 🚀 FIXED: Simplified validation. 'image' handles Blob uploads much better than 'mimes'
             $request->validate([
                 'avatar' => 'required|image|max:10240', 
             ]);
 
             if ($request->hasFile('avatar')) {
-                // Delete the old avatar from storage to keep the server clean
-                if ($user->avatar) {
+                // 🚀 THE FIX: Check if file actually exists before trying to delete it
+                if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
                     Storage::disk('public')->delete($user->avatar);
                 }
 
-                // Save the new file to the 'avatars' folder
                 $file = $request->file('avatar');
                 $path = $file->store('avatars', 'public');
                 
-                // Save the path to the database
                 $user->avatar = $path;
                 $user->save();
 
-                // 🚀 FIXED: Dynamic URL generation to prevent localhost mismatch errors
                 $fullUrl = url('storage/' . $path);
 
                 return response()->json([
@@ -53,14 +55,13 @@ class ProfileController extends Controller
             return response()->json(['message' => 'No image file detected in the payload.'], 400);
 
         } catch (\Illuminate\Validation\ValidationException $e) {
-            // Catches strict validation errors and tells React exactly what failed
+            Log::error('Avatar Validation Failed', ['errors' => $e->errors()]);
             return response()->json([
                 'message' => 'Invalid image format or size.',
                 'errors' => $e->errors()
             ], 422);
 
         } catch (\Exception $e) {
-            // Catches folder permission or storage link errors
             Log::error('Avatar Upload Error: ' . $e->getMessage());
             return response()->json([
                 'message' => 'Server Error: Could not save the image.',
