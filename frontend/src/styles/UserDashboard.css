@@ -6,10 +6,11 @@
 
 .immersive-auth-wrapper { 
     position: relative; 
-    width: 100vw; 
+    /* 🚀 THE FIX: Changed from 100vw to 100% to prevent double scrollbars */
+    width: 100%; 
     max-width: 100%;
     height: 100vh; 
-    height: 100dvh; /* 🚀 Mobile URL bar fix */
+    height: 100dvh; 
     overflow: hidden; 
     background-color: #030407; 
     font-family: 'Inter', system-ui, -apple-system, sans-serif; 
@@ -105,7 +106,6 @@
 /* 2. INNER DASHBOARD STYLES (Dashboard.jsx)                 */
 /* ========================================================= */
 
-/* 🚀 Animated Coordinate Grid */
 .ud-wrapper { 
     position: relative; 
     min-height: calc(100vh - 70px); 
@@ -114,11 +114,12 @@
     color: #ffffff !important; 
     font-family: 'Inter', system-ui, sans-serif !important; 
     padding: clamp(20px, 5vw, 40px) clamp(15px, 4vw, 5%); 
-    overflow-x: hidden; 
-    z-index: 1; 
-    width: 100vw;
+    /* 🚀 THE FIX: Changed from 100vw to 100% to eliminate the second scrollbar */
+    width: 100%;
     max-width: 100%;
     box-sizing: border-box;
+    overflow: hidden; 
+    z-index: 1; 
     background-image: 
         radial-gradient(circle at center, rgba(0, 255, 231, 0.05) 0%, transparent 60%),
         linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px), 
@@ -131,7 +132,7 @@
 .ud-orb-2 { bottom: -10%; right: -10%; width: clamp(300px, 60vw, 600px); height: clamp(300px, 60vw, 600px); background: radial-gradient(circle, rgba(127, 92, 255, 0.2) 0%, transparent 70%); animation: udFloat 15s infinite alternate-reverse ease-in-out; }
 @keyframes udFloat { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(50px, 50px) scale(1.1); } }
 
-/* 🚀 Light Sweep Hover Effect to Glass Cards */
+/* ✨ Enhanced Light Sweep & Breathing Glow on Glass Cards */
 .ud-glass { 
     background: rgba(12, 14, 22, 0.7) !important; 
     backdrop-filter: blur(20px) !important; 
@@ -141,8 +142,15 @@
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(255, 255, 255, 0.02) !important; 
     position: relative;
     overflow: hidden;
-    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s, box-shadow 0.4s;
     box-sizing: border-box;
+    /* ✨ Subtle ambient breathing effect */
+    animation: cardBreathe 6s infinite alternate ease-in-out;
+}
+
+@keyframes cardBreathe {
+    0% { box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(255, 255, 255, 0.02); }
+    100% { box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6), inset 0 0 25px rgba(0, 255, 231, 0.05); }
 }
 
 .ud-glass::after {
@@ -152,7 +160,7 @@
 }
 .ud-glass:hover::after { left: 150%; transition: 0.7s cubic-bezier(0.25, 0.8, 0.25, 1); }
 
-/* 🚀 Staggered Slide Up Animations */
+/* Staggered Slide Up Animations */
 @keyframes udSlideUpFade { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
 
 .ud-header { animation: udSlideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
@@ -173,22 +181,42 @@
 
 .ud-profile-area { display: flex; align-items: center; gap: 20px; }
 
-/* Avatar Styles */
+/* ✨ Spinning Holographic Avatar Ring */
 .ud-avatar-ring { 
   width: clamp(55px, 8vw, 75px); height: clamp(55px, 8vw, 75px); border-radius: 50%; 
-  background: linear-gradient(135deg, #00ffe7, #7f5cff); 
+  background: conic-gradient(from 0deg, #00ffe7, #7f5cff, #ffaa00, #00ffe7); 
   padding: 3px; box-shadow: 0 0 20px rgba(0, 255, 231, 0.4);
   position: relative; cursor: pointer; overflow: hidden; transition: transform 0.3s ease;
   flex-shrink: 0;
+  animation: avatarSpin 4s linear infinite;
 }
-.ud-avatar-ring:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(0, 255, 231, 0.6); }
-.ud-avatar { width: 100%; height: 100%; background-color: #030407; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 800; color: #fff; overflow: hidden; }
+
+@keyframes avatarSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.ud-avatar-ring:hover { transform: scale(1.05) rotate(90deg); box-shadow: 0 0 30px rgba(0, 255, 231, 0.6); }
+
+/* Reverse inner spin so the image stays upright */
+.ud-avatar { 
+    width: 100%; height: 100%; background-color: #030407; border-radius: 50%; 
+    display: flex; align-items: center; justify-content: center; 
+    font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 800; color: #fff; overflow: hidden; 
+    animation: avatarSpinReverse 4s linear infinite;
+}
+
+@keyframes avatarSpinReverse {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(-360deg); }
+}
+
 .ud-avatar-image { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
 .ud-avatar-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); border-radius: 50%; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease; }
 .ud-avatar-ring:hover .ud-avatar-overlay { opacity: 1; }
 .ud-avatar-loading { width: 25px; height: 25px; border: 3px solid rgba(255,255,255,0.3); border-top-color: #00ffe7; border-radius: 50%; animation: udSpin 1s linear infinite; }
 
-/* 🚀 Flowing Shimmer to Gradient Text */
+/* Flowing Shimmer to Gradient Text */
 .ud-welcome-text h1 { font-size: clamp(1.5rem, 4vw, 2.2rem) !important; font-weight: 800 !important; margin: 0 0 5px 0 !important; color: #fff; }
 .ud-gradient-text { 
     background: linear-gradient(90deg, #00ffe7, #7f5cff, #00ffe7); 
@@ -200,21 +228,29 @@
 @keyframes textShimmer { to { background-position: 200% center; } }
 .ud-email { color: #8b92a5 !important; margin: 0 !important; font-size: clamp(0.85rem, 2vw, 1rem) !important; }
 
-/* 🚀 Glowing Core to XP Bar */
+/* ✨ Pulsing Core to XP Bar */
 .ud-level-hud { flex: 1; min-width: 0; max-width: 400px; width: 100%; }
 .ud-level-top { display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: 700; font-size: clamp(0.95rem, 2vw, 1.1rem); }
 .ud-xp-track { width: 100%; height: 10px; background: rgba(0,0,0,0.5); border-radius: 10px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
 .ud-xp-fill { 
     height: 100%; 
     background: linear-gradient(90deg, #7f5cff, #00ffe7); 
+    background-size: 200% 100%;
     border-radius: 10px; 
     box-shadow: 0 0 15px rgba(0, 255, 231, 0.6); 
     transition: width 1s cubic-bezier(0.16, 1, 0.3, 1); 
     position: relative;
+    animation: textShimmer 3s linear infinite;
 }
 .ud-xp-fill::after {
     content: ''; position: absolute; right: 0; top: 0; height: 100%; width: 10px;
     background: #fff; border-radius: 50%; box-shadow: 0 0 10px #fff, 0 0 20px #00ffe7;
+    animation: pingXP 1.5s infinite alternate;
+}
+
+@keyframes pingXP {
+    0% { transform: scale(1); box-shadow: 0 0 10px #fff, 0 0 20px #00ffe7; }
+    100% { transform: scale(1.3); box-shadow: 0 0 15px #fff, 0 0 30px #00ffe7; }
 }
 
 .ud-actions-bar { display: flex; gap: 15px; margin-bottom: clamp(25px, 5vw, 40px); flex-wrap: wrap; }
@@ -231,11 +267,28 @@
 .ud-btn-danger { background: rgba(239, 68, 68, 0.1) !important; color: #ef4444 !important; border: 1px solid rgba(239, 68, 68, 0.3) !important; }
 .ud-btn-danger:hover { background: #ef4444 !important; color: #fff !important; box-shadow: 0 0 20px rgba(239, 68, 68, 0.4) !important; transform: translateY(-2px) !important; }
 
-/* 🚀 Adjusted Grid Layout for narrow mobile screens */
+/* Grid Layout */
 .ud-stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: clamp(15px, 4vw, 25px); margin-bottom: clamp(20px, 4vw, 30px); }
 .ud-stat-card { padding: clamp(20px, 4vw, 30px); display: flex; align-items: center; gap: 20px; transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s, border-color 0.4s; }
 .ud-stat-card:hover { transform: translateY(-8px); border-color: rgba(0, 255, 231, 0.3) !important; box-shadow: 0 20px 40px rgba(0,0,0,0.6), 0 0 30px rgba(0,255,231,0.1) !important; }
-.ud-stat-icon { width: clamp(50px, 8vw, 60px); height: clamp(50px, 8vw, 60px); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: clamp(1.4rem, 3vw, 1.8rem); background: rgba(0, 0, 0, 0.4); flex-shrink: 0; }
+
+/* ✨ Floating Stat Icons */
+.ud-stat-icon { 
+    width: clamp(50px, 8vw, 60px); 
+    height: clamp(50px, 8vw, 60px); 
+    border-radius: 16px; 
+    display: flex; align-items: center; justify-content: center; 
+    font-size: clamp(1.4rem, 3vw, 1.8rem); 
+    background: rgba(0, 0, 0, 0.4); 
+    flex-shrink: 0; 
+    animation: iconFloat 4s ease-in-out infinite alternate;
+}
+
+@keyframes iconFloat {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-5px); }
+}
+
 .ud-icon-cyan { color: #00ffe7; box-shadow: inset 0 0 20px rgba(0, 255, 231, 0.2); border: 1px solid rgba(0,255,231,0.1); }
 .ud-icon-purple { color: #b094ff; box-shadow: inset 0 0 20px rgba(127, 92, 255, 0.2); border: 1px solid rgba(127,92,255,0.1); }
 .ud-icon-orange { color: #ffaa00; box-shadow: inset 0 0 20px rgba(255, 170, 0, 0.2); border: 1px solid rgba(255,170,0,0.1); }
@@ -246,7 +299,7 @@
 .ud-activities-panel { padding: clamp(20px, 4vw, 35px); }
 .ud-panel-title { font-size: clamp(1.1rem, 3vw, 1.4rem) !important; font-weight: 800 !important; margin: 0 0 25px 0 !important; border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding-bottom: 15px; color: #fff; letter-spacing: 0.5px;}
 
-/* 🚀 Staggered Activity Rows with Hover Glows */
+/* Staggered Activity Rows */
 .ud-activity-row { 
     display: flex; justify-content: space-between; align-items: center; padding: clamp(15px, 3vw, 20px); 
     background: rgba(0, 0, 0, 0.3); border-radius: 16px; margin-bottom: 15px; 
@@ -262,7 +315,17 @@
 
 @keyframes udFadeSlideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
 
+/* ✨ Neon Sweeping Border on Activity Hover */
+.ud-activity-row { position: relative; overflow: hidden; }
+.ud-activity-row::before {
+    content: ''; position: absolute; left: 0; top: -100%; width: 3px; height: 100%;
+    background: linear-gradient(180deg, transparent, #00ffe7, transparent);
+    transition: top 0.4s ease;
+}
+
 .ud-activity-row:hover { background: rgba(0, 0, 0, 0.6); border-color: rgba(255, 255, 255, 0.15); transform: translateX(8px); box-shadow: -5px 5px 20px rgba(0,0,0,0.5); }
+.ud-activity-row:hover::before { top: 100%; }
+
 .ud-activity-main { display: flex; align-items: center; gap: 15px; flex: 2; min-width: 0; }
 .ud-dot { width: 12px; height: 12px; border-radius: 50%; animation: udPulseDot 2s infinite; flex-shrink: 0; }
 .ud-dot-cyan { background: #00ffe7; box-shadow: 0 0 10px #00ffe7; }
@@ -297,15 +360,13 @@
 /* ========================================================= */
 /* 4. OMNI-NODE VOICE POPUP MODAL                            */
 /* ========================================================= */
-.ud-modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; height: 100dvh; background-color: rgba(5, 7, 12, 0.8); backdrop-filter: blur(20px) !important; display: flex; align-items: center; justify-content: center; z-index: 2000; animation: udFadeIn 0.3s ease-out; box-sizing: border-box; padding: 20px; }
+.ud-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; height: 100dvh; background-color: rgba(5, 7, 12, 0.8); backdrop-filter: blur(20px) !important; display: flex; align-items: center; justify-content: center; z-index: 2000; animation: udFadeIn 0.3s ease-out; box-sizing: border-box; padding: 20px; }
 .ud-voice-popup { background: rgba(12, 15, 24, 0.8) !important; backdrop-filter: blur(30px) !important; -webkit-backdrop-filter: blur(30px) !important; border: 1px solid rgba(0, 255, 231, 0.2) !important; border-radius: 32px !important; padding: clamp(30px, 6vw, 60px) clamp(20px, 5vw, 50px); width: 100%; max-width: 600px; box-shadow: 0 40px 100px rgba(0, 0, 0, 0.9), 0 0 40px rgba(0,255,231,0.1), inset 0 0 20px rgba(255, 255, 255, 0.05) !important; text-align: center; position: relative; display: flex; flex-direction: column; align-items: center; box-sizing: border-box; }
 
-/* Central Microphone Circle */
 .ud-mic-container { width: clamp(120px, 30vw, 160px); height: clamp(120px, 30vw, 160px); background: linear-gradient(135deg, #00ffe7, #7f5cff); border-radius: 50%; padding: 3px; box-shadow: 0 0 30px rgba(0, 255, 231, 0.3), inset 0 0 10px rgba(255, 255, 255, 0.2); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); position: relative; margin-bottom: 25px; }
 .ud-mic-container:hover { transform: scale(1.1); box-shadow: 0 0 50px rgba(0, 255, 231, 0.6); }
 .ud-mic-icon { width: clamp(80px, 20vw, 100px); height: clamp(80px, 20vw, 100px); background-color: rgba(0, 0, 0, 0.4); border-radius: 50%; color: #fff; padding: clamp(15px, 4vw, 20px); box-sizing: border-box; }
 
-/* Radiating Wave Animation */
 .ud-mic-container.listening .ud-wave { position: absolute; top: 50%; left: 50%; border-radius: 50%; transform: translate(-50%, -50%) scale(1); border: 2px solid rgba(0, 255, 231, 0.8); box-shadow: 0 0 20px rgba(0, 255, 231, 0.5); opacity: 1; pointer-events: none; }
 .ud-wave-1 { animation: udWavePulse 2.5s infinite cubic-bezier(0.16, 1, 0.3, 1); }
 .ud-wave-2 { animation: udWavePulse 2.5s infinite cubic-bezier(0.16, 1, 0.3, 1) 0.6s; }
@@ -330,32 +391,10 @@
 .ud-tag { padding: 6px 12px; border-radius: 8px; font-size: clamp(0.7rem, 2vw, 0.8rem); font-weight: 800; letter-spacing: 1px; font-family: monospace; text-transform: uppercase; }
 .theme-purple-tag { background: rgba(127, 92, 255, 0.15); color: #d8b4fe; border: 1px solid rgba(127, 92, 255, 0.4); box-shadow: 0 0 10px rgba(127,92,255,0.2); }
 
-/* ========================================================= */
-/* HARD MEDIA QUERIES (MOBILE RE-FLOW)                       */
-/* ========================================================= */
-@media (max-width: 900px) { 
-    .ud-header, .ud-activity-row { flex-direction: column; align-items: flex-start; } 
-    .ud-level-hud { width: 100%; } 
-    .ud-activity-stats { justify-content: flex-start; margin-top: 10px; width: 100%; } 
-    .ud-actions-bar { width: 100%; }
-    .ud-actions-bar .ud-btn { flex: 1; }
-}
-
-@media (max-width: 600px) {
-    /* Disable physical hover transforms on touch screens to prevent sticking */
-    .ud-glass:hover { transform: none; }
-    .ud-btn-primary:hover, .ud-btn-outline:hover, .ud-btn-danger:hover { transform: none; }
-    .ud-stat-card:hover { transform: none; border-color: rgba(255, 255, 255, 0.08) !important; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(255, 255, 255, 0.02) !important; }
-    .ud-activity-row:hover { transform: none; background: rgba(0, 0, 0, 0.3); border-color: rgba(255,255,255,0.02); box-shadow: none; }
-    .mic-btn:hover { transform: none; box-shadow: none; }
-    .ud-mic-container:hover { transform: none; box-shadow: 0 0 30px rgba(0, 255, 231, 0.3), inset 0 0 10px rgba(255, 255, 255, 0.2); }
-    .ud-close-btn:hover { transform: none; box-shadow: none; }
-}
 
 /* ========================================================= */
 /* AUTH & GENERAL UI ANIMATIONS                              */
 /* ========================================================= */
-
 .auth-anim-slide-up {
   opacity: 0;
   transform: translateY(20px);
@@ -385,22 +424,24 @@
   transform: translateY(-2px);
 }
 
-.ultra-glass-card {
-  position: relative;
-  overflow: hidden;
-  transition: box-shadow 0.4s;
+/* ========================================================= */
+/* HARD MEDIA QUERIES (MOBILE RE-FLOW)                       */
+/* ========================================================= */
+@media (max-width: 900px) { 
+    .ud-header, .ud-activity-row { flex-direction: column; align-items: flex-start; } 
+    .ud-level-hud { width: 100%; } 
+    .ud-activity-stats { justify-content: flex-start; margin-top: 10px; width: 100%; } 
+    .ud-actions-bar { width: 100%; }
+    .ud-actions-bar .ud-btn { flex: 1; }
 }
 
-.ultra-glass-card::before {
-  content: '';
-  position: absolute;
-  top: -50%; left: -50%; width: 200%; height: 200%;
-  background: conic-gradient(transparent, rgba(127, 92, 255, 0.1), transparent 30%);
-  animation: rotateGlow 6s linear infinite;
-  pointer-events: none;
-  z-index: -1;
-}
-
-@keyframes rotateGlow {
-  100% { transform: rotate(360deg); }
+@media (max-width: 600px) {
+    /* Disable physical hover transforms on touch screens to prevent sticking */
+    .ud-glass:hover { transform: none; }
+    .ud-btn-primary:hover, .ud-btn-outline:hover, .ud-btn-danger:hover { transform: none; }
+    .ud-stat-card:hover { transform: none; border-color: rgba(255, 255, 255, 0.08) !important; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(255, 255, 255, 0.02) !important; }
+    .ud-activity-row:hover { transform: none; background: rgba(0, 0, 0, 0.3); border-color: rgba(255,255,255,0.02); box-shadow: none; }
+    .mic-btn:hover { transform: none; box-shadow: none; }
+    .ud-mic-container:hover { transform: none; box-shadow: 0 0 30px rgba(0, 255, 231, 0.3), inset 0 0 10px rgba(255, 255, 255, 0.2); }
+    .ud-close-btn:hover { transform: none; box-shadow: none; }
 }
