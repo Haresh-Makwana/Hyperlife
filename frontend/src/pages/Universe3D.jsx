@@ -500,7 +500,7 @@ function SpaceScene({ planets, orbitMappings, level, activePlanet, onPlanetClick
         <DailyBonusPortal onClick={onWormholeClick} />
         <ConnectionLines links={goalLinks} orbitMappings={orbitMappings} planets={planets} timePaused={mode === 'link' || mode === 'prioritize'} />
         {planets.map((planet, index) => (
-          <OrbitWrapper key={planet.id} planet={planet} orbitRing={orbitMappings[planet.id] || 2} isActive={activePlanet?.id === planet.id} onClick={onPlanetClick} mode={mode} futureDays={futureDays} linkBase={linkBase} pendingLink={pendingLink} goalLinks={goalLinks} onMoonComplete={onMoonComplete} onDefend={onDefend}>
+          <OrbitWrapper key={planet.id} planet={planet} orbitRing={orbitMappings[planet.id] || 2} isActive={activePlanet?.id === planet.id} onClick={onPlanetClick} mode={mode} futureDays={futureDays} linkBase={linkBase} pendingLink={pendingLink} goalLinks={goalLinks} onMoonComplete={onMoonComplete} onDefend={handleSaveStreak}>
             {index === 0 ? <PlanetOne planet={planet} /> : index === 1 ? <PlanetTwo planet={planet} /> : index === 2 ? <PlanetThree planet={planet} /> : <GenericPlanet planet={planet} futureDays={futureDays} />}
           </OrbitWrapper>
         ))}
@@ -699,25 +699,22 @@ export default function Universe3D() {
   };
 
   const handleWormholeClick = async () => {
-      setActivePlanetData(null); setIsBonusPortalActive(true); setBountyText("Checking for your Daily Reward...");
+      setActivePlanetData(null); setIsBonusPortalActive(true); setBountyText("Consulting the Oracle Node...");
       try {
-          // 🚨 FIXED: The ghost is eliminated. Replaced with dynamic AI environment variable.
-          const AI_URL = import.meta.env.VITE_AI_BASE_URL || "https://hyperlife-ai-v2.onrender.com";
-          
-          const res = await fetch(`${AI_URL}/predict`, { 
+          // 🚨 SECURE FIX: Route the request through Laravel to bypass the Python core's security perimeter
+          const data = await apiFetch(`/ai-suggestions`, { 
             method: 'POST', 
-            headers: { "Content-Type": "application/json" }, 
-            body: JSON.stringify({ activities: [] }) 
+            body: JSON.stringify({ activities: planets.slice(0, 3) }) // Feed some basic context to the AI
           });
           
-          if (res.ok) { 
-              const data = await res.json(); 
-              setBountyText(data.insight); 
+          if (data) { 
+              const insightText = Array.isArray(data) ? data[0] : (data.insight || "Bonus claimed. Matrix stabilized.");
+              setBountyText(insightText); 
           } else {
-              setBountyText("Bonus currently unavailable. Please try again later.");
+              setBountyText("Oracle Node currently unavailable. Please try again later.");
           }
       } catch (err) { 
-          setBountyText("Connection failed."); 
+          setBountyText("Secure connection to the Oracle failed."); 
       }
   };
 
