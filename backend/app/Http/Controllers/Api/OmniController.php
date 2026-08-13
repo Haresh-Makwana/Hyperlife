@@ -25,12 +25,13 @@ class OmniController extends Controller
         $rawText = $request->telemetry_text;
 
         try {
-            // 🚨 SECURE CONNECTION: Target the live node and grab the secret key
-            $aiUrl = rtrim(env('AI_MICROSERVICE_URL', 'https://hyperlife-ai-v2.onrender.com'), '/');
-            $aiSecret = env('HYPER_AI_SECRET_KEY', ''); // Grabs the key to pass the Python shield
+            // 🚨 SECURE CONNECTION: Matches your exact .env variables (AI_CORE_URL fallback)
+            $aiUrl = rtrim(env('AI_MICROSERVICE_URL', env('AI_CORE_URL', 'https://hyperlife-ai-core-nwkg.onrender.com')), '/');
+            $aiSecret = env('HYPER_AI_SECRET_KEY', ''); 
             
-            // Inject the Bearer token into the HTTP request
+            // Inject the Bearer token and accept JSON
             $aiResponse = Http::withToken($aiSecret)
+                ->acceptJson()
                 ->timeout(15)
                 ->post($aiUrl . '/omni-process', [
                     'telemetry_text' => $rawText
@@ -80,12 +81,13 @@ class OmniController extends Controller
             $audioContent = file_get_contents($file->getRealPath());
             $filename = $file->getClientOriginalName() ?: 'voice_command.webm';
 
-            // 🚨 SECURE CONNECTION: Target the live node and grab the secret key
-            $aiUrl = rtrim(env('AI_MICROSERVICE_URL', 'https://hyperlife-ai-v2.onrender.com'), '/');
+            // 🚨 SECURE CONNECTION: Matches your exact .env variables (AI_CORE_URL fallback)
+            $aiUrl = rtrim(env('AI_MICROSERVICE_URL', env('AI_CORE_URL', 'https://hyperlife-ai-core-nwkg.onrender.com')), '/');
             $aiSecret = env('HYPER_AI_SECRET_KEY', '');
             
             // Inject the Bearer token into the HTTP request with the audio payload
             $aiResponse = Http::withToken($aiSecret)
+                ->acceptJson()
                 ->timeout(60)
                 ->attach('audio', $audioContent, $filename)
                 ->post($aiUrl . '/omni-process-audio'); 

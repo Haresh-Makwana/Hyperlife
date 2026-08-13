@@ -25,8 +25,8 @@ class JournalController extends Controller
         $sentiment = 5;
 
         try {
-            // 🚨 SECURE CONNECTION: Target the live node and grab the secret key
-            $aiUrl = rtrim(env('AI_MICROSERVICE_URL', 'https://hyperlife-ai-v2.onrender.com'), '/');
+            // 🚨 SECURE CONNECTION: Matches your exact .env variables (AI_CORE_URL fallback)
+            $aiUrl = rtrim(env('AI_MICROSERVICE_URL', env('AI_CORE_URL', 'https://hyperlife-ai-core-nwkg.onrender.com')), '/');
             $aiSecret = env('HYPER_AI_SECRET_KEY', ''); // Grabs the key to pass the Python shield
             
             // Inject the Bearer token into the HTTP request
