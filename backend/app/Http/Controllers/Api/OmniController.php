@@ -25,19 +25,23 @@ class OmniController extends Controller
         $rawText = $request->telemetry_text;
 
         try {
-            // 🚨 FIXED: Hard-wired to the V2 AI Cloud node. The 127.0.0.1 ghost is dead.
+            // 🚨 SECURE CONNECTION: Target the live node and grab the secret key
             $aiUrl = rtrim(env('AI_MICROSERVICE_URL', 'https://hyperlife-ai-v2.onrender.com'), '/');
+            $aiSecret = env('HYPER_AI_SECRET_KEY', ''); // Grabs the key to pass the Python shield
             
-            $aiResponse = Http::timeout(15)->post($aiUrl . '/omni-process', [
-                'telemetry_text' => $rawText
-            ]);
+            // Inject the Bearer token into the HTTP request
+            $aiResponse = Http::withToken($aiSecret)
+                ->timeout(15)
+                ->post($aiUrl . '/omni-process', [
+                    'telemetry_text' => $rawText
+                ]);
 
             if ($aiResponse->successful()) {
                 $aiData = $aiResponse->json();
                 $insightMessage = $aiData['analysis'] ?? 'Telemetry recorded successfully.';
                 $xpDelta = $aiData['gamification']['xp_gained'] ?? 15;
             } else {
-                throw new \Exception("AI Core returned error status.");
+                throw new \Exception("AI Core returned error status: " . $aiResponse->status());
             }
         } catch (\Exception $e) {
             $insightMessage = "Offline Mode: Data saved to local matrix.";
@@ -76,10 +80,13 @@ class OmniController extends Controller
             $audioContent = file_get_contents($file->getRealPath());
             $filename = $file->getClientOriginalName() ?: 'voice_command.webm';
 
-            // 🚨 FIXED: Hard-wired to the V2 AI Cloud node.
+            // 🚨 SECURE CONNECTION: Target the live node and grab the secret key
             $aiUrl = rtrim(env('AI_MICROSERVICE_URL', 'https://hyperlife-ai-v2.onrender.com'), '/');
+            $aiSecret = env('HYPER_AI_SECRET_KEY', '');
             
-            $aiResponse = Http::timeout(60)
+            // Inject the Bearer token into the HTTP request with the audio payload
+            $aiResponse = Http::withToken($aiSecret)
+                ->timeout(60)
                 ->attach('audio', $audioContent, $filename)
                 ->post($aiUrl . '/omni-process-audio'); 
 
@@ -89,7 +96,7 @@ class OmniController extends Controller
                 $insightMessage = $aiData['analysis'] ?? 'Audio analyzed successfully.';
                 $xpDelta = $aiData['gamification']['xp_gained'] ?? 20; 
             } else {
-                throw new \Exception("AI Core failed to process audio.");
+                throw new \Exception("AI Core failed to process audio: " . $aiResponse->status());
             }
         } catch (\Exception $e) {
             // ⚠️ FALLBACK
