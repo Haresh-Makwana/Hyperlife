@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\JournalLog;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -24,10 +25,13 @@ class JournalController extends Controller
         $sentiment = 5;
 
         try {
-            // 🚨 FIXED: Hard-wired to the new V2 AI Core.
+            // 🚨 SECURE CONNECTION: Target the live node and grab the secret key
             $aiUrl = rtrim(env('AI_MICROSERVICE_URL', 'https://hyperlife-ai-v2.onrender.com'), '/');
+            $aiSecret = env('HYPER_AI_SECRET_KEY', ''); // Grabs the key to pass the Python shield
             
-            $aiRes = Http::timeout(30)
+            // Inject the Bearer token into the HTTP request
+            $aiRes = Http::withToken($aiSecret)
+                ->timeout(30)
                 ->acceptJson()
                 ->post($aiUrl . '/psych-eval', [
                     'log_text' => $request->log_text
@@ -42,7 +46,7 @@ class JournalController extends Controller
             }
         } catch (\Exception $e) {
             $errorMsg = $e->getMessage();
-            $evalText = "GHOST PROTOCOL: Cloud Bypass Failed -> " . $errorMsg;
+            $evalText = "Offline Mode: Cloud Bypass Failed -> " . $errorMsg;
             Log::error("Psych-Eval Connection Error: " . $errorMsg);
         }
 
@@ -57,7 +61,14 @@ class JournalController extends Controller
     }
 
     public function destroy($id) {
-        JournalLog::where('id', $id)->where('user_id', auth()->id())->delete();
+        if (!auth()->check()) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+
+        JournalLog::where('id', $id)
+            ->where('user_id', auth()->id())
+            ->delete();
+
         return response()->json(['message' => 'Log eradicated.']);
     }
 }
