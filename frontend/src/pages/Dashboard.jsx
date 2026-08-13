@@ -100,6 +100,45 @@ export default function Dashboard() {
         }
       } catch (e) { console.warn("Stats offline"); }
 
+      // 🚀 REACT FIX: Fetch Activities & AI Insights which were previously missing
+      try {
+        const actRes = await fetch(`${API_URL}/api/activities${cacheBuster}`, { headers });
+        if (actRes.ok) {
+            const actData = await actRes.json();
+            const fetchedActs = Array.isArray(actData) ? actData : (actData.data || []);
+            setActivities(fetchedActs);
+
+            if (['commander', 'syndicate', 'overwatch', 'admin'].includes(userJson.role?.toLowerCase())) {
+                if (fetchedActs.length > 0) {
+                    const aiRes = await fetch(`${API_URL}/api/ai-suggestions`, {
+                        method: "POST",
+                        headers: { ...headers, "Content-Type": "application/json" },
+                        body: JSON.stringify({ activities: fetchedActs.slice(0, 10) })
+                    });
+                    if (aiRes.ok) {
+                        const aiData = await aiRes.json();
+                        setSystemInsight(aiData[0] || aiData.insight || "System stable. Continue operations.");
+                    } else {
+                        setSystemInsight("Matrix offline: AI Core calibrating.");
+                    }
+                } else {
+                    setSystemInsight("Awaiting operator telemetry to calibrate the predictive model.");
+                }
+            } else {
+                setSystemInsight("Omni-Node AI Routine Insights are locked.");
+            }
+        }
+      } catch (e) { console.warn("Telemetry fetch failed", e); }
+
+      // 🚀 REACT FIX: Fetch Weekly Data for the AreaChart
+      try {
+        const weekRes = await fetch(`${API_URL}/api/analytics/weekly${cacheBuster}`, { headers });
+        if (weekRes.ok) {
+            const weekData = await weekRes.json();
+            setWeeklyData(Array.isArray(weekData) ? weekData : []);
+        }
+      } catch (e) { console.warn("Analytics fetch failed", e); }
+
     } catch (error) {
       alert(`🚨 CRITICAL NETWORK CRASH (Likely CORS):\n${error.message}`);
     }
